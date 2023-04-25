@@ -11,11 +11,5 @@ RUN npm install
 COPY ./ /usr/src/front/
 # Build the React app
 RUN npm run build
-
-FROM nginx:alpine
-COPY /usr/src/front/build /usr/share/nginx/html
-# Copy the Nginx configuration file to the appropriate location
-COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 3000
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "start"]
