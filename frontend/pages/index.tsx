@@ -14,6 +14,10 @@ const fetchUser = async () => {
 
 export default function Home() {
   const { isLoading, isError, data: seoyong } = useQuery('user', fetchUser)
+  const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO
+  const REDIRECT_URI_SITE = process.env.REACT_APP_REDIRECT_URI
+  const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_SITE+'kakao'}&response_type=code`
+  console.log(API_KEY_KAKAO, REDIRECT_URI_SITE)
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -24,6 +28,7 @@ export default function Home() {
   }
 
   return (
+    <>
     <div>
       <ol>
         <li>아이디: {seoyong?.id}</li>
@@ -33,5 +38,9 @@ export default function Home() {
         <li>기술 스택: {seoyong?.skills}</li>
       </ol>
     </div>
+    <button><a href={OAUTH_KAKAO}>카카오 로그인</a></button>
+    <button>네이버 로그인</button>
+    <button>깃허브 로그인</button>
+    </>
   );
 }
