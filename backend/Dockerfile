@@ -12,7 +12,7 @@ COPY ./ /usr/src/back/
 RUN npm run build
 
 FROM nginx:alpine
-COPY --from=0 /back/build /usr/share/nginx/html
+COPY --from=0 /usr/src/back/build /usr/share/nginx/html
 # Copy the Nginx configuration file to the appropriate location
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8000
