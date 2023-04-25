@@ -1,5 +1,5 @@
 # Use a node image as the base image
-FROM node:14
+FROM node:16
 # Set the working directory
 WORKDIR /usr/src/back
 # Copy the package.json and package-lock.json files to the working directory

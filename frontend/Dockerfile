@@ -1,5 +1,5 @@
 # Use a node image as the base image
-FROM node:14
+FROM node:16
 ENV REACT_APP_SERVER_BASE_URL https://k8a801.p.ssafy.io/api
 # Set the working directory
 WORKDIR /usr/src/front
