@@ -1,4 +1,4 @@
-import { Query, Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Query, Body, Controller, Delete, Get, Param, Patch, Post, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -6,25 +6,26 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  getAll() :User[] {
-    return this.usersService.getAll()
+  @Post("/oauth/:owner")
+  oauth(@Param('owner') owner:string, @Body('code') code:string){
+    const owners = ['kakao', 'naver', 'github']
+    if (!owners.includes(owner)) {
+      throw new HttpException('잘못된 요청입니다.', HttpStatus.BAD_REQUEST);
+    }
+
+    return this.usersService.oauth(owner, code)
   }
-
-  // @Get('search')
-  // search(@Query('name') searchingName:string){
-  //   return `You will search User by name : ${searchingName}`
-  // }
-
+  
   @Get(":id")
   getOne(@Param('id') id:string): User {
     return this.usersService.getOne(id)
   }
-
-  @Post()
-  create(@Body() userProfile){
-    return this.usersService.create(userProfile)
+  
+  @Get()
+  getAll() :User[] {
+    return this.usersService.getAll()
   }
+  
 
   @Delete(":id")
   delete(@Param('id') id:string){
