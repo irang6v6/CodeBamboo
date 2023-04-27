@@ -17,7 +17,6 @@ export default function Home() {
   const API_KEY_KAKAO = process.env.NEXT_PUBLIC_API_KEY_KAKAO
   const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI
   const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI+'kakao'}&response_type=code`
-  console.log(API_KEY_KAKAO, REDIRECT_URI)
 
   if (isLoading) {
     return <div>Loading...</div>

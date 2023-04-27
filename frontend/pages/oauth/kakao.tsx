@@ -1,39 +1,48 @@
-import { Inter } from 'next/font/google'
-import { useMutation, useQuery } from 'react-query'
+import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
+import { useEffect } from 'react';
 
-const inter = Inter({ subsets: ['latin'] })
+interface LoginResponse {
+  // 반환값 지정
+}
 
-const fetchUser = async (code:string) => {
-  const BASE_URL = 'http://localhost:8000'
-  const response = await fetch(BASE_URL+'/users', {
+const login = async ({ code }: { code: string | undefined}): Promise<LoginResponse> => {
+  const BASE_URL = 'http://localhost:8000';
+  const response = await fetch(BASE_URL + '/users/oauth/kakao', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ code }),
-  })
-  const data = await response.json()
-  return data
-}
+  });
+  const data: LoginResponse = await response.json();
+  return data;
+};
 
 export default function Kakao() {
-  // let code = new URL(window.location.href).searchParams.get("code");
-  // const { isLoading, isError, data: seoyong } = useMutation('user', ()=>fetchUser(code))
-  // console.log(code)
+  const router = useRouter();
+  const code = router.query.code as string | undefined;
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>
-  // }
+  const Login = useMutation<LoginResponse, Error, void>('user', () => login({ code }));
 
-  // if (isError) {
-  //   return <div>Error fetching user data</div>
-  // }
+  useEffect(() => {
+    if (code) {
+      Login.mutate();
+    }
+  }, [code, Login.mutate]);
+  
+  if (Login.isLoading) {
+    return <div>Loading...</div>;
+  }
 
+  if (Login.isError) {
+    return <div>Error fetching user data</div>;
+  }
+
+  console.log(Login.data)
   return (
     <>
-    <h1>z</h1>
+    <h1>카카오 로그인 중...</h1>
     </>
   );
 }
-
-// yOXSN4F7twnquMh3zj_ZvjXjJo4NXtLBS5sdYYl3qNDnyDhS1W7AqpDxU3Bo6JHu-3vB8gopyNkAAAGHu4BXng
