@@ -17,7 +17,6 @@ export default function Home() {
   const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO
   const REDIRECT_URI_SITE = process.env.REACT_APP_REDIRECT_URI
   const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_SITE+'kakao'}&response_type=code`
-  console.log(API_KEY_KAKAO, REDIRECT_URI_SITE)
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -29,6 +28,9 @@ export default function Home() {
 
   return (
     <>
+    <h1 className="text-3xl underline text-green font-scp font-bold">
+      Tailwind CSS rules!
+    </h1>
     <div>
       <ol>
         <li>아이디: {seoyong?.id}</li>
