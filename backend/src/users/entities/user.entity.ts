@@ -13,8 +13,8 @@ export class User {
   })
   user_id: number;
 
-  @Column()
-  username: string;
+  // @Column()
+  // username: string;
 
   @Column({ nullable: true })
   email: string;

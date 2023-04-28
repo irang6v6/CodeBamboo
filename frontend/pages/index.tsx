@@ -13,28 +13,28 @@ const fetchUser = async () => {
 }
 
 export default function Home() {
-  const { isLoading, isError, data: seoyong } = useQuery('user', fetchUser)
+  // const { isLoading, isError, data: seoyong } = useQuery('user', fetchUser)
   const API_KEY_KAKAO = process.env.NEXT_PUBLIC_API_KEY_KAKAO
   const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI
   const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI+'kakao'}&response_type=code`
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>
+  // }
 
-  if (isError) {
-    return <div>Error fetching user data</div>
-  }
+  // if (isError) {
+  //   return <div>Error fetching user data</div>
+  // }
 
   return (
     <>
     <div>
       <ol>
-        <li>아이디: {seoyong?.id}</li>
+        {/* <li>아이디: {seoyong?.id}</li>
         <li>이름: {seoyong?.name}</li>
         <li>나이: {seoyong?.age}</li>
         <li>포지션: {seoyong?.position}</li>
-        <li>기술 스택: {seoyong?.skills}</li>
+        <li>기술 스택: {seoyong?.skills}</li> */}
       </ol>
     </div>
     <button><a href={OAUTH_KAKAO}>카카오 로그인</a></button>
