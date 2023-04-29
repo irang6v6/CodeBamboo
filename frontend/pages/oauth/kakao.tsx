@@ -8,7 +8,7 @@ interface LoginResponse {
 
 const login = async ({ code }: { code: string | undefined}): Promise<LoginResponse> => {
   const BASE_URL = 'http://localhost:8000';
-  const response = await fetch(BASE_URL + '/users/oauth/kakao', {
+  const response = await fetch(BASE_URL + '/auth/oauth/kakao', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,24 +22,34 @@ const login = async ({ code }: { code: string | undefined}): Promise<LoginRespon
 export default function Kakao() {
   const router = useRouter();
   const code = router.query.code as string | undefined;
-
-  const Login = useMutation<LoginResponse, Error, void>('user', () => login({ code }));
+  const loggingIn = useMutation<LoginResponse, Error, void>(() => login({ code }), 
+  {
+    onSuccess: (data) => {
+      console.log('온석세스 :', data);
+    },
+    onError: (error) => {
+      console.log('Error:', error);
+    },
+    onSettled: (data, error) => {
+      console.log('Mutation finished. Data:', data, 'Error:', error);
+    }
+  });
 
   useEffect(() => {
     if (code) {
-      Login.mutate();
+      loggingIn.mutate();
     }
-  }, [code, Login.mutate]);
+  }, [code, loggingIn.mutate]);
   
-  if (Login.isLoading) {
+  if (loggingIn.isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (Login.isError) {
+  if (loggingIn.isError) {
     return <div>Error fetching user data</div>;
   }
 
-  console.log(Login)
+  console.log(loggingIn)
   return (
     <>
     <h1>카카오 로그인 중...</h1>

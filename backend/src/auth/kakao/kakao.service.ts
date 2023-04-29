@@ -28,7 +28,7 @@ export class KakaoService {
         data: qs.stringify(body),
       });
       if (response.status === 200) {
-        // console.log(`kakaoToken : ${JSON.stringify(response.data)}`);
+        // console.log(`kakaoToken : ${JSON.stringify(response.data, null, 2)}`);
         // Token 을 가져왔을 경우 사용자 정보 조회
         const headerUserInfo = {
           'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
