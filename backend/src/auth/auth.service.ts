@@ -70,6 +70,7 @@ export class AuthService {
         provider,
         email: user.email || `${user.nickname}@codeBamboo.site`,
         introduce: user.introduce,
+        user_id : user.user_id
       }
     };
   }

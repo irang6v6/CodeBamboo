@@ -3,7 +3,11 @@ import { useMutation } from 'react-query';
 import { useEffect } from 'react';
 
 interface LoginResponse {
-  // 반환값 지정
+  access_token : string,
+  email : string | null,
+  image : string | null,
+  introduce : string | null,
+  nickname : string
 }
 
 const login = async ({ code }: { code: string | undefined}): Promise<LoginResponse> => {
@@ -25,14 +29,14 @@ export default function Kakao() {
   const loggingIn = useMutation<LoginResponse, Error, void>(() => login({ code }), 
   {
     onSuccess: (data) => {
-      console.log('온석세스 :', data);
+      // console.log('온석세스 :', data);
+      localStorage.setItem('access_token', data.access_token)
+      // 리코일에 isLoggedIn true, 나머지 data들 저장.
+      // 메인페이지로 리다이렉트.
     },
     onError: (error) => {
-      console.log('Error:', error);
+      // console.log('Error:', error);
     },
-    onSettled: (data, error) => {
-      console.log('Mutation finished. Data:', data, 'Error:', error);
-    }
   });
 
   useEffect(() => {
