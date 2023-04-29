@@ -45,7 +45,7 @@ export class KakaoService {
         // console.log(`responseUserInfo.status : ${responseUserInfo.status}`);
         if (responseUserInfo.status === 200) {
           // console.log(
-          //   `kakaoUserInfo : ${JSON.stringify(responseUserInfo.data)}`,
+          //   `kakaoUserInfo : ${JSON.stringify(responseUserInfo.data, null, 2)}`,
           // );
           return responseUserInfo.data;
         } else {

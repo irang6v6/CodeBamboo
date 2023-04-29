@@ -4,32 +4,31 @@ import { Repository, Like } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { SimpleUserDto } from './dto/simple.user.dto';
-import { AuthService } from '../auth/auth.service';
-import { JwtService } from '@nestjs/jwt';
 import { KakaoService } from 'src/auth/kakao/kakao.service';
 import { NaverService } from 'src/auth/naver/naver.service';
 import { GithubService } from 'src/auth/github/github.service';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
-    private jwtService: JwtService,
+    private AuthService : AuthService,
     private KakaoService : KakaoService,
     private NaverService : NaverService,
     private GithubService : GithubService,
   ) {}
 
-  async getSocialUserInfo(owner, code) {
-    let userInfo; let nickname; let image; let oauth_id; let provider
-    switch (owner) {
+  async getSocialUserInfo(provider, code) {
+    let userInfo; let nickname; let image; let oauth_id; let email;
+    switch (provider) {
       case 'kakao' :
-        userInfo = await this.KakaoService.oauthKaKao(owner, code)
+        userInfo = await this.KakaoService.oauthKaKao(provider, code)
         nickname = userInfo.properties.nickname;
         image = userInfo.properties.profile_image;
         oauth_id = userInfo.id; 
-        provider = 'kakao'
+        email = userInfo.email || `${nickname}@codeBamboo.site`
         break
       // case 'naver' :
       //   userInfo = await this.KakaoService.oauthKaKao(owner, code)
@@ -41,34 +40,32 @@ export class UsersService {
         throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST)
     }
 
-    return {nickname, image, oauth_id, provider}
+    return {nickname, image, oauth_id, email}
   }
   
-  async signUp({nickname, image, oauth_id, provider}) {
+  async signUpAndLogin(userInfoFromProvider) {
+    const {nickname, image, oauth_id, provider, email} = userInfoFromProvider
     // [1]. 기존유저인지 확인
-    const isNewbie = await this.userRepository.findOne({ where: { oauth_id: oauth_id } });
-    console.log('기존 유저입니까?', isNewbie)
-    if (!isNewbie) {
-      const newUser = this.userRepository.create({nickname, image, oauth_id, provider});
-      console.log(newUser, 62)
+    const user = await this.userRepository.findOne({ where: { oauth_id: oauth_id } });
+    // [2-1]. 신규 유저일때
+    if (!user) {
+      const newUser = this.userRepository.create({nickname, image, oauth_id, provider, email});
       await this.userRepository.save(newUser);
-      console.log(newUser, 64)
-      return newUser.user_id;
+      console.log('신규유저 회원가입 : ', newUser)
+
+      const payload = {user_id:newUser.user_id, nickname:newUser.nickname}  
+      const access_token = this.AuthService.generateToken(payload)
+      const refresh_token = this.AuthService.generateToken(payload, '30d')
+
+      return {access_token, refresh_token, nickname, image, provider, email, introduce:null };
     } 
-  
-    return isNewbie.user_id
+    // [2-2]. 기존유저일 때
+    const payload = {user_id:user.user_id, nickname:user.nickname}  
+    const access_token = this.AuthService.generateToken(payload)
+    const refresh_token = this.AuthService.generateToken(payload, '30d')
+
+    return {access_token, refresh_token, nickname:user.nickname, image:user.image, provider, email:user.email, introduce:user.introduce };
   }
-
-  // async login(user): Promise<{ access_token: string, refresh_token: string }> {
-  //   const payload = { sub: user.user_id, username: user.nickname }; // Customize the payload as needed
-  //   const access_token = this.jwtService.sign(payload);
-  //   const refresh_token = this.jwtService.sign(payload, { expiresIn: '30d' }); // Set the refresh token expiration time
-
-  //   return {
-  //     access_token,
-  //     refresh_token,
-  //   };
-  // }
 
   async create(createUserdto: CreateUserDto): Promise<void> {
     await this.userRepository.save(createUserdto);

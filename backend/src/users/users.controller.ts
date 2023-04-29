@@ -11,33 +11,29 @@ import { JwtService } from '@nestjs/jwt';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private JwtService: JwtService,
+    private readonly JwtService: JwtService,
     ) {}
 
-    @Post('/oauth/:owner')
+    @Post('/oauth/:provider')
     async oauth(
-      @Param('owner') owner: string,
+      @Param('provider') provider: string,
       @Body('code') code: string,
       @Res() res: Response,
     ): Promise<Response> {
       try {
-        const owners = ['kakao', 'naver', 'github'];
-        if (!owners.includes(owner)) {
+        // 1. provider 유효성 검사
+        const providers = ['kakao', 'naver', 'github'];
+        if (!providers.includes(provider)) {
           throw new HttpException('Bad request.', HttpStatus.BAD_REQUEST);
         }
-    
-        const { nickname, image, oauth_id, provider } = await this.usersService.getSocialUserInfo(owner, code);
-        console.log('로직 1', {nickname, image, oauth_id, provider})
-
-        const user_id = await this.usersService.signUp({ nickname, image, oauth_id, provider });
-        console.log('로직 2', user_id)
-        
-        const access_token = this.JwtService.sign({ nickname, sub : user_id, provider: owner });
-        const refresh_token = this.JwtService.sign({ nickname, sub : user_id, provider: owner }, { expiresIn: '30d' });
-        console.log(access_token, refresh_token)
-        
-        return res.status(HttpStatus.OK).json({ nickname, image, oauth_id, user_id, access_token, refresh_token });
+        // 2. provider로부터 유저 정보 받아오기
+        const userInfoFromProvider = await this.usersService.getSocialUserInfo(provider, code);
+        // 3. (신규유저일 경우)회원가입 시키고, 토큰 생성 후 반환
+        const userInfo = await this.usersService.signUpAndLogin(userInfoFromProvider);
+        // 4. 프론트에 유저 정보 반환하기
+        return res.status(HttpStatus.OK).json(userInfo);
       } catch (error) {
+        console.log(error)
         throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
