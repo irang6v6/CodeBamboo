@@ -1,8 +1,10 @@
-import { Controller, Body, Param, Post, Res, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Body, Param, Post, Res, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
+// @UseGuards(AuthGuard)
 export class AuthController {
   constructor(
     private AuthService : AuthService
