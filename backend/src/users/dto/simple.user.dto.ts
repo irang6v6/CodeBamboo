@@ -14,10 +14,6 @@ export class SimpleUserDto {
   @IsNumber()
   user_id: number;
 
-  // @IsNotEmpty()
-  // @IsString()
-  // username: string;
-
   @IsOptional()
   @IsEmail()
   email: string;
@@ -35,10 +31,10 @@ export class SimpleUserDto {
   provider: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  oauth_id: number;
+  @IsString()
+  oauth_id: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsDate()
   creation_time: Timestamp;
 
@@ -49,5 +45,4 @@ export class SimpleUserDto {
   @IsOptional()
   @IsString()
   introduce: string;
-  
 }

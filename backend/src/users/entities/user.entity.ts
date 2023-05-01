@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   Timestamp,
+  OneToMany,
 } from 'typeorm';
+import { Follow } from './follow.entity';
 
 @Entity()
 export class User {
@@ -12,9 +14,6 @@ export class User {
     type: 'bigint',
   })
   user_id: number;
-
-  // @Column()
-  // username: string;
 
   @Column({ nullable: true })
   email: string;
@@ -29,7 +28,7 @@ export class User {
   provider: string;
 
   @Column()
-  oauth_id: number;
+  oauth_id: string;
 
   @CreateDateColumn()
   creation_time: Timestamp;
@@ -40,4 +39,9 @@ export class User {
   @Column({ nullable: true })
   introduce: string;
 
+  @OneToMany(() => Follow, (follow) => follow.following)
+  followings: Follow[];
+
+  @OneToMany(() => Follow, (follow) => follow.followed)
+  followeds: Follow[];
 }
