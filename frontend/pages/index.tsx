@@ -28,6 +28,9 @@ export default function Home() {
 
   return (
     <>
+    <h1 className="text-3xl underline text-green font-scp font-bold">
+      Tailwind CSS rules!
+    </h1>
     <div>
       <ol>
         <li>아이디: {seoyong?.id}</li>
