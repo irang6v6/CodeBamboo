@@ -1,4 +1,4 @@
-import { Controller, Body, Param, Post, Res, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, Post, Res, HttpStatus, UseGuards, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { AuthGuard } from './auth.guard';
@@ -20,7 +20,7 @@ export class AuthController {
       // 1. provider 유효성 검사
       const providers = ['kakao', 'naver', 'github'];
       if (!providers.includes(provider)) {
-        throw new HttpException('Bad request.', HttpStatus.BAD_REQUEST);
+        throw new BadRequestException();
       }
       // 2. provider로부터 유저 정보 받아오기
       const userInfoFromProvider = await this.AuthService.getSocialUserInfo(provider, code);
@@ -40,7 +40,7 @@ export class AuthController {
         });
     } catch (error) {
       console.log(error)
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new InternalServerErrorException();
     }
   }
 }

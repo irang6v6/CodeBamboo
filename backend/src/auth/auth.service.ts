@@ -1,8 +1,7 @@
-import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './jwt.strategy';
 import { KakaoService } from './kakao/kakao.service';
 import { NaverService } from './naver/naver.service';
 import { GithubService } from './github/github.service';
@@ -31,17 +30,25 @@ export class AuthService {
         userInfo = await this.KakaoService.oauthKaKao(provider, code)
         nickname = userInfo.properties.nickname;
         image = userInfo.properties.profile_image;
-        oauth_id = userInfo.id; 
+        oauth_id = userInfo.id.toString(); 
         email = userInfo.email || `${nickname}@codeBamboo.site`
         break
-      // case 'naver' :
-      //   userInfo = await this.KakaoService.oauthKaKao(owner, code)
-      //   break
-      // case 'github' :
-      //   userInfo = await this.KakaoService.oauthKaKao(owner, code)
-      //   break
+      case 'naver' :
+        userInfo = await this.NaverService.oauthNaver(provider, code)
+        nickname = userInfo.response.nickname
+        image = userInfo.response.profile_image
+        oauth_id = userInfo.response.id
+        email = userInfo.response.email || `${nickname}@codeBamboo.site`
+        break
+      case 'github' :
+        userInfo = await this.GithubService.oauthGithub(provider, code)
+        nickname = userInfo.login
+        image = userInfo.avatar_url
+        oauth_id = userInfo.id.toString()
+        email  = userInfo.html_url || `${nickname}@codeBamboo.site`
+        break
       default :
-        throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST)
+        throw new BadRequestException()
     }
 
     return {nickname, image, oauth_id, email}
@@ -70,7 +77,7 @@ export class AuthService {
         provider,
         email: user.email || `${user.nickname}@codeBamboo.site`,
         introduce: user.introduce,
-        user_id : user.user_id
+        user_id : Number(user.user_id)
       }
     };
   }
