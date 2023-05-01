@@ -12,7 +12,7 @@ import { LeafsService } from './leafs.service';
 import { CreateLeafDto } from './dto/create.leaf.dto';
 import { SimpleLeafDto } from './dto/simple.leaf.dto';
 
-@Controller('leafs')
+@Controller('leaf')
 export class LeafsController {
   constructor(private readonly leafsService: LeafsService) {}
 

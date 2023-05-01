@@ -13,7 +13,7 @@ import { CreateTopicDto } from './dto/create.topic.dto';
 import { SimpleTopicDto } from './dto/simple.topic.dto';
 import { User } from 'src/users/entities/user.entity';
 
-@Controller('topics')
+@Controller('topic')
 export class TopicsController {
   constructor(private readonly topicsService: TopicsService) {}
 

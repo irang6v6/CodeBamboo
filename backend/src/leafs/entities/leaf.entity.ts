@@ -7,11 +7,12 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
-  JoinTable,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Topic } from 'src/topics/entities/topic.entity';
 import { Code } from './code.entity';
+import { Bookmark } from 'src/users/entities/bookmark.entity';
+import { Like } from 'src/users/entities/like.entity';
 
 @Entity()
 export class Leaf {
@@ -57,4 +58,10 @@ export class Leaf {
 
   @OneToMany(() => Code, (code) => code.leaf, { eager: true })
   code: Code[];
+
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
+  bookmarks: Bookmark[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }
