@@ -35,8 +35,8 @@ export class SimpleUserDto {
   provider: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  oauth_id: number;
+  @IsString()
+  oauth_id: string;
 
   @IsNotEmpty()
   @IsDate()

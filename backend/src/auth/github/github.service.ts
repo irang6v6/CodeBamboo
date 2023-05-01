@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
+import { SocialUserInfoDto } from '../dto/social.userInfo.dto';
 
 @Injectable()
 export class GithubService {
-  async oauthGithub(provider: string ,code: string): Promise<any> {
+  async oauthGithub(provider: string ,code: string): Promise<SocialUserInfoDto> {
     const body = {
       client_id: process.env.GITHUB_CLIENT_ID,
       client_secret : process.env.GITHUB_CLIENT_SECRET,

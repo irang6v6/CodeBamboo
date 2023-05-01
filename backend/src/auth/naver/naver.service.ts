@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
+import { SocialUserInfoDto } from '../dto/social.userInfo.dto';
 
 @Injectable()
 export class NaverService {
 
-  async oauthNaver(provider: string, code: string): Promise<any> {
+  async oauthNaver(provider: string, code: string): Promise<SocialUserInfoDto> {
     const client_id = process.env.NAVER_CLIENT_ID
     const client_secret = process.env.NAVER_CLIENT_SECRET
     const redirect_uri = process.env.REDIRECT_URI + '/' + provider

@@ -26,7 +26,6 @@ const login = async ({ code }: { code: string | undefined}): Promise<LoginRespon
 export default function Kakao() {
   const router = useRouter();
   const code = router.query.code as string | undefined;
-  console.log(code)
   const loggingIn = useMutation<LoginResponse, Error, void>(() => login({ code }), 
   {
     onSuccess: (data) => {

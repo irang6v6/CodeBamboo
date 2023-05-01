@@ -13,9 +13,6 @@ export class User {
   })
   user_id: number;
 
-  // @Column()
-  // username: string;
-
   @Column({ nullable: true })
   email: string;
 
@@ -29,7 +26,7 @@ export class User {
   provider: string;
 
   @Column()
-  oauth_id: number;
+  oauth_id: string;
 
   @CreateDateColumn()
   creation_time: Timestamp;
