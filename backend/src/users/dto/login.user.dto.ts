@@ -1,11 +1,11 @@
 import {
-  IsOptional,
   IsString,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class LoginUserDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
@@ -22,11 +22,11 @@ export class CreateUserDto {
   @IsString()
   provider: string;
 
-  @IsNotEmpty()
-  @IsString()
-  oauth_id: string;
-
   @IsOptional()
   @IsString()
-  introduce: string;
+  introduce: string | null;
+
+  @IsNotEmpty()
+  @IsString()
+  access_token: string
 }
