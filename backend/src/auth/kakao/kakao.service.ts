@@ -6,10 +6,10 @@ import * as qs from "qs"
 export class KakaoService {
   // 카카오소셜 로그인 담당하는 로직
   async oauthKaKao(owner: string, code: string ): Promise<any> {
-    const kakaoKey = 'c29ede11d38b98d260d2a6007228d72e';
-    const redirect_uri = `http://localhost:3000/oauth/${owner}`;
-    const kakaoTokenUrl = 'https://kauth.kakao.com/oauth/token';
-    const kakaoUserInfoUrl = 'https://kapi.kakao.com/v2/user/me';
+    const kakaoKey = process.env.KAKAO_API_KEY
+    const redirect_uri = `${process.env.KAKAO_REDIRECT_URI}/${owner}`
+    const kakaoTokenUrl = process.env.KAKAO_TOKEN_URL
+    const kakaoUserInfoUrl = process.env.KAKAO_USERINFO_URL
     const body = {
       grant_type: 'authorization_code',
       client_id: kakaoKey,
