@@ -12,6 +12,10 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
+  async create(createUserdto: CreateUserDto): Promise<void> {
+    await this.userRepository.save(createUserdto);
+  }
+
   async getAll(): Promise<SimpleUserDto[]> {
     return this.userRepository.find();
   }
@@ -32,10 +36,6 @@ export class UsersService {
       throw new NotFoundException(`user id ${id} not found`);
     }
     return user;
-  }
-
-  async create(createUserdto: CreateUserDto): Promise<void> {
-    await this.userRepository.save(createUserdto);
   }
 
   async deleteOne(id: number): Promise<void> {
