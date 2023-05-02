@@ -8,8 +8,9 @@ import {
 } from 'typeorm';
 import { Follow } from './follow.entity';
 import { Bookmark } from './bookmark.entity';
-import { Like } from './like.entity';
+import { LikeEntity } from './like.entity';
 import { Topic } from 'src/topics/entities/topic.entity';
+import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 @Entity()
 export class User {
@@ -51,9 +52,12 @@ export class User {
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmarks: Bookmark[];
 
-  @OneToMany(() => Like, (like) => like.user)
-  likes: Like[];
+  @OneToMany(() => LikeEntity, (like) => like.user)
+  likes: LikeEntity[];
 
   @OneToMany(() => Topic, (topic) => topic.user)
-  topic: Topic[];
+  topics: Topic[];
+
+  @OneToMany(() => Leaf, (leaf) => leaf.user)
+  leafs: Leaf[];
 }

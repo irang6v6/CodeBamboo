@@ -6,6 +6,7 @@ import { UsersService } from './users.service';
 import { followRepository } from './dao/follows.repository';
 import { bookmarkRepository } from './dao/bookmarks.repository';
 import { likeRepository } from './dao/likes.repository';
+import { LeafRepository } from 'src/leafs/dao/leafs.repository';
 
 @Module({
   imports: [DatabaseModule],
@@ -14,6 +15,8 @@ import { likeRepository } from './dao/likes.repository';
     ...userRepository,
     ...followRepository,
     ...bookmarkRepository,
+    ...likeRepository,
+    ...LeafRepository,
     ...likeRepository,
     UsersService,
   ],
