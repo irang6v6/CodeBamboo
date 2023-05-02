@@ -7,12 +7,12 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    colors: {
-      green: '#2A9464',
-    },
     extend: {
       fontFamily: {
-        'scp': ['Source Code Pro', 'monospace']
+        scp: ['Source Code Pro', 'monospace'],
+      },
+      colors: {
+        bamboo: '#2A9464',
       },
     },
   },
