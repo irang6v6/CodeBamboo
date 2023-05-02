@@ -6,8 +6,10 @@ import {
   Timestamp,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
+import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 @Entity()
 export class Topic {
@@ -22,7 +24,12 @@ export class Topic {
   @CreateDateColumn()
   creation_time: Timestamp;
 
-  @ManyToOne(() => User, (user) => user.topic)
+  @ManyToOne(() => User, (user) => user.topics, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => Leaf, (leaf) => leaf.topic)
+  leafs: Leaf[];
 }

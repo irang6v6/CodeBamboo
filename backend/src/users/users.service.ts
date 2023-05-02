@@ -7,6 +7,9 @@ import { SimpleUserDto } from './dto/simple.user.dto';
 import { CreateFollowDto } from './dto/create.follow.dto';
 import { GetUserDto } from './dto/get.user.dto';
 import { MessageUserDto } from './dto/message.user.dto';
+import { Bookmark } from './entities/bookmark.entity';
+import { Leaf } from 'src/leafs/entities/leaf.entity';
+import { LikeEntity } from './entities/like.entity';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +19,15 @@ export class UsersService {
 
     @Inject('FOLLOW_REPOSITORY')
     private followRepository: Repository<Follow>,
+
+    @Inject('BOOKMARK_REPOSITORY')
+    private bookmarkRepository: Repository<Bookmark>,
+
+    @Inject('LEAF_REPOSITORY')
+    private leafRepository: Repository<Leaf>,
+
+    @Inject('LIKE_REPOSITORY')
+    private likeRepository: Repository<LikeEntity>,
   ) {}
 
   // [#] 테스트용 코드
@@ -24,14 +36,25 @@ export class UsersService {
   }
 
   // [1] 유저 nickname으로 정보 조회
-  async searchUsersNickname(userInput: string): Promise<SimpleUserDto[]> {
+  async searchUsersNickname(userInput: string): Promise<GetUserDto[]> {
     const users = await this.userRepository.find({
       where: { nickname: Like(`%${userInput}%`) },
     });
     if (!users) {
       throw new NotFoundException(`user nickname ${userInput} not found`);
     }
-    return users;
+    return users.map((obj) => {
+      const getUserDto = {
+        user_id: obj.user_id,
+        nickname: obj.nickname,
+        image: obj.image,
+        introduce: obj.introduce,
+        email: obj.email,
+        isDeleted: obj.isDeleted,
+        // isFollowed: obj.followed.isFollowed,
+      };
+      return getUserDto;
+    });
   }
 
   // [2 - 1] 유저Id로 팔로우 목록 조회
@@ -102,7 +125,131 @@ export class UsersService {
     }
   }
 
-  // [4] 유저 id로 정보 조회
+  // [4] 특정 유저가 작성한 모든 토픽 조회
+  async getUserTopics(userId: number) {
+    const existedUser = await this.getUser(userId);
+    if (existedUser) {
+      const user = await this.userRepository.findOne({
+        where: {
+          user_id: userId,
+        },
+        relations: {
+          topics: true,
+        },
+      });
+      return user.topics;
+    }
+  }
+
+  // [5] 특정 유저가 작성한 모든 리프 조회
+  async getUserLeafs(userId: number) {
+    const existedUser = await this.getUser(userId);
+    if (existedUser) {
+      const user = await this.userRepository.findOne({
+        where: {
+          user_id: userId,
+        },
+        relations: {
+          leafs: true,
+        },
+      });
+      const userLeafs = user.leafs.map((obj) => {
+        return {
+          ...obj,
+          user: {
+            user_id: obj.user.user_id,
+            nickname: obj.user.nickname,
+            image: obj.user.image,
+            isDeleted: obj.user.isDeleted,
+            // isFollowed: await this.isFollowerUser(myUserId, obj.user.user_id),
+          },
+        };
+      });
+      return userLeafs;
+    }
+  }
+
+  // [6] 특정 유저가 즐겨찾기한 리프 조회
+  async getBookmarkLeafs(userId: number) {
+    const existedUser = await this.getUser(userId);
+    if (existedUser) {
+      const userBookmark = await this.userRepository.findOne({
+        where: {
+          user_id: userId,
+        },
+        relations: {
+          bookmarks: true,
+        },
+      });
+      return userBookmark.bookmarks;
+    }
+  }
+
+  // [7] 즐겨찾기 추가 및 제거
+  async addBookmarkLeaf(userId: number, leafId: number) {
+    const existedUser = await this.getUser(userId);
+    const existedLeaf = await this.leafRepository.findOne({
+      where: { leaf_id: leafId },
+    });
+    if (!existedLeaf) {
+      throw new NotFoundException('없는 리프 아이디 입니다.');
+    }
+    if (existedUser && existedLeaf) {
+      const bookmark = await this.bookmarkRepository.findBy({
+        user: Equal(userId),
+        leaf: Equal(leafId),
+      });
+      const messageUserDto = new MessageUserDto();
+      if (bookmark.length <= 0) {
+        // 없는 관계면 생성
+        await this.bookmarkRepository.save({
+          user: existedUser,
+          leaf: existedLeaf,
+        });
+        messageUserDto.message = `${existedLeaf.leaf_id}번 리프 즐겨찾기 등록 성공`;
+        return messageUserDto;
+      } else {
+        // 이미 있는 관계면 삭제
+        await this.bookmarkRepository.delete(bookmark[0].bookmark_id);
+        messageUserDto.message = `${existedLeaf.leaf_id}번 리프 즐겨찾기 삭제 성공`;
+        return messageUserDto;
+      }
+    }
+  }
+
+  // [8] 리프 좋아요 추가 및 삭제
+  async addLikeLeaf(userId: number, leafId: number) {
+    const existedUser = await this.getUser(userId);
+    const existedLeaf = await this.leafRepository.findOne({
+      where: { leaf_id: leafId },
+    });
+    if (!existedLeaf) {
+      throw new NotFoundException('없는 리프 입니다.');
+    }
+    if (existedUser && existedLeaf) {
+      const like = await this.likeRepository.findBy({
+        user: Equal(userId),
+        leaf: Equal(leafId),
+      });
+      const messageUserDto = new MessageUserDto();
+      if (like.length <= 0) {
+        // 없는 관계면 생성
+        await this.likeRepository.save({
+          user: existedUser,
+          leaf: existedLeaf,
+        });
+        messageUserDto.message = `${existedLeaf.leaf_id}번 리프 좋아요 등록 성공`;
+        return messageUserDto;
+      } else {
+        // 이미 있는 관계면 삭제
+        await this.likeRepository.delete(like[0].like_id);
+        messageUserDto.message = `${existedLeaf.leaf_id}번 리프 좋아요 삭제 성공`;
+        return messageUserDto;
+      }
+    }
+  }
+
+  // [9] 유저 id로 정보 조회
   async getUser(id: number): Promise<GetUserDto> {
     const user = await this.userRepository.findOne({ where: { user_id: id } });
     if (!user) {

@@ -10,11 +10,11 @@ import { User } from 'src/users/entities/user.entity';
 import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 @Entity()
-export class Like {
+export class LikeEntity {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
-  bookmark_id: number;
+  like_id: number;
 
   @CreateDateColumn()
   creation_time: Timestamp;
