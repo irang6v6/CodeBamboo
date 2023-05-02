@@ -76,8 +76,8 @@ export class AuthService {
 
     return {
       refresh_token,
+      access_token,
       user : {
-        access_token,
         nickname: user.nickname,
         image: user.image,
         provider,

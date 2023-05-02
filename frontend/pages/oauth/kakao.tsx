@@ -1,13 +1,20 @@
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { userState } from '@/recoil/user';
 
-interface LoginResponse {
+export interface LoginResponse {
+  messeage:string,
   access_token : string,
-  email : string | null,
-  image : string | null,
-  introduce : string | null,
-  nickname : string
+  data: {
+    email : string,
+    image : string,
+    introduce : string | null,
+    nickname : string,
+    provider : string,
+    user_id : number
+  }
 }
 
 const login = async ({ code }: { code: string | undefined}): Promise<LoginResponse> => {
@@ -26,13 +33,17 @@ const login = async ({ code }: { code: string | undefined}): Promise<LoginRespon
 export default function Kakao() {
   const router = useRouter();
   const code = router.query.code as string | undefined;
+  const [user, setUser] = useRecoilState(userState)
   const loggingIn = useMutation<LoginResponse, Error, void>(() => login({ code }), 
   {
     onSuccess: (data) => {
       // console.log('온석세스 :', data);
       localStorage.setItem('access_token', data.access_token)
-      // 리코일에 isLoggedIn true, 나머지 data들 저장.
-      // 메인페이지로 리다이렉트.
+      setUser({
+        ...data.data,
+        isLoggedIn:true
+      })
+      router.push('/')
     },
     onError: (error) => {
       // console.log('Error:', error);
@@ -54,6 +65,7 @@ export default function Kakao() {
   }
 
   console.log(loggingIn)
+  console.log(user)
   return (
     <>
     <h1>카카오 로그인 중...</h1>

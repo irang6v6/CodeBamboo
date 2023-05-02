@@ -36,6 +36,7 @@ export class AuthController {
       // 4-2. 리프레시 토큰 뺸 나머지 정보들 프론트에 반환
       const response : LoginResponseDto = {
         message: "로그인 성공",
+        access_token: userInfo.access_token,
         data: {
           ...userInfo.user,
         },

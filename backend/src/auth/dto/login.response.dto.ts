@@ -26,15 +26,12 @@ export class LoginUserDto {
   @IsOptional()
   @IsString()
   introduce: string | null;
-
-  @IsNotEmpty()
-  @IsString()
-  access_token: string
 }
 
 
 // 유저가 로그인 요청할 때 받는 리스폰스의 DTO
 export class LoginResponseDto {
   message: string;
+  access_token: string;
   data: LoginUserDto;
 }
