@@ -1,13 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import axios from "axios"
 import * as qs from "qs"
+import { SocialUserInfoDto } from '../dto/social.userInfo.dto';
 
 @Injectable()
 export class KakaoService {
   // 카카오소셜 로그인 담당하는 로직
-  async oauthKaKao(owner: string, code: string ): Promise<any> {
+  async oauthKaKao(provider: string, code: string ): Promise<SocialUserInfoDto> {
     const kakaoKey = process.env.KAKAO_API_KEY
-    const redirect_uri = `${process.env.KAKAO_REDIRECT_URI}/${owner}`
+    const redirect_uri = `${process.env.REDIRECT_URI}/${provider}`
     const kakaoTokenUrl = process.env.KAKAO_TOKEN_URL
     const kakaoUserInfoUrl = process.env.KAKAO_USERINFO_URL
     const body = {

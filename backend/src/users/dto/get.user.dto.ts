@@ -1,4 +1,3 @@
-import { Timestamp } from 'typeorm';
 import {
   IsNumber,
   IsOptional,
@@ -6,17 +5,12 @@ import {
   IsEmail,
   IsBoolean,
   IsNotEmpty,
-  IsDate,
 } from 'class-validator';
 
-export class SimpleUserDto {
+export class GetUserDto {
   @IsNotEmpty()
   @IsNumber()
   user_id: number;
-
-  @IsOptional()
-  @IsEmail()
-  email: string;
 
   @IsNotEmpty()
   @IsString()
@@ -26,23 +20,19 @@ export class SimpleUserDto {
   @IsString()
   image: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  provider: string;
-
-  @IsNotEmpty()
-  @IsString()
-  oauth_id: string;
+  introduce: string;
 
   @IsOptional()
-  @IsDate()
-  creation_time: Timestamp;
+  @IsEmail()
+  email: string;
 
   @IsOptional()
   @IsBoolean()
   isDeleted: boolean;
 
-  @IsOptional()
-  @IsString()
-  introduce: string;
+  // @IsNotEmpty()
+  // @IsBoolean()
+  // isFollowed: boolean;
 }
