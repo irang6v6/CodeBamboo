@@ -5,7 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 export class SimpleTopicDto {
   @IsNotEmpty()
   @IsBoolean()
-  need_help: boolean;
+  needHelp: boolean;
 
   // @IsNotEmpty()
   // @IsDate()

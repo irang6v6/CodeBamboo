@@ -28,7 +28,7 @@ export const Rendering = () => {
   return (
     <div>
       <iframe
-        srcDoc={srcCode}
+        srcDoc={src}
         sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-downloads allow-presentation"
         allow="accelerometer; camera; encrypted-media; display-capture; geolocation; gyroscope; microphone; midi; clipboard-read; clipboard-write"
         scrolling="auto"

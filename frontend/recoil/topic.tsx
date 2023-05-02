@@ -24,8 +24,21 @@ export const codeState = atom<CodeObject[]>({
       codeId : 2,
       language : 'CSS',
       content : `h1 {
-        color: red
-      }`
+	color: green
+}`
     }
    ],
+});
+
+export interface ArticleObject {
+  title: string;
+  content: string;
+}
+
+export const articleState = atom<ArticleObject>({
+  key: "articleState",
+  default: {
+    title : '알갱이 쏟아지는 효과 간단한 구현',
+    content : '쉬는 날에 심심해서 구현해봤습니다 ㅎㅎ 여기에 색깔 조합만 잘 넣으시면 완성될 것 같네요 ㅎㅎ'
+  },
 });

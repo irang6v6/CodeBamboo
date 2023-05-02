@@ -6,10 +6,9 @@ interface Props {
 
 export const Topics = ({ } : Props) => {
   return (
-    <div>
-      New Topic
+    <>
       <Editor />
-    </div>
+    </>
   );
 };
 

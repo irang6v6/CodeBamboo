@@ -42,15 +42,15 @@ export class LeafsService {
   //   return user;
   // }
 
-  async create(createLeaf): Promise<void> {
-    console.log(createLeaf);
+  async create(data): Promise<void> {
+    console.log(data);
     //user와 topic type에 맞추어줌.
-    const userId = { user: { user_id: createLeaf.user_id } };
-    const topicId = { topic: { topic_id: createLeaf.topic_id } };
+    const userId = { user: { user_id: data.user_id } };
+    const topicId = { topic: { topic_id: data.topic_id } };
 
     //code만 따로 저장
-    const createCode = createLeaf.code;
-    let json = { ...createLeaf, ...userId, ...topicId };
+    const createCode = data.code;
+    let json = { ...data, ...userId, ...topicId };
 
     //json에서 code객체만 추출 후 재정의
     const { code, ...obj } = json;

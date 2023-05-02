@@ -13,6 +13,7 @@ module.exports = {
       },
       colors: {
         bamboo: '#2A9464',
+        editor: '#263238',
       },
     },
   },

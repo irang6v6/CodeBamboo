@@ -33,7 +33,7 @@ export class TopicsController {
   }
 
   @Post()
-  create(@Body() createTopicDto: CreateTopicDto) {
+  create(@Body() createTopicDto) {
     this.topicsService.create(createTopicDto);
   }
 

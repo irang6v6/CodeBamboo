@@ -7,12 +7,12 @@ interface Props {
 
 export const Layout = ({ children } : Props) => {
   return (
-    <div className="flex min-h-screen
+    <div className="flex h-screen w-screen
                     flex-col 
-                    md:flex-row "
+                    md:flex-row"
     >
       <Bar />
-      <main className="flex-grow">{children}</main>
+      <main className="h-full w-full">{children}</main>
     </div>
   );
 };

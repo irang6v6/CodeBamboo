@@ -15,7 +15,7 @@ export class Code {
   code_id: number;
 
   @Column({ length: 100 })
-  title: string;
+  language: string;
 
   @Column({ type: 'text', nullable: true })
   content: string;
