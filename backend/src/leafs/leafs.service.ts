@@ -95,4 +95,13 @@ export class LeafsService {
   //         .execute();
   //     }
   //   }
+
+    // 토픽id로 리프들을 받아오는 로직
+    async getLeafsByTopicId(topicId:number): Promise<Leaf[]> {
+      return await this.leafRepository.find({ 
+        where: {
+          topic: { topic_id: topicId },
+        },
+      });
+    }
 }
