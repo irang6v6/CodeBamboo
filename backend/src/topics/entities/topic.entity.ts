@@ -17,7 +17,7 @@ export class Topic {
   topic_id: number;
 
   @Column({ type: 'boolean', default: true })
-  need_help: boolean;
+  needHelp: boolean;
 
   @CreateDateColumn()
   creation_time: Timestamp;

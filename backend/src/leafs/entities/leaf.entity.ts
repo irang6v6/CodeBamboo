@@ -21,7 +21,7 @@ export class Leaf {
   })
   leaf_id: number;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   is_root: boolean;
 
   @Column()
