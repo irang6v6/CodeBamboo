@@ -22,7 +22,7 @@ export const BarItems = ({ isHovered } : Props) => {
 
 
   return (
-    <div className='bg-inherit 
+    <div className='bg-inherit z-10
                     absolute top-20 right-0 h-screen w-1/2 
                     md:static md:h-auto md:w-auto'>
       { HoverBarItems }
