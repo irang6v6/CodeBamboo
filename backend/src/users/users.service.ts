@@ -137,6 +137,7 @@ export class UsersService {
           topics: true,
         },
       });
+      // 토픽의 대표리프와 해당하는 코드를 매핑해야함
       return user.topics;
     }
   }
@@ -165,6 +166,15 @@ export class UsersService {
           },
         };
       });
+      for (let i = 0; i < userLeafs.length; i++) {
+        const leaf = await this.leafRepository.findOne({
+          where: { leaf_id: userLeafs[i].leaf_id },
+          relations: { codes: true },
+          loadEagerRelations: false,
+        });
+        console.log(leaf);
+        userLeafs[i].codes = leaf.codes;
+      }
       return userLeafs;
     }
   }
@@ -181,7 +191,26 @@ export class UsersService {
           bookmarks: true,
         },
       });
-      return userBookmark.bookmarks;
+
+      const bookmarkList = userBookmark.bookmarks.map((obj) => {
+        return {
+          bookmark_id: obj.bookmark_id,
+          user_id: obj.user.user_id,
+          leaf: obj.leaf,
+          codes: obj.leaf.codes,
+        };
+      });
+
+      for (let i = 0; i < bookmarkList.length; i++) {
+        const leaf = await this.leafRepository.findOne({
+          where: { leaf_id: bookmarkList[i].leaf.leaf_id },
+          relations: { codes: true },
+          loadEagerRelations: false,
+        });
+        console.log(leaf);
+        bookmarkList[i].leaf = leaf;
+      }
+      return bookmarkList;
     }
   }
 
