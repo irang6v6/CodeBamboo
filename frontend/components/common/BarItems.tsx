@@ -11,13 +11,13 @@ export const BarItems = ({ isHovered } : Props) => {
     <>
       <Link href={"/topics"}><div>New</div></Link>
       <Link href={"/search"}><div>Search</div></Link>
-      <div>Username/Login</div>
+      <div  className="flex flex-col justify-end items-center w-full h-full mb-4">Username/Login</div>
     </>
     :
     <>
       <Link href={"/topics"}><div>N</div></Link>
       <Link href={"/search"}><div>S</div></Link>
-      <div>U</div>
+      <div  className="flex flex-col justify-end items-center w-full h-full mb-4">U</div>
     </>
 
 
