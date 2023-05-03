@@ -1,8 +1,9 @@
-import { Controller, Body, Param, Post, Res, HttpStatus, UseGuards, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Body, Param, Post, Res, HttpStatus, UseGuards, BadRequestException, InternalServerErrorException, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import { LoginResponseDto } from './dto/login.response.dto';
+import { providerValidator } from './utils/utils';
 
 @Controller('auth')
 // @UseGuards(AuthGuard)
@@ -20,8 +21,7 @@ export class AuthController {
    {
     try {
       // 1. provider 유효성 검사
-      const providers = ['kakao', 'naver', 'github'];
-      if (!providers.includes(provider)) {
+      if (!providerValidator(provider)) {
         throw new BadRequestException();
       }
       // 2. provider로부터 유저 정보 받아오기
@@ -36,6 +36,7 @@ export class AuthController {
       // 4-2. 리프레시 토큰 뺸 나머지 정보들 프론트에 반환
       const response : LoginResponseDto = {
         message: "로그인 성공",
+        access_token: userInfo.access_token,
         data: {
           ...userInfo.user,
         },
@@ -45,5 +46,11 @@ export class AuthController {
       console.log(error)
       throw new InternalServerErrorException();
     }
+  }
+
+  @Post('logout')
+  async logout (@Req() req: Request, @Res() res: Response) {
+    res.clearCookie('refresh_token');
+    return res.status(HttpStatus.OK).json({ message: '로그아웃 성공' });
   }
 }

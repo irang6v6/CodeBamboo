@@ -1,15 +1,15 @@
 import { atom, selector } from "recoil";
 
-export const exampleState = atom<string>({
-  key: "exampleState", // 선언명과 같지 않아도 됨, 그래도 통일하면 좋을 듯
-  default: '',
-});
-
 export interface ExampleObject {
   exampleId: number;
   exampleName: string;
   exampleContent: string;
 }
+
+export const exampleState = atom<string>({
+  key: "exampleState", // 선언명과 같지 않아도 됨, 그래도 통일하면 좋을 듯
+  default: '',
+});
 
 export const exampleObjectState = atom<ExampleObject[]>({
   key: "exampleObjectState",

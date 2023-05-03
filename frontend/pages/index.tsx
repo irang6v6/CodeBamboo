@@ -1,6 +1,8 @@
 import { useQuery } from 'react-query'
 import { LeafItem } from '@/components/LeafItem'
 import { UserItem } from '@/components/UserItem'
+import { useRecoilState } from 'recoil'
+import { userState } from '@/recoil/user'
 
 const fetchUser = async () => {
   const BASE_URL = 'http://localhost:8000'
@@ -12,7 +14,7 @@ const fetchUser = async () => {
 }
 
 export default function Home() {
-  const { isLoading, isError, data: seoyong } = useQuery('user', fetchUser)
+  const [user, setUser] = useRecoilState(userState)
   const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI
   // 카카오
   const API_KEY_KAKAO = process.env.NEXT_PUBLIC_API_KEY_KAKAO
@@ -24,13 +26,7 @@ export default function Home() {
   // 깃허브
   const github_client_id = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID
   const OAUTH_GITHUB = `https://github.com/login/oauth/authorize?client_id=${github_client_id}`
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
-  if (isError) {
-    return <div>Error fetching user data</div>
-  }
 
   return (
     <>
@@ -39,11 +35,15 @@ export default function Home() {
       </h1>
       <div>
         <ol>
-          <li>아이디: {seoyong?.id}</li>
-          <li>이름: {seoyong?.name}</li>
-          <li>나이: {seoyong?.age}</li>
-          <li>포지션: {seoyong?.position}</li>
-          <li>기술 스택: {seoyong?.skills}</li>
+          <img src={user?.image} alt="" className='h-24'/>
+          <li>닉네임: {user?.nickname}</li>
+          <li>이메일: {user?.email}</li>
+          <li>자기소개: {user?.introduce}</li>
+          {user.isLoggedIn?
+          <li>소셜로그인: {user?.provider}</li>
+          :
+          <li>로그인 상태 : false</li>
+          }
         </ol>
       </div>
       <button><a href={OAUTH_KAKAO}>카카오 로그인</a></button>
