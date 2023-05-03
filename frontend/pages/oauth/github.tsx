@@ -51,7 +51,6 @@ export default function Kakao() {
     return <div>Error fetching user data</div>;
   }
 
-  console.log(loggingIn)
   return (
     <>
     <h1>깃허브 로그인 중...</h1>
