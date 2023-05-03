@@ -10,6 +10,8 @@ import { MessageUserDto } from './dto/message.user.dto';
 import { Bookmark } from './entities/bookmark.entity';
 import { Leaf } from 'src/leafs/entities/leaf.entity';
 import { LikeEntity } from './entities/like.entity';
+import { transformUserTopics } from './utils/utils';
+import { getUserTopicsDTO } from './dto/get.userTopics.dto';
 
 @Injectable()
 export class UsersService {
@@ -126,19 +128,24 @@ export class UsersService {
   }
 
   // [4] 특정 유저가 작성한 모든 토픽 조회
-  async getUserTopics(userId: number) {
+  async getUserTopics(userId: number): Promise<getUserTopicsDTO> {
     const existedUser = await this.getUser(userId);
-    if (existedUser) {
-      const user = await this.userRepository.findOne({
-        where: {
-          user_id: userId,
-        },
-        relations: {
-          topics: true,
-        },
-      });
-      return user.topics;
-    }
+    if (!existedUser) throw new NotFoundException('존재하지 않는 유저입니다.'); // 에러타입이랑 메세지 알맞게 바꿔주셈
+
+    const user = await this.userRepository.findOne({
+      where: {
+        user_id: userId,
+      },
+      // 여기 업데이트 해서, 토픽의 리프, 리프의 코드 싹 가져옴
+      relations: ['topics', 'topics.leafs', 'topics.leafs.codes'],
+    });
+
+    // DTO에 맞게 찜찜
+    const data = transformUserTopics(user.topics);
+    return {
+      message: '유저 토픽 조회 성공',
+      data,
+    };
   }
 
   // [5] 특정 유저가 작성한 모든 리프 조회
@@ -165,6 +172,15 @@ export class UsersService {
           },
         };
       });
+      for (let i = 0; i < userLeafs.length; i++) {
+        const leaf = await this.leafRepository.findOne({
+          where: { leaf_id: userLeafs[i].leaf_id },
+          relations: { codes: true },
+          loadEagerRelations: false,
+        });
+        console.log(leaf);
+        userLeafs[i].codes = leaf.codes;
+      }
       return userLeafs;
     }
   }
@@ -181,7 +197,26 @@ export class UsersService {
           bookmarks: true,
         },
       });
-      return userBookmark.bookmarks;
+
+      const bookmarkList = userBookmark.bookmarks.map((obj) => {
+        return {
+          bookmark_id: obj.bookmark_id,
+          user_id: obj.user.user_id,
+          leaf: obj.leaf,
+          codes: obj.leaf.codes,
+        };
+      });
+
+      for (let i = 0; i < bookmarkList.length; i++) {
+        const leaf = await this.leafRepository.findOne({
+          where: { leaf_id: bookmarkList[i].leaf.leaf_id },
+          relations: { codes: true },
+          loadEagerRelations: false,
+        });
+        console.log(leaf);
+        bookmarkList[i].leaf = leaf;
+      }
+      return bookmarkList;
     }
   }
 

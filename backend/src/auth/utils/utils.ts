@@ -1,4 +1,4 @@
-export function providerValidator(provider:string) : Boolean {
+export function providerValidator(provider: string): boolean {
   const providers = ['kakao', 'naver', 'github'];
-  return providers.includes(provider)
+  return providers.includes(provider);
 }

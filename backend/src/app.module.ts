@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TopicsModule } from './topics/topics.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { LeafsModule } from './leafs/leafs.module';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -17,6 +18,11 @@ import { LeafsModule } from './leafs/leafs.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {}

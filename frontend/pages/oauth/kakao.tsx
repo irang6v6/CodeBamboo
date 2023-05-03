@@ -44,6 +44,11 @@ export default function Kakao() {
         isLoggedIn:true
       })
       router.push('/')
+      setUser({
+        ...data.data,
+        isLoggedIn:true
+      })
+      router.push('/')
     },
     onError: (error) => {
       // console.log('Error:', error);
