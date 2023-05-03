@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRecoilState } from 'recoil';
-import { userState } from '@/recoil/user';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { toggleLoginModal, userState } from '@/recoil/user';
 
 interface Props {
   isHovered: boolean
@@ -9,13 +9,15 @@ interface Props {
 
 export const BarItems = ({ isHovered } : Props) => {
   const [user, setUser] = useRecoilState(userState)
+  const handleIsModalOpen = useSetRecoilState(toggleLoginModal);
+
   const HoverBarItems = isHovered ?
     <>
       <div>
         <Link href={"/topics"}><div>New</div></Link>
         <Link href={"/search"}><div>Search</div></Link>
       </div>
-      <div  className="mb-8 flex items-center">
+      <div className="mb-8 flex items-center cursor-pointer" onClick={handleIsModalOpen}>
         <img src={user.image} alt="" className='h-12'/>
         <span>{user.nickname}</span>
       </div>
@@ -26,7 +28,9 @@ export const BarItems = ({ isHovered } : Props) => {
         <Link href={"/topics"}><div>N</div></Link>
         <Link href={"/search"}><div>S</div></Link>
       </div>
-      <div className="mb-8"><img src={user.image} alt="" className='h-12'/></div>
+      <div className="mb-8 cursor-pointer" onClick={handleIsModalOpen}>
+        <img src={user.image} alt="" className='h-12'/>
+      </div>
     </>
 
 

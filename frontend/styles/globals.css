@@ -6,3 +6,92 @@
 .CodeMirror {
   height: 100% !important;
 }
+
+@layer components {
+  /* 모달 컴포넌트 클래스들 */
+  .modal-wrapper {
+    @apply flex flex-col border border-transparent shadow-md rounded-xl fixed inset-0 m-auto bg-white z-10 tracking-wider bg-blue-400 justify-center items-center;
+  }
+
+  .modal-wrapper-hidden {
+    @apply hidden;
+  }
+
+  .close-button {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  }
+
+  .bg-bamboo {
+    background-image: url('/images/bg-bamboo.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  /* 시맨틱 컴포넌트를 위한 클래스들 */
+  .wrapper {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .line {
+    @apply w-6/4 border border-solid border-opacity-5;
+  }
+
+  .pink-button {
+    @apply h-8 text-white text-xs font-semibold bg-pink-300 border-none rounded px-4 mx-2 cursor-pointer;
+  }
+
+  .header {
+    @apply flex flex-col bg-orange-300 ;
+  }
+
+  .main {
+    @apply bg-red-300 flex flex-col;
+  }
+
+  .article {
+    @apply flex flex-col bg-green-300;
+  }
+
+  .section {
+    @apply flex flex-col bg-blue-300;
+  }
+  
+  .footer {
+    @apply flex justify-between items-center;
+  }
+
+  .overlay {
+    @apply absolute w-full h-full flex flex-col justify-center items-center z-10;
+  }
+
+}
+
+@screen md {
+  .modal-wrapper {
+    @apply w-3/4 h-5/6 max-w-screen-lg
+  }
+
+  .wrapper {
+    @apply w-5/12;
+  }
+
+  .header {
+    @apply w-4/5;
+  }
+
+  .main {
+    @apply w-4/5 h-4/5
+  }
+
+  .article {
+    @apply w-3/5;
+  }
+
+  .section {
+    @apply w-4/5;
+  }
+
+  /* .footer {
+    @apply w-4/5;
+  } */
+}

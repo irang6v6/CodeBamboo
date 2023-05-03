@@ -64,8 +64,6 @@ export default function Kakao() {
     return <div>Error fetching user data</div>;
   }
 
-  console.log(loggingIn)
-  console.log(user)
   return (
     <>
     <h1>카카오 로그인 중...</h1>

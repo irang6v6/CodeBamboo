@@ -52,7 +52,6 @@ export default function Kakao() {
     return <div>Error fetching user data</div>;
   }
 
-  console.log(loggingIn)
   return (
     <>
     <h1>네이버 로그인 중...</h1>
