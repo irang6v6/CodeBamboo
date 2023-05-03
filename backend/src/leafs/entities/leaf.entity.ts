@@ -59,8 +59,8 @@ export class Leaf {
   @JoinColumn({ name: 'topic_id' })
   topic: Topic;
 
-  @OneToMany(() => Code, (code) => code.leaf, { eager: true })
-  code: Code[];
+  @OneToMany(() => Code, (code) => code.leaf)
+  codes: Code[];
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmarks: Bookmark[];

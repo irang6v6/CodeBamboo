@@ -20,7 +20,7 @@ export class Code {
   @Column({ type: 'text', nullable: true })
   content: string;
 
-  @ManyToOne(() => Leaf, (leaf) => leaf.code)
+  @ManyToOne(() => Leaf, (leaf) => leaf.codes, { eager: true })
   @JoinColumn({ name: 'leaf_id' })
   leaf: Leaf;
 }
