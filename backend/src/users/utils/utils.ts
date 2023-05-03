@@ -1,5 +1,5 @@
-import { Topic } from "src/topics/entities/topic.entity";
-import { UserTopics } from "../dto/get.userTopics.dto";
+import { Topic } from 'src/topics/entities/topic.entity';
+import { UserTopics } from '../dto/get.userTopics.dto';
 
 // user.topics 찜찌기 with GPT-4
 export function transformUserTopics(userTopics: Topic[]): UserTopics[] {
@@ -18,7 +18,7 @@ export function transformUserTopics(userTopics: Topic[]): UserTopics[] {
             logId: rootLeaf.leaf_id,
             title: rootLeaf.title,
             content: rootLeaf.content,
-            codes: rootLeaf.code.map((code) => ({
+            codes: rootLeaf.codes.map((code) => ({
               codeId: code.code_id,
               language: code.language,
               content: code.content,
@@ -30,7 +30,7 @@ export function transformUserTopics(userTopics: Topic[]): UserTopics[] {
             logId: bestLeaf.leaf_id,
             title: bestLeaf.title,
             content: bestLeaf.content,
-            codes: bestLeaf.code.map((code) => ({
+            codes: bestLeaf.codes.map((code) => ({
               codeId: code.code_id,
               language: code.language,
               content: code.content,

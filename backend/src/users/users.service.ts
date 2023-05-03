@@ -130,22 +130,22 @@ export class UsersService {
   // [4] 특정 유저가 작성한 모든 토픽 조회
   async getUserTopics(userId: number): Promise<getUserTopicsDTO> {
     const existedUser = await this.getUser(userId);
-    if (!existedUser) throw new NotFoundException('존재하지 않는 유저입니다.') // 에러타입이랑 메세지 알맞게 바꿔주셈
+    if (!existedUser) throw new NotFoundException('존재하지 않는 유저입니다.'); // 에러타입이랑 메세지 알맞게 바꿔주셈
 
     const user = await this.userRepository.findOne({
       where: {
         user_id: userId,
       },
       // 여기 업데이트 해서, 토픽의 리프, 리프의 코드 싹 가져옴
-      relations: ['topics', 'topics.leafs', 'topics.leafs.code']
+      relations: ['topics', 'topics.leafs', 'topics.leafs.codes'],
     });
 
     // DTO에 맞게 찜찜
-    const data = transformUserTopics(user.topics)
+    const data = transformUserTopics(user.topics);
     return {
-      message : "유저 토픽 조회 성공",
-      data
-    }
+      message: '유저 토픽 조회 성공',
+      data,
+    };
   }
 
   // [5] 특정 유저가 작성한 모든 리프 조회
