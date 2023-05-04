@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { userState } from '@/recoil/user';
 import { useRouter } from 'next/router';
-import { url } from 'inspector';
 
 interface LoginResponse {
   messeage:string,

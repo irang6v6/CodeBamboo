@@ -1,37 +1,32 @@
-// 헤더에 엑세스 토큰을 담아서 보내야하는 요청에 대한 훅.
+import { request } from './api.request.config';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, QueryFunction } from 'react-query';
 
-import { useQuery, useMutation } from 'react-query';
-import axios from 'axios';
-
-const getHeaders = () => {
-  const token = localStorage.getItem('token');
-  return { headers: { Authorization: `Bearer ${token}` } };
+export const useQueryApi = (
+  key: string,
+  url: string,
+  config?: UseQueryOptions<any, unknown, any, string>
+) => {
+  return useQuery(
+    key,
+    () => request(url, 'GET'),
+    {
+      ...config,
+      onSuccess: config?.onSuccess,
+      onError: config?.onError,
+    }
+  );
 };
 
-const fetcher = async (url) => {
-  const response = await axios.get(url, getHeaders());
-  return response.data;
-};
-
-const mutator = async ({ url, method, data }) => {
-  const response = await axios({
-    url,
-    method,
-    data,
-    ...getHeaders(),
-  });
-
-  return response.data;
-};
-
-export const useAuthenticatedFetch = (key, url) => {
-  return useQuery(key, () => fetcher(url));
-};
-
-export const useAuthenticatedMutation = (method) => {
-  return useMutation((data) => mutator({ ...data, method }), {
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+export const useMutationApi = (
+  method: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  config?: UseMutationOptions<any, unknown, { url: string; payload: Object }, unknown>
+) => {
+  return useMutation(
+    (data: { url: string; payload: Object }) => request(data.url, method, data.payload),
+    {
+      ...config,
+      onSuccess: config?.onSuccess,
+      onError: config?.onError,
+    }
+  );
 };

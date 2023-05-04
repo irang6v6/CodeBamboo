@@ -11,19 +11,14 @@ export class AuthController {
     private AuthService : AuthService
   ){}
 
-  // @UseGuards(JwtAuthGuard)
   @Post('oauth/:provider')
   async login (
     @Param('provider') provider: string,
     @Body('code') code: string,
-    @Res() res: Response,
-    @Req() req: Request
+    @Res() res: Response
   )
    {
     try {
-      const user_id = req.user;
-      console.log('req : ', user_id)
-      
       // 1. provider 유효성 검사
       if (!providerValidator(provider)) {
         throw new BadRequestException();
@@ -56,6 +51,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout (@Req() req: Request, @Res() res: Response) {
+    const user_id = req.user;
+    console.log('req : ', user_id)
+    console.log('Authorization header:', req.headers.authorization)
+
     res.clearCookie('refresh_token');
     return res.status(HttpStatus.OK).json({ message: '로그아웃 성공' });
   }
