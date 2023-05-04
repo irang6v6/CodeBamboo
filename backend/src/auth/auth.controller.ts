@@ -1,25 +1,29 @@
 import { Controller, Body, Param, Post, Res, HttpStatus, UseGuards, BadRequestException, InternalServerErrorException, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
-import { AuthGuard } from './auth.guard';
+import { JwtAuthGuard } from './auth.guard';
 import { LoginResponseDto } from './dto/login.response.dto';
 import { providerValidator } from './utils/utils';
 
 @Controller('auth')
-// @UseGuards(AuthGuard)
 export class AuthController {
   constructor(
     private AuthService : AuthService
   ){}
 
+  // @UseGuards(JwtAuthGuard)
   @Post('oauth/:provider')
   async login (
     @Param('provider') provider: string,
     @Body('code') code: string,
-    @Res() res: Response
+    @Res() res: Response,
+    @Req() req: Request
   )
    {
     try {
+      const user_id = req.user;
+      console.log('req : ', user_id)
+
       // 1. provider 유효성 검사
       if (!providerValidator(provider)) {
         throw new BadRequestException();
@@ -48,9 +52,24 @@ export class AuthController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout (@Req() req: Request, @Res() res: Response) {
     res.clearCookie('refresh_token');
     return res.status(HttpStatus.OK).json({ message: '로그아웃 성공' });
   }
+
+  // 토큰 검증 X
+  // @Post('refresh')
+  // async refreshToken(@Req() request: Request) {
+  //   // This endpoint is not protected by JwtAuthGuard
+  //   // Validate the refresh token and issue a new access token
+  //   const newAccessToken = await this.authService.refreshAccessToken(request);
+
+  //   if (!newAccessToken) {
+  //     throw new UnauthorizedException('Invalid refresh token');
+  //   }
+
+  //   return { accessToken: newAccessToken };
+  // }
 }

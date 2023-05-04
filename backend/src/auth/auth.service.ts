@@ -1,14 +1,13 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException, UnauthorizedException  } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { KakaoService } from './kakao/kakao.service';
 import { NaverService } from './naver/naver.service';
 import { GithubService } from './github/github.service';
-import { CreateUserDto } from 'src/users/dto/create.user.dto';
 import { SocialUserInfoDto } from './dto/social.userInfo.dto';
-import { SimpleUserDto } from 'src/users/dto/simple.user.dto';
 import { SocialLoginResponseDto } from './dto/social.userInfo.dto';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -71,8 +70,8 @@ export class AuthService {
     console.log('기존유저입니다. user_id :', user.user_id)
     // [3]. 토큰 생성
     const payload = { user_id: user.user_id, nickname: user.nickname }
-    const access_token = this.jwtService.sign(payload)
-    const refresh_token = this.jwtService.sign(payload, {expiresIn:'14d'})
+    const access_token = this.jwtService.sign(payload, {secret:process.env.SECRET})
+    const refresh_token = this.jwtService.sign(payload, {expiresIn:'14d', secret:process.env.SECRET})
 
     return {
       refresh_token,
@@ -87,4 +86,15 @@ export class AuthService {
       }
     };
   }
+
+//   async refreshToken(refreshToken: string) {
+//     try {
+//       const decoded = await jwt.verify(refreshToken, process.env.SECRET);
+//       const newAccessToken = jwt.sign({ user_id: decoded.user_id }, process.env.SECRET, { expiresIn: '60m' });
+
+//       return { accessToken: newAccessToken };
+//     } catch (error) {
+//       throw new UnauthorizedException('Invalid refresh token');
+//     }
+//   }
 }

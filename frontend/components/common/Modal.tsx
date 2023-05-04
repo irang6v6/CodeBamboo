@@ -24,7 +24,7 @@ function Modal() {
   const OAUTH_GITHUB = `https://github.com/login/oauth/authorize?client_id=${github_client_id}`
 
   return (
-    <div className={`${modalWrapperClasses} bg-bamboo items-start w-full h-full border-none
+    <div className={`${modalWrapperClasses} bgImg-bamboo items-start w-full h-full border-none
                     md:w-4/5 md:h-4/5
     `}>
       <div className='wrapper bg-neutral-50/95 h-full w-full relative md:rounded-xl
