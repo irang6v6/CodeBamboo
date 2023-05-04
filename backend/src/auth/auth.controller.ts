@@ -23,7 +23,7 @@ export class AuthController {
     try {
       const user_id = req.user;
       console.log('req : ', user_id)
-
+      
       // 1. provider 유효성 검사
       if (!providerValidator(provider)) {
         throw new BadRequestException();
@@ -33,6 +33,7 @@ export class AuthController {
       // 3. (신규유저일 경우)회원가입 시키고, 토큰 생성 후 반환
       const userInfo = await this.AuthService.socialLogin({...userInfoFromProvider, provider});
       // 4-1. 리프레시 토큰은 httpOnly로 쿠키에 넣어줌
+      console.log('로직4')
       res.cookie('refresh_token', userInfo.refresh_token, {
         httpOnly: true,
         maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
