@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      transitionProperty: {
+        'w': 'width',
+      },
       fontFamily: {
         scp: ['Source Code Pro', 'monospace'],
       },

@@ -23,9 +23,9 @@ export const Bar = () => {
 
   return (
     <aside
-      className="bg-sky-900 text-white relative flex text-center transition-all duration-500 ease-in-out
+      className="bg-sky-900 text-white relative flex text-center  
                 flex-row justify-between h-20
-                md:flex-col md:justify-normal md:w-24 md:h-screen md:hover:w-48"
+                md:flex-col md:justify-normal md:w-24 md:h-screen md:hover:w-48 md:transition-w md:duration-500 md:ease-in-out"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

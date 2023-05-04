@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 interface Props {}
 
-export const LeafItem = ({}: Props) => {
+export const TopicItem = ({}: Props) => {
   return (
     <div>
-      <Link href={`/topics/${1}`}>LeafItem 1</Link>
+      <Link href={`/topics/${1}`}>TopicItem 1</Link>
     </div>
   );
 };

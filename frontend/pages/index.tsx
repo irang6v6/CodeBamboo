@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query'
-import { LeafItem } from '@/components/LeafItem'
+import { TopicItem } from '@/components/TopicItem'
 import { UserItem } from '@/components/UserItem'
 import { useRecoilState } from 'recoil'
 import { userState } from '@/recoil/user'
@@ -36,7 +36,7 @@ export default function Home() {
           }
         </ol>
       </div>
-      <LeafItem />
+      <TopicItem />
       <UserItem />
       <Modal/>
     </>

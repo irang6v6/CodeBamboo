@@ -4,7 +4,7 @@ import { atom } from "recoil";
 export interface CodeObject {
   codeId: number;
   language: string;
-  content: string;
+  content: string | null;
 }
 
 export const codeState = atom<CodeObject[]>({
@@ -32,7 +32,7 @@ export const codeState = atom<CodeObject[]>({
 
 export interface ArticleObject {
   title: string;
-  content: string;
+  content: string | null;
 }
 
 export const articleState = atom<ArticleObject>({
@@ -42,3 +42,28 @@ export const articleState = atom<ArticleObject>({
     content : '쉬는 날에 심심해서 구현해봤습니다 ㅎㅎ 여기에 색깔 조합만 잘 넣으시면 완성될 것 같네요 ㅎㅎ'
   },
 });
+
+export interface LeafObject {
+  leaf_id: number,
+  nickname: string,
+	title: string,
+  step: number,
+  ref_order: number,
+  parentLeafId: number,
+  exportCnt: number,
+  likeCnt: number,
+}
+
+export const LeafState = atom<LeafObject[]>({
+  key: "LeafState",
+  default: [{
+    "leaf_id": 6,
+    "nickname": "태형",
+    "title": "헬로우",
+    "step": 1,
+    "ref_order": 0,
+    "parentLeafId": 2,
+    "exportCnt": 6,
+    "likeCnt": 5
+  }],
+}); 
