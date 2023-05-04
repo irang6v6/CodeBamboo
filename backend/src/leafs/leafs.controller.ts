@@ -26,10 +26,10 @@ export class LeafsController {
   //     return this.usersService.search(userInput);
   //   }
 
-  // @Get(':id')
-  // getOne(@Param('id') id: number): Promise<CreateTopicDto> {
-  //   return this.topicsService.getOne(id);
-  // }
+  @Get(':id')
+  getOne(@Param('id') id: number): Promise<SimpleLeafDto> {
+    return this.leafsService.getOne(id);
+  }
 
   @Post()
   create(@Body() createLeaf) {

@@ -7,6 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Topic } from 'src/topics/entities/topic.entity';
@@ -50,20 +51,26 @@ export class Leaf {
 
   @ManyToOne(() => User, (user) => user.leafs, {
     onDelete: 'CASCADE',
-    eager: true,
+    lazy: true,
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Topic, (topic) => topic.leafs, { eager: true })
+  @ManyToOne(() => Topic, (topic) => topic.leafs, { lazy: true })
   @JoinColumn({ name: 'topic_id' })
   topic: Topic;
 
-  @OneToMany(() => Code, (code) => code.leaf)
+  @OneToMany(() => Code, (code) => code.leaf, { lazy: true })
   codes: Code[];
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmarks: Bookmark[];
+
+  @OneToOne(() => Topic)
+  bestLeaf: Topic;
+
+  @OneToOne(() => Topic)
+  rootLeaf: Topic;
 
   @OneToMany(() => LikeEntity, (like) => like.user)
   likes: LikeEntity[];

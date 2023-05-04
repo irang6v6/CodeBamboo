@@ -22,19 +22,24 @@ export class TopicsController {
     return this.topicsService.getAll();
   }
 
-  //   @Get('search')
-  //   search(@Query('name') userInput: string): Promise<SimpleUserDto[]> {
-  //     return this.usersService.search(userInput);
-  //   }
+  @Get('search')
+  search(@Query('input') userInput: string) {
+    return this.topicsService.search(userInput);
+  }
 
   @Get(':id')
-  getOne(@Param('id') id: number): Promise<SimpleTopicDto> {
+  getOne(@Param('id') id: number) {
     return this.topicsService.getOne(id);
   }
 
   @Post()
   create(@Body() createTopicDto) {
     this.topicsService.create(createTopicDto);
+  }
+
+  @Patch('help/:id')
+  closeHelp(@Param('id') id: number) {
+    return this.topicsService.closeHelp(id);
   }
 
   //   @Delete(':id')

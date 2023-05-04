@@ -6,6 +6,7 @@ import {
   Timestamp,
   ManyToOne,
   JoinColumn,
+  OneToOne,
   OneToMany,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
@@ -32,4 +33,12 @@ export class Topic {
 
   @OneToMany(() => Leaf, (leaf) => leaf.topic)
   leafs: Leaf[];
+
+  @OneToOne(() => Leaf, (leaf) => leaf.bestLeaf)
+  @JoinColumn({ name: 'best_leaf_id' })
+  bestLeaf: Leaf;
+
+  @OneToOne(() => Leaf, (leaf) => leaf.rootLeaf)
+  @JoinColumn({ name: 'root_leaf_id' })
+  rootLeaf: Leaf;
 }

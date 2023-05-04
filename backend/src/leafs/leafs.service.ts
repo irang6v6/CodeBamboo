@@ -1,9 +1,10 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Leaf } from './entities/leaf.entity';
-import { Repository, Like } from 'typeorm';
+import { Repository, Like, QueryFailedError } from 'typeorm';
 import { CreateLeafDto } from './dto/create.leaf.dto';
 import { SimpleLeafDto } from './dto/simple.leaf.dto';
 import { Code } from './entities/code.entity';
+import { CreateCodeDto } from './dto/create.code.dto';
 
 @Injectable()
 export class LeafsService {
@@ -32,18 +33,18 @@ export class LeafsService {
   //     return users;
   //   }
 
-  // async getOne(id: number): Promise<CreateTopicDto> {
-  //   const user = await this.topicRepository.findOne({
-  //     where: { topic_id: id },
-  //   });
-  //   if (!user) {
-  //     throw new NotFoundException(`user id ${id} not found`);
-  //   }
-  //   return user;
-  // }
+  async getOne(id: number): Promise<SimpleLeafDto> {
+    const leaf = await this.leafRepository.findOne({
+      where: { leaf_id: id },
+    });
+    if (!leaf) {
+      throw new NotFoundException(`leaf id ${id} not found`);
+    }
+    return leaf;
+  }
 
   async create(data): Promise<void> {
-    console.log(data);
+    // console.log(data);
     //user와 topic type에 맞추어줌.
     const userId = { user: { user_id: data.user_id } };
     const topicId = { topic: { topic_id: data.topic_id } };
@@ -57,17 +58,17 @@ export class LeafsService {
     json = obj;
 
     //재정의한 객체를 leaf에 저장
-    const createUser = await this.leafRepository.save(json);
+    const createLeaf = await this.leafRepository.save(json);
 
     //leaf_id 가져오기
-    const leaf_id = createUser.leaf_id;
+    const leaf_id = createLeaf.leaf_id;
 
     //따로 빼놓았던 code를 DB에 저장
     for (let index = 0; index < createCode.length; index++) {
       const element = createCode[index];
       // console.log(element);
       const id = { leaf: { leaf_id: leaf_id } };
-      const json = { ...element, ...id };
+      const json: CreateCodeDto = { ...element, ...id };
       // console.log(json);
       await this.codeRepository.save(json);
     }

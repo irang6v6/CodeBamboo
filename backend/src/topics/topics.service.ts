@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Leaf } from 'src/leafs/entities/leaf.entity';
 import { CreateLeafDto } from 'src/leafs/dto/create.leaf.dto';
 import { Code } from 'src/leafs/entities/code.entity';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TopicsService {
@@ -19,35 +20,77 @@ export class TopicsService {
 
     @Inject('CODE_REPOSITORY')
     private codeRepository: Repository<Code>,
+
+    @Inject('USER_REPOSITORY')
+    private userRepository: Repository<User>,
   ) {}
 
   async getAll(): Promise<SimpleTopicDto[]> {
     const getall = this.topicRepository.find({
-      relations: ['user'],
-      loadRelationIds: true,
+      relations: { user: true, rootLeaf: true, bestLeaf: true },
+      loadRelationIds: { relations: ['user'] },
     });
     return await getall;
   }
 
-  //   async search(userInput: string): Promise<SimpleUserDto[]> {
-  //     const users = await this.userRepository.find({
-  //       where: { nickname: Like(`%${userInput}%`) },
-  //     });
-  //     if (!users) {
-  //       throw new NotFoundException(`user nickname ${userInput} not found`);
-  //     }
-  //     return users;
-  //   }
-
-  async getOne(id: number): Promise<SimpleTopicDto> {
-    const topic = await this.topicRepository.findOne({
-      where: { topic_id: id },
-      relations: ['user'],
-      loadRelationIds: true,
+  async search(userInput: string) {
+    //title로 조회. where문으로 검색할 수 있음. 괄호 주의
+    const titleTopics = await this.topicRepository.find({
+      relations: {
+        user: true,
+        rootLeaf: { codes: true },
+        bestLeaf: { codes: true },
+      },
+      where: {
+        rootLeaf: { title: Like(`%${userInput}%`) },
+      },
+      select: {
+        user: { nickname: true, user_id: true, image: true },
+        rootLeaf: { title: true, content: true, codes: true },
+        bestLeaf: { title: true, content: true, codes: true },
+      },
     });
-    // console.log(topic);
+    const userTopics = await this.topicRepository.find({
+      relations: {
+        user: true,
+        rootLeaf: { codes: true },
+        bestLeaf: { codes: true },
+      },
+      where: { user: { nickname: Like(`%${userInput}%`) } },
+      select: {
+        user: { nickname: true, user_id: true, image: true },
+        rootLeaf: { title: true, content: true, codes: true },
+        bestLeaf: { title: true, content: true, codes: true },
+      },
+    });
+    //닉네임이나 타이틀로 검색 안되면 []로 들어와서 길이를 재서 유무 판별
+    if (userTopics.length == 0 && titleTopics.length == 0) {
+      throw new NotFoundException(
+        `'${userInput}'라는 검색결과를 찾을 수 없습니다.`,
+      );
+    } else if (userTopics.length > 0) {
+      return userTopics;
+    } else if (titleTopics.length > 0) {
+      return titleTopics;
+    }
+  }
+
+  async getOne(id: number) {
+    const topic = await this.topicRepository.find({
+      where: { topic_id: id },
+      select: {
+        user: { nickname: true, user_id: true, image: true },
+      },
+      relations: {
+        user: true,
+        rootLeaf: { codes: true },
+        bestLeaf: { codes: true },
+        leafs: { codes: true },
+      },
+    });
+    console.log(topic);
     if (!topic) {
-      throw new NotFoundException(`user id ${id} not found`);
+      throw new NotFoundException(`topic id ${id} not found`);
     }
     return topic;
   }
@@ -89,6 +132,11 @@ export class TopicsService {
     //8.leaf_id 받아오기
     // console.log(data.codes.length);
     const leaf_id = { leaf: { leaf_id: newLeaf.leaf_id } };
+    //8-1. topic이 생성될 때 best_leaf는 root_leaf이므로 topic entity의 best_leaf_id에 leaf_id 수정.
+    await this.topicRepository.update(newTopic.topic_id, {
+      rootLeaf: { leaf_id: newLeaf.leaf_id },
+    });
+
     //9.codes의 갯수만큼 for문 돌면서 code생성
     for (let index = 0; index < data.codes.length; index++) {
       const code = { ...leaf_id, ...data.codes[index] };
@@ -105,6 +153,9 @@ export class TopicsService {
   //       await this.userRepository.delete(id);
   //     }
   //   }
+  async closeHelp(id: number): Promise<void> {
+    await this.topicRepository.update(id, { needHelp: false });
+  }
 
   //   async update(id: number, updateUserDto: UpdateUserDto): Promise<void> {
   //     const simpleUserDto = await this.getOne(id);
