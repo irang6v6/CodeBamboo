@@ -28,7 +28,6 @@ export class AuthController {
       // 3. (신규유저일 경우)회원가입 시키고, 토큰 생성 후 반환
       const userInfo = await this.AuthService.socialLogin({...userInfoFromProvider, provider});
       // 4-1. 리프레시 토큰은 httpOnly로 쿠키에 넣어줌
-      console.log('로직4')
       res.cookie('refresh_token', userInfo.refresh_token, {
         httpOnly: true,
         maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
@@ -48,12 +47,12 @@ export class AuthController {
     }
   }
 
+  // 토큰 검증
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout (@Req() req: Request, @Res() res: Response) {
-    const user_id = req.user;
-    console.log('req : ', user_id)
-    console.log('Authorization header:', req.headers.authorization)
+    const user = req.user;
+    console.log('user_id : ', user["user_id"])
 
     res.clearCookie('refresh_token');
     return res.status(HttpStatus.OK).json({ message: '로그아웃 성공' });

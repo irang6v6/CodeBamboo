@@ -37,6 +37,7 @@ export const useLogin = (code:string|undefined, provider:string) => {
     onSuccess: (data) => {
       console.log('로그인 성공. 유저 정보 :', data);
       localStorage.setItem('access_token', data.access_token)
+      localStorage.setItem('provider', data.data.provider)
       setUser({
         ...data.data,
         isLoggedIn:true
