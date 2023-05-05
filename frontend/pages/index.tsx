@@ -2,10 +2,10 @@ import { useMutation, useQuery } from 'react-query'
 import { TopicItem } from '@/components/TopicItem'
 import { UserItem } from '@/components/UserItem'
 import { useRecoilState } from 'recoil'
-import { userState } from '@/recoil/user'
+import { userDefault, userState } from '@/recoil/user'
 import Modal from '@/components/common/Modal'
-import { useState } from 'react'
 import api from '@/hooks/api/axios.instance'
+import { useRouter } from 'next/router'
 
 // <<query 전략을 정의한다.>>
 
@@ -15,6 +15,7 @@ import api from '@/hooks/api/axios.instance'
 
 // 2. useMutaion
 const queryFn = async () =>{
+  // 로그아웃 하시겠습니까? 로직 추가..
   try {
     const response = await api.post('auth/logout')
     return response.data
@@ -24,12 +25,15 @@ const queryFn = async () =>{
 } 
 
 export default function Home() {
-  const [user, _] = useRecoilState(userState)
+  const [user, setUser] = useRecoilState(userState)
+  const router = useRouter()
   const logoutMutation = useMutation(queryFn, {
     onSuccess : (data)=>{
       console.log(data)
       localStorage.removeItem('access_token')
       localStorage.removeItem('provider')
+      setUser(userDefault)
+      router.push('/')
     }
   })
 
@@ -51,7 +55,9 @@ export default function Home() {
           }
         </ol>
       </div>
-      <button className='pink-button' onClick={logoutMutation.mutate()}>로그아웃</button>
+      {user.isLoggedIn &&
+        <button className='pink-button' onClick={() => logoutMutation.mutate()}>로그아웃</button>
+      }
       <TopicItem />
       <UserItem />
       <Modal/>
