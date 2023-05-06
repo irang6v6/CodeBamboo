@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());
@@ -23,7 +24,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
+    
+  app.use(cookieParser());
+  
   await app.listen(8000);
 }
 bootstrap();

@@ -87,14 +87,17 @@ export class AuthService {
     };
   }
 
-//   async refreshToken(refreshToken: string) {
-//     try {
-//       const decoded = await jwt.verify(refreshToken, process.env.SECRET);
-//       const newAccessToken = jwt.sign({ user_id: decoded.user_id }, process.env.SECRET, { expiresIn: '60m' });
+  async refreshAccessToken(refreshToken: string) {
+    try {
+      // verify : jwt를 검증하고, 페이로드를 반환한다.
+      const decoded = await this.jwtService.verify(refreshToken, { secret: process.env.SECRET });
+      console.log(decoded)
+      const newAccessToken = this.jwtService.sign({ user_id: decoded["user_id"], nickname: decoded["nickname"] }, { secret:process.env.SECRET, expiresIn: '60m' });
 
-//       return { accessToken: newAccessToken };
-//     } catch (error) {
-//       throw new UnauthorizedException('Invalid refresh token');
-//     }
-//   }
+      return { access_token: newAccessToken };
+      
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+  }
 }

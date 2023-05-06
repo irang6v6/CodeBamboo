@@ -4,8 +4,9 @@ import { UserItem } from '@/components/UserItem'
 import { useRecoilState } from 'recoil'
 import { userDefault, userState } from '@/recoil/user'
 import Modal from '@/components/common/Modal'
-import api from '@/hooks/api/axios.instance'
+import Authapi from '@/hooks/api/axios.authorization.instance'
 import { useRouter } from 'next/router'
+import axios from 'axios'
 
 // <<query 전략을 정의한다.>>
 
@@ -17,7 +18,7 @@ import { useRouter } from 'next/router'
 const queryFn = async () =>{
   // 로그아웃 하시겠습니까? 로직 추가..
   try {
-    const response = await api.post('auth/logout')
+    const response = await Authapi.post('auth/logout')
     return response.data
   } catch (error) {
     console.error(error)
