@@ -13,12 +13,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen } : Props) => {
   const [_, setIsOpen] = useRecoilState(loginModalState)
 
   const handleModalToggle = (event: React.MouseEvent) => {
-    console.log(event.target)
-    event.stopPropagation();
-    
-    if (event.target instanceof HTMLElement && event.target.tagName !== 'pink-button') {
       setIsOpen(prev => !prev);
-    }
   };
   
 
@@ -29,13 +24,14 @@ export const BarItems = ({ isHovered, setIsMenuOpen } : Props) => {
         <Link href={"/search"}><div>Search</div></Link>
       </div>
       <div
+        id='profile-div'
         className="h-fit flex items-center cursor-pointer
-
+                  
                   md:mb-8" 
         onClick={handleModalToggle}>
         <img src={user.image} alt="" className='h-12'/>
-        <span>{user.isLoggedIn? user.nickname : <button className='pink-button'>Login</button>}</span>
-        {user.isLoggedIn && <button className='pink-button'>로그아웃</button>}
+        <span>{user.isLoggedIn? user.nickname : <button className='login-button'>Login</button>}</span>
+        {user.isLoggedIn && <button className='login-button'>로그아웃</button>}
       </div>
     </>
     :
