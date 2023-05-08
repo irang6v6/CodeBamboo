@@ -1,15 +1,30 @@
-import { loginModalState, toggleLoginModal } from '@/recoil/user';
-import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { loginModalState } from '@/recoil/user';
+import React, { useRef, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import Draggable from 'react-draggable';
 
 function Modal() {
-  const loginModal = useRecoilValue(loginModalState)
-  const handleIsModalOpen = useSetRecoilState(toggleLoginModal); 
+  const [isOpen, setIsOpen] = useRecoilState(loginModalState)
 
   const modalWrapperClasses = `
-    ${loginModal.isOpen ? '' : 'modal-wrapper-hidden'}
+    ${isOpen ? '' : 'modal-wrapper-hidden'}
     modal-wrapper
   `;
+
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event:any) => {
+  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
+  //       setIsOpen(false);
+  //     }
+  //   };
+
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [modalRef]);
 
   const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI
   // 카카오
@@ -24,8 +39,9 @@ function Modal() {
   const OAUTH_GITHUB = `https://github.com/login/oauth/authorize?client_id=${github_client_id}`
 
   return (
-    <div className={`${modalWrapperClasses} bgImg-bamboo items-start w-full h-full border-none
-                    md:w-4/5 md:h-4/5
+    <Draggable defaultPosition={{x:0, y:0}}>
+    <div ref={modalRef} className={`${modalWrapperClasses} bgImg-bamboo items-start w-full h-full border-none
+      md:w-4/5 md:h-4/5
     `}>
       <div className='wrapper bg-neutral-50/95 h-full w-full relative md:rounded-xl
       '>
@@ -60,11 +76,12 @@ function Modal() {
         </main>
         <footer className="footer absolute bottom-3 right-3">
           <img src='/images/prev.png' className='cursor-pointer'
-            onClick={handleIsModalOpen}
+            onClick={()=>setIsOpen(prev=>!prev)}
             />
         </footer>
       </div>
     </div>
+    </Draggable>
   );
 }
 
