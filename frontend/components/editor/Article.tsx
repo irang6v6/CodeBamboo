@@ -36,13 +36,14 @@ export const Article = ({}: Props) => {
 
   return (
     <div
-      className="bg-editor text-white flex justify-center 
-                      h-full
-                      md:bg-inherit md:h-1/2"
+      className="flex p-4 bg-inherit
+                h-full
+                md:h-1/2"
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className='flex flex-col w-full' onSubmit={handleSubmit(onSubmit)}>
+        <div className='font-bold'>Title :</div>
         <input
-          className="my-7 bg-white h-8 w-full max-w-md  border-black text-black"
+          className="h-8 max-w-md article-input"
           maxLength={100}
           {...register('title', { required: true, maxLength: 100 })}
           type="text"
@@ -51,8 +52,9 @@ export const Article = ({}: Props) => {
           onChange={handleInputChange}
           placeholder='제목'
         />
+        <div className='font-bold'>Content :</div>
         <textarea
-          className="resize-none bg-white h-3/5 w-full max-w-lg border-black text-black"
+          className="resize-none h-full article-input"
           {...register('content')}
           name='content'
           value={localArticle.content || ""}
@@ -60,9 +62,9 @@ export const Article = ({}: Props) => {
           placeholder='내용'
         />
         <button
-          className='bg-bamboo text:white'
+          className='bamboo-button place-self-end'
         >
-          submit
+          Submit
         </button>
       </form>
     </div>

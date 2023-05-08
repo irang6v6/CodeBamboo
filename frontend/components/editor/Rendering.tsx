@@ -26,10 +26,10 @@ export const Rendering = () => {
   }, [srcCode]);
 
   return (
-    <div>
+    <div className='h-full w-full border md:h-1/2'>
       <iframe
         srcDoc={src}
-        sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-downloads allow-presentation"
+        sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-scripts allow-top-navigation-by-user-activation allow-downloads allow-presentation"
         allow="accelerometer; camera; encrypted-media; display-capture; geolocation; gyroscope; microphone; midi; clipboard-read; clipboard-write"
         scrolling="auto"
         // allowTransparency={true} // TS 에러가 나거나 콘솔에 뜸

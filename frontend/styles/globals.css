@@ -40,6 +40,10 @@
     @apply h-8 text-white text-xs font-semibold bg-pink-300 border-none rounded px-4 mx-2 cursor-pointer;
   }
 
+  .bamboo-button {
+    @apply h-fit w-fit py-3 px-4 bg-bamboo text-white rounded-lg;
+  }
+
   .header {
     @apply flex flex-col bg-orange-300 ;
   }
@@ -94,4 +98,21 @@
   /* .footer {
     @apply w-4/5;
   } */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.article-input {
+  @apply bg-gray-100 rounded-sm w-full mt-1 mb-3 p-2
+}
+
+.editor-tab {
+  @apply shrink-0 h-auto m-2 rounded-md flex items-center justify-center
 }

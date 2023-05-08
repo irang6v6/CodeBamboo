@@ -49,23 +49,20 @@ export const Editor = () => {
       .map((e) => e.language);
 
     return (
-      <div className='flex flex-row'>
+      <div
+        className='flex flex-row h-16 overflow-x-scroll scrollbar-hide'>
         {tabs.map((tab) => (
-          <div
-            className={`flex w-28 h-16 text-center text-white items-center justify-center
-                        ${selectedLanguage === tab ? 'font-bold bg-bamboo' : 'bg-editor'}`}
+          <div 
             key={tab}
             onClick={() => setSelectedLanguage(tab)}
-          >
+            className={`editor-tab w-24 ${selectedLanguage === tab ? 'font-bold bg-bamboo text-white' : 'bg-gray-300'}`}>
             {`${tab}`}
           </div>
         ))}
         {isMobile && (
-          <div
-            className={`flex w-20 h-16 text-center text-white items-center justify-center
-                      ${selectedLanguage === 'Content' ? 'font-bold bg-bamboo' : 'bg-editor'}`}
-          onClick={()=>setSelectedLanguage('Content')}
-          >
+          <div 
+            onClick={()=>setSelectedLanguage('Content')}
+            className={`editor-tab w-20 ${selectedLanguage === 'Content' ? 'font-bold bg-bamboo text-white' : 'bg-gray-300'} justify-end`}>
             Text
           </div>
         )}
@@ -82,27 +79,27 @@ export const Editor = () => {
                       md:w-1/2'>
         <Tabs />
         <div className='h-full'>
-          { selectedLanguage !== 'Content' ?
-            <CodeItem
-              className='h-full
-                        text-base
-                        md:text-lg'
-              value={initialCode}
-              onChange={handleChange}
-              options={{
-                mode: 'xml',
-                theme: 'material',
-                lineNumbers: true,
-                // imeMode: 'disabled',
-                // spellcheck: false,
-                // inputStyle: "contenteditable",  
-                // lint: 'true',
-              }}
-              autoScroll={false}
-            />
-            :
-            <Article />
-          }
+            { selectedLanguage !== 'Content' ?
+              <CodeItem
+                className='h-full
+                          text-base
+                          md:text-lg'
+                value={initialCode}
+                onChange={handleChange}
+                options={{
+                  mode: 'xml',
+                  theme: 'material',
+                  lineNumbers: true,
+                  // imeMode: 'disabled',
+                  // spellcheck: false,
+                  // inputStyle: "contenteditable",  
+                  // lint: 'true',
+                }}
+                autoScroll={true}
+              />
+              :
+              <Article />
+            }
         </div>
       </div>
       <div className='h-full
