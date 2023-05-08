@@ -25,6 +25,15 @@ const queryFn = async () =>{
   }
 } 
 
+const test = async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/auth/access', {withCredentials:true})
+    console.log(response.data)
+  } catch (error) {
+    
+  }
+}
+
 export default function Home() {
   const [user, setUser] = useRecoilState(userState)
   const router = useRouter()
@@ -57,7 +66,10 @@ export default function Home() {
         </ol>
       </div>
       {user.isLoggedIn &&
-        <button className='pink-button' onClick={() => logoutMutation.mutate()}>로그아웃</button>
+        <>
+          <button className='pink-button' onClick={() => logoutMutation.mutate()}>로그아웃</button>
+          <button className='pink-button' onClick={() => test()}>리프레시</button>
+        </>
       }
       <TopicItem />
       <UserItem />

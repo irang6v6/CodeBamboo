@@ -6,11 +6,13 @@ import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());
+  
+  app.use(cookieParser());
 
   app.enableCors({
     origin: ['http://localhost:3000', 'https://k8a801.p.ssafy.io'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'Authorization'],
+    allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'Authorization', 'Access-Control-Allow-Origin'],
     credentials: true,
   });
 
@@ -24,8 +26,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-    
-  app.use(cookieParser());
   
   await app.listen(8000);
 }

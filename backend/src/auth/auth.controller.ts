@@ -33,6 +33,7 @@ export class AuthController {
         maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
         secure: false,
       });
+      console.log(res.cookie)
       // 4-2. 리프레시 토큰 뺸 나머지 정보들 프론트에 반환
       const response : LoginResponseDto = {
         message: "로그인 성공",
@@ -63,9 +64,10 @@ export class AuthController {
   @Get('access')
   async refreshToken(@Req() req: Request, @Res() res: Response) {
     try {
+      console.log(JSON.stringify(req.cookies))
       // 쿠키의 리프레시 토큰을 할당
       const refreshToken = req.cookies['refresh_token']
-      if (!refreshToken) throw new UnauthorizedException('Invalid refresh token');
+      if (!refreshToken) throw new UnauthorizedException();
 
       const newAccessToken = await this.AuthService.refreshAccessToken(refreshToken);
       // @res 데코레이터를 사용했다면, 리턴문 역시 이런 형태로 작성해야 정상적으로 리스폰스를 반환할 수 있다.
@@ -80,7 +82,7 @@ export class AuthController {
         res.clearCookie('refresh_token');
         return res.status(HttpStatus.OK).json({ message: '리프레쉬 토큰이 유효하지 않습니다. 로그아웃됩니다.' });
       } else {
-        // 500에러일 때는, 원래대로 500에러 send
+        // 2. 500에러일 때는, 원래대로 500에러 send
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
       }
     }

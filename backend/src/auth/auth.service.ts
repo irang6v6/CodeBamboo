@@ -91,7 +91,7 @@ export class AuthService {
     try {
       // verify : jwt를 검증하고, 페이로드를 반환한다.
       const decoded = await this.jwtService.verify(refreshToken, { secret: process.env.SECRET });
-      console.log(decoded)
+      console.log('decoded : ', decoded)
       const newAccessToken = this.jwtService.sign({ user_id: decoded["user_id"], nickname: decoded["nickname"] }, { secret:process.env.SECRET, expiresIn: '60m' });
 
       return { access_token: newAccessToken };
