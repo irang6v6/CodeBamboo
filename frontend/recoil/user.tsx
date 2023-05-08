@@ -10,18 +10,20 @@ export interface userObject {
   user_id: number;
 }
 
+export const userDefault = {
+  isLoggedIn: false,
+  email: "Panda123@codeBamboo.site",
+  image:
+    "https://ssl.pstatic.net/static/pwe/address/img_profile.png",
+  introduce: "Hello, Bamboos!",
+  nickname: "Panda123",
+  provider: "kakao",
+  user_id: 999,
+}
+
 export const userState = atom<userObject>({
   key: "userState", // 선언명과 같지 않아도 됨, 그래도 통일하면 좋을 듯
-  default: {
-    isLoggedIn: false,
-    email: "Panda123@codeBamboo.site",
-    image:
-      "https://ssl.pstatic.net/static/pwe/address/img_profile.png",
-    introduce: "Hello, Bamboos!",
-    nickname: "Panda123",
-    provider: "kakao",
-    user_id: 999,
-  },
+  default:userDefault
 });
 
 interface loginModal {
