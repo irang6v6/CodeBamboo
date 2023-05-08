@@ -26,23 +26,8 @@ export const userState = atom<userObject>({
   default:userDefault
 });
 
-interface loginModal {
-  isOpen : boolean;
-}
-
-export const loginModalState = atom<loginModal>({
+export const loginModalState = atom<boolean>({
   key: "loginModalState", // 선언명과 같지 않아도 됨, 그래도 통일하면 좋을 듯
-  default: {
-    isOpen: false,
-  },
+  default: false,
 });
 
-export const toggleLoginModal = selector({
-  key: 'toggleLoginModal',
-  get: ({ get }) => get(loginModalState),
-  set: ({ set }) => {
-    set(loginModalState, (prevState) => {
-      return { ...prevState, isOpen: !prevState.isOpen };
-    });
-  },
-});

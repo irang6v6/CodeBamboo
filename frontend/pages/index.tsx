@@ -3,7 +3,6 @@ import { TopicItem } from '@/components/TopicItem'
 import { UserItem } from '@/components/UserItem'
 import { useRecoilState } from 'recoil'
 import { userDefault, userState } from '@/recoil/user'
-import Modal from '@/components/common/Modal'
 import Authapi from '@/hooks/api/axios.authorization.instance'
 import { useRouter } from 'next/router'
 import axios from 'axios'
@@ -24,7 +23,6 @@ const queryFn = async () =>{
     console.error(error)
   }
 } 
-
 
 export default function Home() {
   const [user, setUser] = useRecoilState(userState)
@@ -76,7 +74,6 @@ export default function Home() {
       }
       <TopicItem />
       <UserItem />
-      <Modal/>
     </>
   );
 }

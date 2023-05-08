@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import '@/styles/globals.css'
 import { Layout } from '@/components/common/Layout';
+import Modal from '@/components/common/LoginModal';
 
 const queryClient = new QueryClient();
 
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <RecoilRoot>
         <Layout>
           <Component {...pageProps} />
+          <Modal/>
         </Layout>
       </RecoilRoot>
     </QueryClientProvider>

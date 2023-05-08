@@ -40,6 +40,10 @@
     @apply h-8 text-white text-xs font-semibold bg-pink-300 border-none rounded px-4 mx-2 cursor-pointer;
   }
 
+  .login-button {
+    @apply h-8 text-white text-xs font-semibold bg-bamboo border-none rounded px-4 mx-2 cursor-pointer;
+  }
+
   .bamboo-button {
     @apply h-fit w-fit py-3 px-4 bg-bamboo text-white rounded-lg;
   }
