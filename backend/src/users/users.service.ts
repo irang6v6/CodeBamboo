@@ -10,8 +10,9 @@ import { MessageUserDto } from './dto/message.user.dto';
 import { Bookmark } from './entities/bookmark.entity';
 import { Leaf } from 'src/leafs/entities/leaf.entity';
 import { LikeEntity } from './entities/like.entity';
-import { transformUserTopics } from './utils/utils';
+import { transformUserTopics, searchBestLeafId } from './utils/utils';
 import { getUserTopicsDTO } from './dto/get.userTopics.dto';
+import { Topic } from 'src/topics/entities/topic.entity';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +31,9 @@ export class UsersService {
 
     @Inject('LIKE_REPOSITORY')
     private likeRepository: Repository<LikeEntity>,
+
+    @Inject('TOPIC_REPOSITORY')
+    private topicRepository: Repository<Topic>,
   ) {}
 
   // [#] 테스트용 코드
@@ -38,6 +42,7 @@ export class UsersService {
   }
 
   // [1] 유저 nickname으로 정보 조회
+  // myUserId가 전달인자로 포함되어야함
   async searchUsersNickname(userInput: string): Promise<GetUserDto[]> {
     const users = await this.userRepository.find({
       where: { nickname: Like(`%${userInput}%`) },
@@ -53,13 +58,14 @@ export class UsersService {
         introduce: obj.introduce,
         email: obj.email,
         isDeleted: obj.isDeleted,
-        // isFollowed: obj.followed.isFollowed,
+        // isFollowed: await this.isFollowerUser(myUserId, obj.user_id),
       };
       return getUserDto;
     });
   }
 
   // [2 - 1] 유저Id로 팔로우 목록 조회
+  // myUserId가 전달인자로 포함되어야함
   async getFollowUsers(id: number): Promise<GetUserDto[]> {
     const existedUser = await this.getUser(id);
     if (existedUser) {
@@ -79,7 +85,7 @@ export class UsersService {
           introduce: obj.followed.introduce,
           email: obj.followed.email,
           isDeleted: obj.followed.isDeleted,
-          // isFollowed: obj.followed.isFollowed,
+          // isFollowed: await this.isFollowerUser(myUserId, obj.followed.user_id),
         };
         return followedUser;
       });
@@ -149,6 +155,7 @@ export class UsersService {
   }
 
   // [5] 특정 유저가 작성한 모든 리프 조회
+  // myUserId가 전달인자로 추가되어야함
   async getUserLeafs(userId: number) {
     const existedUser = await this.getUser(userId);
     if (existedUser) {
@@ -257,34 +264,59 @@ export class UsersService {
     const existedUser = await this.getUser(userId);
     const existedLeaf = await this.leafRepository.findOne({
       where: { leaf_id: leafId },
+      relations: ['topic'],
     });
     if (!existedLeaf) {
       throw new NotFoundException('없는 리프 입니다.');
     }
+
     if (existedUser && existedLeaf) {
-      const like = await this.likeRepository.findBy({
-        user: Equal(userId),
-        leaf: Equal(leafId),
+      const likeItem = await this.likeRepository.findOne({
+        where: {
+          user: { user_id: userId },
+          leaf: { leaf_id: leafId },
+        },
       });
       const messageUserDto = new MessageUserDto();
-      if (like.length <= 0) {
+      if (!likeItem) {
         // 없는 관계면 생성
         await this.likeRepository.save({
-          user: existedUser,
-          leaf: existedLeaf,
+          user: { user_id: userId },
+          leaf: { leaf_id: leafId },
         });
         messageUserDto.message = `${existedLeaf.leaf_id}번 리프 좋아요 등록 성공`;
-        return messageUserDto;
       } else {
         // 이미 있는 관계면 삭제
-        await this.likeRepository.delete(like[0].like_id);
+        await this.likeRepository.delete(likeItem.like_id);
         messageUserDto.message = `${existedLeaf.leaf_id}번 리프 좋아요 삭제 성공`;
-        return messageUserDto;
       }
+
+      // 좋아요를 누른 리프의 토픽의 손들기 확인
+      if (!(await existedLeaf.topic.needHelp)) {
+        // 좋아요를 누른 리프의 토픽 찾기
+        const topicItem = await this.topicRepository.findOne({
+          where: { topic_id: existedLeaf.topic.topic_id },
+          relations: ['leafs', 'leafs.likes'],
+          loadRelationIds: {
+            relations: ['leafs.likes'],
+          },
+        });
+        // 찾은 토픽의 모든 리프들의 좋아요 수를 비교
+        // 가장 좋아요수가 높은 리프의 leaf_id값을 반환
+        const bestLeafId = searchBestLeafId(topicItem.leafs);
+
+        // 토픽의 best_leaf_id 갱신
+        this.topicRepository.update(topicItem.topic_id, {
+          bestLeaf: { leaf_id: bestLeafId },
+        });
+      }
+
+      return messageUserDto;
     }
   }
 
   // [9] 유저 id로 정보 조회
+  // myUserId가 전달인자로 추가되어야함
   async getUser(id: number): Promise<GetUserDto> {
     const user = await this.userRepository.findOne({ where: { user_id: id } });
     if (!user) {
@@ -295,6 +327,7 @@ export class UsersService {
     return user;
   }
 
+  // [10] 유저 삭제
   async deleteOne(id: number): Promise<void> {
     const user = await this.getUser(id);
     if (user) {
@@ -302,19 +335,20 @@ export class UsersService {
     }
   }
 
+  // [11] 유저 정보 수정
+  // 닉네임, 이미지경로, 자기소개만 수정 가능
   async update(id: number, updateUserDto: UpdateUserDto): Promise<void> {
     const simpleUserDto = await this.getUser(id);
     if (simpleUserDto) {
-      await this.userRepository
-        .createQueryBuilder()
-        .update(User)
-        .set({
-          nickname: updateUserDto.nickname,
-          image: updateUserDto.image,
-          introduce: updateUserDto.introduce,
-        })
-        .where('user_id = :id', { id })
-        .execute();
+      await this.userRepository.update(id, {
+        nickname: updateUserDto.nickname
+          ? updateUserDto.nickname
+          : simpleUserDto.nickname,
+        image: updateUserDto.image ? updateUserDto.image : simpleUserDto.image,
+        introduce: updateUserDto.introduce
+          ? updateUserDto.introduce
+          : simpleUserDto.introduce,
+      });
     }
   }
 }

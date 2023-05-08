@@ -8,6 +8,7 @@ import { bookmarkRepository } from './dao/bookmarks.repository';
 import { likeRepository } from './dao/likes.repository';
 import { LeafRepository } from 'src/leafs/dao/leafs.repository';
 import { APP_PIPE } from '@nestjs/core';
+import { TopicRepository } from 'src/topics/dao/topics.repository';
 
 @Module({
   imports: [DatabaseModule],
@@ -19,6 +20,7 @@ import { APP_PIPE } from '@nestjs/core';
     ...likeRepository,
     ...LeafRepository,
     ...likeRepository,
+    ...TopicRepository,
     UsersService,
     {
       provide: APP_PIPE,

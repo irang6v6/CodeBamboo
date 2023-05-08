@@ -63,7 +63,7 @@ export class Leaf {
   @OneToMany(() => Code, (code) => code.leaf, { lazy: true })
   codes: Code[];
 
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.leaf)
   bookmarks: Bookmark[];
 
   @OneToOne(() => Topic)
@@ -72,6 +72,6 @@ export class Leaf {
   @OneToOne(() => Topic)
   rootLeaf: Topic;
 
-  @OneToMany(() => LikeEntity, (like) => like.user)
+  @OneToMany(() => LikeEntity, (like) => like.leaf)
   likes: LikeEntity[];
 }

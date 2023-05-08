@@ -1,5 +1,6 @@
 import { Topic } from 'src/topics/entities/topic.entity';
 import { UserTopics } from '../dto/get.userTopics.dto';
+import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 // user.topics 찜찌기 with GPT-4
 export function transformUserTopics(userTopics: Topic[]): UserTopics[] {
@@ -39,4 +40,17 @@ export function transformUserTopics(userTopics: Topic[]): UserTopics[] {
         : null,
     };
   });
+}
+
+// 해당 토픽의 가장 좋아요수가 높은 리프 ID[DB상의 id] 반환
+export function searchBestLeafId(topicLeafs: Leaf[]) {
+  let bestLeafId = 1;
+  let bestLeafLikes = 0;
+  for (let i = 0; i < topicLeafs.length; i++) {
+    if (topicLeafs[i].likes.length > bestLeafLikes) {
+      bestLeafId = i + 1;
+      bestLeafLikes = topicLeafs[i].likes.length;
+    }
+  }
+  return bestLeafId;
 }
