@@ -31,9 +31,8 @@ export class AuthController {
       res.cookie('refresh_token', userInfo.refresh_token, {
         httpOnly: true,
         maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-        secure: false,
+        secure:true
       });
-      console.log(res.cookie)
       // 4-2. 리프레시 토큰 뺸 나머지 정보들 프론트에 반환
       const response : LoginResponseDto = {
         message: "로그인 성공",
@@ -64,7 +63,6 @@ export class AuthController {
   @Get('access')
   async refreshToken(@Req() req: Request, @Res() res: Response) {
     try {
-      console.log(JSON.stringify(req.cookies))
       // 쿠키의 리프레시 토큰을 할당
       const refreshToken = req.cookies['refresh_token']
       if (!refreshToken) throw new UnauthorizedException();
@@ -80,7 +78,7 @@ export class AuthController {
       if (error instanceof UnauthorizedException) {
         // 1. 쿠키의 리프레시 토큰 삭제
         res.clearCookie('refresh_token');
-        return res.status(HttpStatus.OK).json({ message: '리프레쉬 토큰이 유효하지 않습니다. 로그아웃됩니다.' });
+        return res.status(HttpStatus.UNAUTHORIZED).json({ message: '리프레쉬 토큰이 유효하지 않습니다. 로그아웃됩니다.' });
       } else {
         // 2. 500에러일 때는, 원래대로 500에러 send
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();

@@ -25,14 +25,6 @@ const queryFn = async () =>{
   }
 } 
 
-const test = async () => {
-  try {
-    const response = await axios.get('http://localhost:8000/auth/access', {withCredentials:true})
-    console.log(response.data)
-  } catch (error) {
-    
-  }
-}
 
 export default function Home() {
   const [user, setUser] = useRecoilState(userState)
@@ -46,6 +38,17 @@ export default function Home() {
       router.push('/')
     }
   })
+
+  const test123 = async () => {
+    try {
+      const newAccessToken = await axios.get('http://localhost:8000/auth/access', { withCredentials: true }).then(res => res.data.data.access_token);
+      localStorage.setItem('access_token', newAccessToken);
+      router.push('/')
+      console.log(newAccessToken)
+    } catch (error) {
+      
+    }
+  }
 
   return (
     <>
@@ -68,7 +71,7 @@ export default function Home() {
       {user.isLoggedIn &&
         <>
           <button className='pink-button' onClick={() => logoutMutation.mutate()}>로그아웃</button>
-          <button className='pink-button' onClick={() => test()}>리프레시</button>
+          <button className='pink-button' onClick={() => test123()}>리프레시</button>
         </>
       }
       <TopicItem />

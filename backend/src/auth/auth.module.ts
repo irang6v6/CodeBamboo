@@ -14,7 +14,7 @@ import { JwtStrategy } from './jwt.strategy';
     JwtModule.register({
       global: true,
       secret: process.env.SECRET,
-      signOptions: { expiresIn: '60m' },
+      signOptions: { expiresIn: '5m' },
     }),
   ],
   providers: [ AuthService, NaverService, KakaoService, GithubService, JwtStrategy], 

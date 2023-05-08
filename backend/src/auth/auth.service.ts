@@ -70,8 +70,8 @@ export class AuthService {
     console.log('기존유저입니다. user_id :', user.user_id)
     // [3]. 토큰 생성
     const payload = { user_id: user.user_id, nickname: user.nickname }
-    const access_token = this.jwtService.sign(payload, {secret:process.env.SECRET})
-    const refresh_token = this.jwtService.sign(payload, {expiresIn:'14d', secret:process.env.SECRET})
+    const access_token = this.jwtService.sign(payload, {secret:process.env.SECRET })
+    const refresh_token = this.jwtService.sign(payload, {expiresIn:'1d', secret:process.env.SECRET})
 
     return {
       refresh_token,
@@ -91,9 +91,8 @@ export class AuthService {
     try {
       // verify : jwt를 검증하고, 페이로드를 반환한다.
       const decoded = await this.jwtService.verify(refreshToken, { secret: process.env.SECRET });
-      console.log('decoded : ', decoded)
-      const newAccessToken = this.jwtService.sign({ user_id: decoded["user_id"], nickname: decoded["nickname"] }, { secret:process.env.SECRET, expiresIn: '60m' });
-
+      console.log('리프레시토큰 정보 : ', decoded)
+      const newAccessToken = this.jwtService.sign({ user_id: decoded["user_id"], nickname: decoded["nickname"] }, { secret:process.env.SECRET});
       return { access_token: newAccessToken };
       
     } catch (error) {

@@ -24,7 +24,8 @@ const serveAuthCode = async (code:string|undefined, provider:string): Promise<Lo
   const response = await axios.post(BASE_URL + provider, {code}, {
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
+    withCredentials:true
   });
   return response.data;
 };
