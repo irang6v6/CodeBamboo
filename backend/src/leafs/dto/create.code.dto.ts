@@ -15,4 +15,7 @@ export class CreateCodeDto {
   @IsOptional()
   @IsString()
   content: string;
+
+  @IsNotEmpty()
+  leaf: Leaf;
 }

@@ -11,10 +11,6 @@ import { Topic } from 'src/topics/entities/topic.entity';
 
 export class CreateLeafDto {
   @IsNotEmpty()
-  @IsString()
-  type: string;
-
-  @IsNotEmpty()
   @IsBoolean()
   is_root: boolean;
 

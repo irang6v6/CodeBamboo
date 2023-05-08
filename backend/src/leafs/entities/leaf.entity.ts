@@ -26,7 +26,7 @@ export class Leaf {
   is_root: boolean;
 
   @Column()
-  type: string;
+  type: number;
 
   @Column({ length: 100 })
   title: string;
@@ -50,17 +50,19 @@ export class Leaf {
   parent_leaf_id: number;
 
   @ManyToOne(() => User, (user) => user.leafs, {
-    onDelete: 'CASCADE',
-    lazy: true,
+    eager: true,
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Topic, (topic) => topic.leafs, { lazy: true })
+  @ManyToOne(() => Topic, (topic) => topic.leafs, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'topic_id' })
   topic: Topic;
 
-  @OneToMany(() => Code, (code) => code.leaf, { lazy: true })
+  @OneToMany(() => Code, (code) => code.leaf)
   codes: Code[];
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.leaf)
