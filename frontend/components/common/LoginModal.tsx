@@ -65,7 +65,7 @@ function Modal() {
     <div ref={modalRef} className={`${modalWrapperClasses} ${Opacity? 'opacity-70' : 'opacity-100'} bgImg-bamboo items-start w-full h-full border-none 
       md:w-4/5 md:h-4/5
     `}>
-      <div className='wrapper bg-neutral-50/95 h-full w-full relative md:rounded-xl
+      <div className='modal-inner-wrapper bg-neutral-50/95 h-full w-full relative md:rounded-xl
       '>
         <header className='header flex-row items-center justify-center absolute top-2 left-2 
         md:w-auto bg-transparent

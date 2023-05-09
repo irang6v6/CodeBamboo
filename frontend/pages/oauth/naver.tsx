@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useLogin } from '@/hooks/auth/useLogin';
 
-export default function Kakao() {
+export default function Naver() {
   const router = useRouter()
   const code = router.query.code as string | undefined;
   
