@@ -49,7 +49,7 @@
   }
 
   .header {
-    @apply flex flex-col bg-orange-300 ;
+    @apply flex flex-col bg-orange-300;
   }
 
   .main {
@@ -63,7 +63,7 @@
   .section {
     @apply flex flex-col bg-blue-300;
   }
-  
+
   .footer {
     @apply flex justify-between items-center;
   }
@@ -71,12 +71,11 @@
   .overlay {
     @apply absolute w-full h-full flex flex-col justify-center items-center z-10;
   }
-
 }
 
 @screen md {
   .modal-wrapper {
-    @apply w-3/4 h-5/6 max-w-screen-lg
+    @apply w-3/4 h-5/6 max-w-screen-lg;
   }
 
   .wrapper {
@@ -88,7 +87,7 @@
   }
 
   .main {
-    @apply w-4/5 h-4/5
+    @apply w-4/5 h-4/5;
   }
 
   .article {
@@ -114,9 +113,26 @@
 }
 
 .article-input {
-  @apply bg-gray-100 rounded-sm w-full mt-1 mb-3 p-2
+  @apply bg-gray-100 rounded-sm w-full mt-1 mb-3 p-2;
 }
 
 .editor-tab {
-  @apply shrink-0 h-auto m-2 rounded-md flex items-center justify-center
+  @apply shrink-0 h-auto m-2 rounded-md flex items-center justify-center;
+}
+
+.bgImg-position {
+  background-position: 50% 50%;
+  background-size: none;
+}
+
+.bgImg-bamboo-bar-icon {
+  background-image: url('/images/icons/bar_icon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.scroll-arrow {
+  background-image: url('/images/scroll-arrow.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 }
