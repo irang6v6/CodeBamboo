@@ -6,7 +6,8 @@ import { userDefault, userState } from '@/recoil/user';
 import Authapi from '@/hooks/api/axios.authorization.instance';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { isIntroState } from '@/recoil/isIntro';
+import useIsMobile from '@/hooks/useIsMobile';
+import useIsClient from '@/hooks/useIsClient';
 
 // <<query 전략을 정의한다.>>
 
@@ -26,8 +27,9 @@ const queryFn = async () => {
 };
 
 export default function Main() {
+  const isClient = useIsClient();
+  const isMobile = useIsMobile();
   const [user, setUser] = useRecoilState(userState);
-  const [isIntro, setIsIntro] = useRecoilState(isIntroState);
   const router = useRouter();
   const logoutMutation = useMutation(queryFn, {
     onSuccess: (data) => {
@@ -50,7 +52,10 @@ export default function Main() {
     } catch (error) {}
   };
   return (
-    <div className="absolute top-[700vh] z-30">
+    <div className="relative top-[700vh] z-30">
+      {/* 스크롤바에 밀리지않게 더미 박스 */}
+      {isClient && isMobile && <div className="w-full h-20"></div>}
+
       <h1 className="text-3xl underline text-bamboo font-scp font-bold">
         Tailwind CSS rules!
       </h1>

@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import useIsMobile from '@/hooks/useIsMobile';
 import useIsClient from '@/hooks/useIsClient';
-import { isIntroState } from '@/recoil/isIntro';
-import { useRecoilState } from 'recoil';
 
 export const Intro = () => {
   const isMobile = useIsMobile();
   const isClient = useIsClient();
   const [scrollPercent, setScrollPercent] = useState(0);
-  // const [doubleScrollPercent, setDoubleScrollPercent] = useState(0);
-  const [isIntro, setIsIntro] = useRecoilState(isIntroState);
 
   useEffect(() => {
     const onScroll = () => {
@@ -26,18 +22,7 @@ export const Intro = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    if (scrollPercent > 82) {
-      setIsIntro(false);
-    } else {
-      setIsIntro(true);
-    }
-  }, [scrollPercent]);
-
   const ResponsiveIntro = (
-    // isClient && isMobile ? (
-    //   <></>
-    // ) :
     <>
       <div
         className="bgImg-bamboo-bar-icon fixed z-20 p-0 m-0 

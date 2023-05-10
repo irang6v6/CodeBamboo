@@ -3,10 +3,13 @@ import Link from 'next/link';
 import useIsMobile from '@/hooks/useIsMobile';
 import useIsClient from '@/hooks/useIsClient';
 import { BarItems } from './BarItems';
+import { useRecoilValue } from 'recoil';
+import { isHomeState } from '@/recoil/isHome';
 
 export const Bar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const isHome = useRecoilValue(isHomeState);
   const isMobile = useIsMobile();
   const isClient = useIsClient();
 
@@ -47,12 +50,12 @@ export const Bar = () => {
 
   return (
     <aside
-      className="flex text-center items-center z-40
+      className={`flex text-center items-center z-40
                   flex-row justify-between h-20 text-white bg-black
-                  fixed top-0 w-screen
+                  ${isHome ? 'absolute top-[700vh]' : 'relative'} w-screen
                   md:flex-col md:justify-normal md:w-24 md:h-screen md:text-black md:bg-white
                   md:hover:w-48 md:transition-w md:duration-500 md:ease-in-out
-                  md:relative md:top-[700vh]"
+                  ${isHome ? 'md:relative md:top-[700vh]' : 'md:bottom-0'}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
