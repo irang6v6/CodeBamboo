@@ -13,12 +13,23 @@ export const UserDetail = ({ } : Props) => {
 
   return (
     <>
-      <header className='header h-6 bg-transparent'/>
-      <main className='main rounded mx-4 my-4 h-auto bg-transparent'>
-        <section className='section h-72 justify-between rounded-t-3xl rounded-b border-4 border-bamboo bg-transparent'>
-          <article className='article items-center relative h-20 bg-transparent'>
-            {user.nickname}
-            <img src={user.image} alt="" className='w-24 absolute bottom-2 rounded-lg drop-shadow-md'/>
+      <main className='main rounded mx-4 mb-4 mt-9 h-[90%] bg-transparent
+        md:mx-auto
+      '>
+        <section className='section h-1/2 min-h-[18rem] justify-between rounded-t-3xl rounded-b border-4 border-bamboo bg-transparent
+          md:flex-row
+        '>
+          <article className='article items-center relative h-24 bg-
+            md:h-full md:static md:justify-center
+          '>
+            <img src={user.image} alt="" className='min-w-[6rem] absolute bottom-8 rounded-lg drop-shadow-md
+              md:static
+            '/>
+            <p className='absolute bottom-1 font-bold
+              md:static
+            '>
+             {user.nickname}
+            </p>
           </article> 
           <article className='article h-4/6 px-4 pb-0 bg-transparent'>
             <div>
@@ -31,30 +42,30 @@ export const UserDetail = ({ } : Props) => {
             </div>
           </article>
         </section>
-        <section className='section h-10 flex-row justify-between my-1 bg-transparent'>
+        <section className='section h-10 flex-row justify-between w-[345px] max-w-[505px] my-1.5 px-0.5 self-center bg-transparent'>
           <article className={`${menu==='topics' ? 'bg-bamboo' : 'bg-gray-300'}
-          article rounded-md w-24 items-center justify-center 
+          article rounded-md w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center 
           `} 
           onClick={()=>setMenu('topics')}
           >
             Topics
           </article> 
           <article className={`${menu==='follow' ? 'bg-bamboo' : 'bg-gray-300'}
-          article rounded-md w-24 items-center justify-center 
+          article rounded-md w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center 
           `} 
           onClick={()=>setMenu('follow')}
           >
             Follow
           </article> 
           <article className={`${menu==='following' ? 'bg-bamboo' : 'bg-gray-300'}
-          article rounded-md w-24 items-center justify-center 
+          article rounded-md w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center 
           `} 
           onClick={()=>setMenu('following')}
           >
             Following
           </article> 
         </section>
-        <section className='section h-52 bg-transparent'>
+        <section className='section h-1/2 min-h-[13rem] bg-transparent justify-center'>
           {menu==='topics' &&
             <article className='article h-full justify-center items-center bg-gray-300 rounded-md'>
               <div className='w-5/6 h-5/6 flex justify-center items-center border-3 bg-white rounded-md'>
