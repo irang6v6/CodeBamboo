@@ -76,14 +76,14 @@ function Modal() {
       onStop={handleEnd}
       disabled={isMobile}
     >
-    <div ref={modalRef} className={`${modalWrapperClasses} ${Opacity? 'opacity-70' : 'opacity-100'} bgImg-bamboo items-start w-full h-full min-h-[40rem] border-none 
+    <div ref={modalRef} className={`${modalWrapperClasses} ${Opacity? 'opacity-70' : 'opacity-100'} bgImg-bamboo items-start w-full h-full min-h-[40rem] border-none z-40
       md:w-4/5 md:h-4/5
     `}>
       <div className='modal-inner-wrapper bg-neutral-50/95 h-full w-full min-w-[25rem] relative md:rounded-xl
       '>
         <header className='header flex-row items-center justify-center absolute top-2 left-2 
         md:w-auto bg-transparent
-        "
+        '
           >
             <img src="/images/codebambooLogo.png" alt="" className="w-16" />
             <h1 className="text-md font-bold">Code Bamboo</h1>
@@ -108,7 +108,7 @@ function Modal() {
             <article
               className="article h-36 justify-between items-center border-none
           md:w-full bg-transparent
-          '>
+          ">
             <a href={OAUTH_NAVER}>
               <img src="/images/naver_login.png" alt="" className='rounded'/>
             </a>
@@ -120,7 +120,7 @@ function Modal() {
             </a>
           </article>
         </main>
-        <footer className="footer absolute bottom-3 right-3 bg-transparent">
+        <footer className="footer absolute bottom-3 right-5 bg-transparent">
           <img src='/images/prev.png' className='cursor-pointer'
             onClick={()=>setIsOpen(prev=>!prev)}
             />
