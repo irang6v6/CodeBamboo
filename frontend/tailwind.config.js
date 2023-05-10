@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       transitionProperty: {
-        'w': 'width',
+        w: 'width',
       },
       fontFamily: {
         scp: ['Source Code Pro', 'monospace'],
@@ -18,7 +18,29 @@ module.exports = {
         bamboo: '#2A9464',
         editor: '#263238',
       },
+      keyframes: {
+        progress: {
+          to: {
+            backgroundColor: 'rgb(20, 255, 226)',
+            width: '100vw',
+          },
+        },
+        scrollArrow: {
+          from: {
+            transform: 'translate(-50%, 0%)',
+          },
+          to: {
+            transform: 'translate(-50%, 30%)',
+          },
+        },
+      },
+      animation: {
+        scrollArrow: 'scrollArrow 1.2s linear alternate-reverse infinite',
+      },
     },
+  },
+  variants: {
+    extend: {},
   },
   plugins: [],
 };

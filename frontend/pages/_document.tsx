@@ -8,7 +8,7 @@ export default function Document() {
         {/* <meta name="name" content="content" /> */}
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      <body>
+      <body className="scrollbar-hide">
         <Main />
         <NextScript />
       </body>

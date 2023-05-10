@@ -7,7 +7,8 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SimpleUserDto } from './dto/simple.user.dto';
@@ -15,8 +16,9 @@ import { UpdateUserDto } from './dto/update.user.dto';
 import { CreateFollowDto } from './dto/create.follow.dto';
 import { GetUserDto } from './dto/get.user.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Request } from 'express';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -29,9 +31,12 @@ export class UsersController {
 
   // [1] 유저 nickname으로 정보 조회
   @Get('search')
+  @UseGuards(JwtAuthGuard)
   searchUsersNickname(
+    @Req() req: Request,
     @Query('nickname') searchNickname: string,
   ): Promise<GetUserDto[]> {
+    console.log(req.user);
     return this.usersService.searchUsersNickname(searchNickname);
   }
 
