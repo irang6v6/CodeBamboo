@@ -24,8 +24,9 @@ authApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    console.log('originalRequest : ', originalRequest)
     if (error.response && (error.response.data.errorType === 'expired_token' || error.response.data.errorType === 'invalid_payload')) {
-
+      console.log('error response : ', error.response)
       const { handleLogout } = useAuthInterceptor();
 
       try {

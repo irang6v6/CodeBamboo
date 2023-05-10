@@ -10,7 +10,7 @@
 @layer components {
   /* 모달 컴포넌트 클래스들 */
   .modal-wrapper {
-    @apply flex flex-col border border-transparent shadow-md rounded-xl fixed inset-0 m-auto bg-white z-10 tracking-wider bg-blue-400 justify-center items-center;
+    @apply flex flex-col border border-transparent shadow-md rounded-xl fixed inset-0 m-auto bg-white z-10 tracking-wider justify-center items-center;
   }
 
   .modal-wrapper-hidden {
@@ -28,12 +28,12 @@
   }
 
   /* 시맨틱 컴포넌트를 위한 클래스들 */
-  .wrapper {
+  .modal-inner-wrapper {
     @apply flex flex-col items-center justify-center;
   }
 
   .line {
-    @apply w-6/4 border border-solid border-opacity-5;
+    @apply w-4/6 border border-solid border-opacity-5 border-blue-500;
   }
 
   .pink-button {
@@ -65,7 +65,7 @@
   }
 
   .footer {
-    @apply flex justify-between items-center;
+    @apply flex justify-between items-center bg-lime-300 ;
   }
 
   .overlay {
@@ -78,7 +78,7 @@
     @apply w-3/4 h-5/6 max-w-screen-lg;
   }
 
-  .wrapper {
+  .modal-inner-wrapper {
     @apply w-5/12;
   }
 
@@ -91,16 +91,13 @@
   }
 
   .article {
-    @apply w-3/5;
+    @apply w-full;
   }
 
   .section {
-    @apply w-4/5;
+    @apply w-full;
   }
 
-  /* .footer {
-    @apply w-4/5;
-  } */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
