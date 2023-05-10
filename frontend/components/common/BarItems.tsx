@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loginModalState, userState } from '@/recoil/user';
 
 interface Props {
