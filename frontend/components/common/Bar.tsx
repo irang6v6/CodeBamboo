@@ -39,11 +39,19 @@ export const Bar = () => {
       {isMobile ? (
         <img src="/images/icons/bar_icon.png" alt="Bar Icon" />
       ) : (
+        <div className='flex items-center mt-4 justify-between w-[7.5rem]'>
         <img
           src="/images/icons/logo_icon.png"
-          className="mt-4"
+          className=""
           alt="Logo Icon"
-        />
+          />
+          {isHovered && 
+          <div className='flex flex-col font-bold tracking-wide'>
+          {/* <p>Code</p> */}
+          <p><span className='md:text-3xl md:font-semibold'>H</span>ome</p>
+          </div>
+          }
+        </div>
       )}
     </Link>
   );
@@ -53,14 +61,15 @@ export const Bar = () => {
       className={`flex text-center items-center z-40
                   flex-row justify-between h-20 text-white bg-black
                   ${isHome ? 'absolute top-[700vh]' : 'relative'} w-screen
-                  md:flex-col md:justify-normal md:w-24 md:h-screen md:text-black md:bg-white
-                  md:hover:w-48 md:transition-w md:duration-500 md:ease-in-out
+                  md:flex-col md:justify-normal md:w-24 md:h-screen md:text-black md:bg-[#eff1f3]
+                  md:hover:w-[11rem] md:transition-w md:duration-500 md:ease-in-out
+                  md:items-start md:ps-4
                   ${isHome ? 'md:relative md:top-[700vh]' : 'md:bottom-0'}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {Logo}
-      {ResponsiveBarItems}
+    {Logo}
+    {ResponsiveBarItems}
     </aside>
   );
 };
