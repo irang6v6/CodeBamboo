@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 import { loginModalState, userState } from '@/recoil/user';
+import { useRouter } from 'next/router';
 
 interface Props {
   isHovered: boolean;
@@ -11,10 +12,14 @@ interface Props {
 export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
   const [user, setUser] = useRecoilState(userState);
   const [_, setIsOpen] = useRecoilState(loginModalState);
+  const router = useRouter()
 
   const handleModalToggle = (event: React.MouseEvent) => {
     setIsOpen((prev) => !prev);
   };
+  const serveUserpage = () => {
+    router.push(`/users/${user.user_id}`)
+  }
 
   const HoverBarItems = isHovered ? (
     <>
@@ -31,9 +36,15 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
         className="h-fit flex items-center cursor-pointer
                   
                   md:mb-8"
-        onClick={handleModalToggle}
+        onClick={!user.isLoggedIn?
+          handleModalToggle
+        :
+          serveUserpage
+        }
       >
-        <img src={user.image} alt="" className="h-12" />
+        <img src={user.image} alt="" className="h-12" 
+        
+        />
         <span>
           {user.isLoggedIn ? (
             user.nickname
@@ -41,7 +52,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
             <button className="login-button">Login</button>
           )}
         </span>
-        {user.isLoggedIn && <button className="login-button">로그아웃</button>}
+        {/* {user.isLoggedIn && <button className="login-button">로그아웃</button>} */}
       </div>
     </>
   ) : (
@@ -56,8 +67,14 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
           <img src="/images/icons/search_icon.png" className="mt-5" />{' '}
         </Link>
       </div>
-      <div className="mb-8 cursor-pointer" onClick={handleModalToggle}>
-        <img src={user.image} alt="" className="h-12" />
+      <div className="mb-8 cursor-pointer" 
+      onClick={!user.isLoggedIn?
+          handleModalToggle
+        :
+          serveUserpage
+        }>
+        <img src={user.image} alt="" className="h-12" 
+        />
       </div>
     </>
   );
