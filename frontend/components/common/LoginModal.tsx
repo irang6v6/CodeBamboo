@@ -3,8 +3,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import Draggable from 'react-draggable';
 import useIsMobile from '@/hooks/useIsMobile';
+import { useRouter } from 'next/router';
 
 function Modal() {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useRecoilState(loginModalState);
   const [Opacity, setOpacity] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
@@ -109,13 +111,13 @@ function Modal() {
               className="article h-36 justify-between items-center border-none
           md:w-full bg-transparent
           ">
-            <a href={OAUTH_NAVER}>
+            <a href={OAUTH_NAVER} onClick={()=>localStorage.setItem('prevPath', router.pathname)}>
               <img src="/images/naver_login.png" alt="" className='rounded'/>
             </a>
-            <a href={OAUTH_KAKAO}>
+            <a href={OAUTH_KAKAO} onClick={()=>localStorage.setItem('prevPath', router.pathname)}>
               <img src="/images/kakao_login.png" alt="" className='rounded'/>
             </a>
-            <a href={OAUTH_GITHUB}>
+            <a href={OAUTH_GITHUB} onClick={()=>localStorage.setItem('prevPath', router.pathname)}>
               <img src="/images/github_login.png" alt="" className='rounded'/>
             </a>
           </article>

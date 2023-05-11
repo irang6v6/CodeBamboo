@@ -81,7 +81,7 @@ export class AuthService {
         image: user.image,
         provider,
         email: user.email || `${user.nickname}@codeBamboo.site`,
-        introduce: user.introduce,
+        introduce: user.introduce || 'Hello, Bamboos!',
         user_id : Number(user.user_id)
       }
     };
