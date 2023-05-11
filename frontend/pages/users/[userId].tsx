@@ -16,44 +16,53 @@ export const UserDetail = ({ } : Props) => {
   return (
     <>
       {!isMobile && 
-        <header className='header mx-8 mt-8 h-1/3 justify-end bg-transparent
+        <header className='header mx-8 mt-8 h-1/3 justify-end bg-transparent ps-[5rem] w-11/12
           md:w-11/12 md:self-center'>
           <img src="/images/bg-bamboo.png" alt="" className='w-full h-full object-cover rounded-xl'/>
-        </header>}
-      <main className='main rounded mx-4 mb-4 mt-9 h-[80%] bg-transparent
-        md:mx-8 md:w-11/12 md:mt-0 md:flex-row md:h-2/3
+        </header>
+      }
+      <main className='main rounded mx-4 mb-3 mt-5 h-[95%] bg-transparent pt-9
+       md:mx-8 md:w-11/12 md:mt-0 md:flex-row md:h-[60%] md:ps-[5rem] md:pt-0
       '>
-        <section className='section h-1/2 min-h-[20rem] justify-between rounded-t-3xl rounded-b border-4 border-bamboo
-          md:w-1/3 md:h-5/6
+        <section className='section h-[40%] min-h-[17rem] justify-between rounded-t-3xl rounded-b border-4 border-bamboo bg-transparent
+          md:w-1/3 md:h-full
         '>
           <article className='article items-center relative h-24 bg-transparent
           '>
-            <img src={user.image} alt="" className='min-w-[5rem] absolute bottom-8 rounded-lg drop-shadow-md
-              md:min-w-[8rem]
+            <img src={user.image} alt="" className='min-w-[5rem] max-w-[5rem] absolute bottom-16 rounded-lg drop-shadow-md
+              md:min-w-[8rem] md:bottom-8
             '/>
-            <p className='absolute bottom-1 font-bold
+            <p className='absolute bottom-8 font-bold
               md:text-lg md:-bottom-1
             '>
-             {user.nickname}
+              {user.nickname}
+            </p>
+            <p className='absolute bottom-2 text-neutral-400
+              md:text-lg md:-bottom-7
+            '>
+              {user.email}
             </p>
           </article> 
-          <article className='article h-4/6 px-4 py-2 bg-transparent
+          <article className='article h-4/6 px-4 bg-transparent
+          md:h-[75%] md:pt-5
           '>
-            <div className='md:min-w-[14rem]'>
-              <p className='text-md text-gray-500 border-b-4 border-b-lime-300 w-12'>Email</p>
-              <div className='text-xl'>{user.email}</div>
-            </div>
-            <div className='h-2/3 mt-4 overflow-y-auto
+            <div className='h-2/3 overflow-y-auto
             '>
-              <p className='text-md text-gray-500 border-b-4 border-b-lime-300 w-12'>Introduce</p>
-              <div className='text-lg'>
+              <p className='text-xs text-gray-500 border-b-4 border-b-lime-300 w-12
+                md:text-sm
+              '>Introduce</p>
+              <div className='text-md
+              md:text-lg xs:text-md
+              '>
                 {user.introduce}
                 </div>
             </div>
           </article>
         </section>
-        <div className='md:w-2/3 md:h-5/6'>
-        <section className='section h-9 flex-row justify-between w-full my-1.5 px-1 self-center bg-transparent'>
+        <div className='md:w-2/3 md:h-full h-[45%]'>
+        <section className='section h-9 flex-row justify-between w-full my-1.5 px-1 self-center bg-transparent
+        md:absolute md:max-w-sm md:grid-cols-3 md:grid md:gap-2
+        '>
             <div className={`${menu==='topics' ? 'bg-bamboo' : 'bg-gray-300'}
             article rounded-md w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center 
             `} 
@@ -66,18 +75,18 @@ export const UserDetail = ({ } : Props) => {
             `} 
             onClick={()=>setMenu('follow')}
             >
-              Follow
+              Bookmark
             </div> 
             <div className={`${menu==='following' ? 'bg-bamboo' : 'bg-gray-300'}
             article rounded-md w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center 
             `} 
             onClick={()=>setMenu('following')}
             >
-              Following
+              Follow
             </div> 
         </section>
-        <section className='section h-1/2 min-h-[13rem] bg-transparent justify-center
-          md:h-full
+        <section className='section h-5/6 min-h-[13rem] bg- justify-center bg-transparent
+          md:h-full md:pt-12
         '>
           {menu==='topics' &&
             <article className='article h-full justify-center items-center bg-gray-300 rounded-md'>
@@ -87,13 +96,17 @@ export const UserDetail = ({ } : Props) => {
             </article> 
           }
           {menu==='follow' &&
-            <article className='article h-full rounded-md border-4 border-bamboo bg-transparent'>
-              팔로우
+            <article className='article h-full rounded-md border-4 border-bamboo bg-transparent
+            md:border-l-0 md:px-6 md:py-6
+            '>
+              즐겨찾기
             </article> 
           }
           {menu==='following' &&
-            <article className='article h-full rounded-md border-4 border-bamboo bg-transparent'>
-              팔로잉
+            <article className='article h-full rounded-md border-4 border-bamboo bg-transparent
+            md:border-l-0 md:px-6 md:py-6
+      6     '>
+              팔로우 || 팔로워
             </article> 
           }
         </section>
