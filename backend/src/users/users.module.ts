@@ -19,7 +19,6 @@ import { TopicRepository } from 'src/topics/dao/topics.repository';
     ...bookmarkRepository,
     ...likeRepository,
     ...LeafRepository,
-    ...likeRepository,
     ...TopicRepository,
     UsersService,
     {
@@ -27,6 +26,9 @@ import { TopicRepository } from 'src/topics/dao/topics.repository';
       useClass: ValidationPipe,
     },
   ],
-  exports: [...userRepository],
+  exports: [
+    ...userRepository,
+    UsersService
+  ],
 })
 export class UsersModule {}

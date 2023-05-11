@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userState } from '@/recoil/user';
 import { useRouter } from 'next/router';
 
@@ -31,7 +31,7 @@ const serveAuthCode = async (code:string|undefined, provider:string): Promise<Lo
 };
 
 export const useLogin = (code:string|undefined, provider:string) => {
-  const [user, setUser] = useRecoilState(userState)
+  const setUser = useSetRecoilState(userState)
   const router = useRouter()
   
   return useMutation(() => serveAuthCode(code, provider), {
@@ -43,7 +43,9 @@ export const useLogin = (code:string|undefined, provider:string) => {
         ...data.data,
         isLoggedIn:true
       })
-      router.push('/')
+      const prevPath = localStorage.getItem('prevPath')
+      console.log('다시 돌아갑니다 : ', prevPath)
+      router.push(prevPath || '/')
     },
     onError: (error) => {
       console.error(error);

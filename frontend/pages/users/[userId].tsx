@@ -29,7 +29,7 @@ export const UserDetail = ({ } : Props) => {
         '>
           <article className='article items-center relative h-24 bg-transparent
           '>
-            <img src={user.image} alt="" className='min-w-[5rem] max-w-[5rem] absolute bottom-16 rounded-lg drop-shadow-md
+            <img src={user.image} alt="" className='min-w-[5rem] max-w-[5rem] max-h-[8rem] absolute bottom-16 rounded-lg drop-shadow-lg bg-cover
               md:min-w-[8rem] md:bottom-8
             '/>
             <p className='absolute bottom-8 font-bold
@@ -49,7 +49,7 @@ export const UserDetail = ({ } : Props) => {
             <div className='h-2/3 overflow-y-auto
             '>
               <p className='text-xs text-gray-500 border-b-4 border-b-lime-300 w-12
-                md:text-sm
+                md:text-lg md:w-20
               '>Introduce</p>
               <div className='text-md
               md:text-lg xs:text-md

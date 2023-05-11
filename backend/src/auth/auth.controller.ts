@@ -4,11 +4,15 @@ import { Request, Response } from 'express';
 import { JwtAuthGuard } from './auth.guard';
 import { LoginResponseDto } from './dto/login.response.dto';
 import { providerValidator } from './utils/utils';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    private AuthService : AuthService
+    private AuthService : AuthService,
+    private jwtService : JwtService,
+    private userService : UsersService,
   ){}
 
   @Post('oauth/:provider')
@@ -82,6 +86,26 @@ export class AuthController {
       } else {
         // 2. 500에러일 때는, 원래대로 500에러 send
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+      }
+    }
+  }
+
+  @Get('/keep-login-state')
+  async loginState(@Req() req: Request){
+    const refreshToken = req.cookies['refresh_token']
+    const decoded = this.jwtService.verify(refreshToken, {secret:process.env.SECRET})
+    // console.log(decoded.user_id)
+    const user = await this.userService.getUser(decoded.user_id)
+    // console.log('user : ', user)
+    return {
+      message:"로그인 상태 유지. 유저정보를 다시 불러왔습니다.",
+      data : {
+        nickname: user.nickname,
+        image: user.image,
+        provider: user["provider"],
+        email: user.email || `${user.nickname}@codeBamboo.site`,
+        introduce: user.introduce || 'Hello, Bamboos!',
+        user_id : Number(user.user_id)
       }
     }
   }
