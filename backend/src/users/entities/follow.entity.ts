@@ -3,9 +3,7 @@ import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Follow {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryGeneratedColumn()
   follow_id: number;
 
   @ManyToOne(() => User, (user) => user.followings, {

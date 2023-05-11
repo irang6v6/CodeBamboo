@@ -17,9 +17,7 @@ import { LikeEntity } from 'src/users/entities/like.entity';
 
 @Entity()
 export class Leaf {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryGeneratedColumn()
   leaf_id: number;
 
   @Column({ type: 'boolean', default: false })
@@ -46,7 +44,7 @@ export class Leaf {
   @Column({ default: 0, nullable: true })
   ref_order: number;
 
-  @Column({ type: 'bigint', default: 0 })
+  @Column({ default: 0 })
   parent_leaf_id: number;
 
   @ManyToOne(() => User, (user) => user.leafs, {

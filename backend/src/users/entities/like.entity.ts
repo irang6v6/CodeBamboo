@@ -11,9 +11,7 @@ import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 @Entity()
 export class LikeEntity {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryGeneratedColumn()
   like_id: number;
 
   @CreateDateColumn()

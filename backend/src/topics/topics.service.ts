@@ -103,11 +103,13 @@ export class TopicsService {
     });
     const userTopics = await this.topicRepository.find({
       relations: {
+        user: true,
         rootLeaf: { codes: true, user: true, likes: true },
         bestLeaf: { codes: true, user: true, likes: true },
       },
       where: { user: { nickname: Like(`%${userInput}%`) } },
     });
+    // console.log(userTopics);
     //닉네임이나 타이틀로 검색 안되면 []로 들어와서 길이를 재서 유무 판별
     if (userTopics.length == 0 && titleTopics.length == 0) {
       throw new NotFoundException(

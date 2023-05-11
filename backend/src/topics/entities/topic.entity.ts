@@ -14,9 +14,7 @@ import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 @Entity()
 export class Topic {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryGeneratedColumn()
   topic_id: number;
 
   @Column({ type: 'boolean', default: true })

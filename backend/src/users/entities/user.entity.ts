@@ -14,9 +14,7 @@ import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryGeneratedColumn()
   user_id: number;
 
   @Column({ nullable: true })

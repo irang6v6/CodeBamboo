@@ -11,9 +11,7 @@ import { Leaf } from 'src/leafs/entities/leaf.entity';
 
 @Entity()
 export class Bookmark {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryGeneratedColumn()
   bookmark_id: number;
 
   @CreateDateColumn()

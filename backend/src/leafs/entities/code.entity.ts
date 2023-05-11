@@ -9,9 +9,7 @@ import { Leaf } from './leaf.entity';
 
 @Entity()
 export class Code {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryGeneratedColumn()
   code_id: number;
 
   @Column({ length: 100 })

@@ -8,8 +8,10 @@ export function makeLeaf(data) {
   const parentLeafId = { parentLeafId: data.parent_leaf_id };
   const exportCnt = { exportCnt: data.export };
   const likeCnt = { likeCnt: data.likes.length };
+  const user_id = { user_id: data.user.user_id };
   const response = {
     ...leaf_id,
+    ...user_id,
     ...nickname,
     ...title,
     ...content,

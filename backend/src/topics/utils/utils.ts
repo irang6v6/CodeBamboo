@@ -1,7 +1,7 @@
-import { Timestamp } from 'typeorm';
-
 export function makeLeaf(data) {
+  // console.log(data);
   const nickname = { nickname: data.user.nickname };
+  const user_id = { user_id: data.user.user_id };
   const title = { title: data.title };
   const content = { content: data.content };
   const type = { type: data.type };
@@ -10,6 +10,7 @@ export function makeLeaf(data) {
   const exportCnt = { exportCnt: data.export };
   const likeCnt = { likeCnt: data.likes.length };
   const response = {
+    ...user_id,
     ...nickname,
     ...title,
     ...content,
@@ -25,8 +26,13 @@ export function makeLeaf(data) {
 export function makeTopicLeafs(data) {
   const likeCnt = { likeCnt: data.likes.length };
   const { user, likes, topic, ...obj } = data;
+  // console.log(user);
+  const user_id = { user_id: user.user_id };
+  const nickname = { nickname: user.nickname };
   data = obj;
   const response = {
+    ...user_id,
+    ...nickname,
     ...likeCnt,
     ...data,
   };
@@ -34,14 +40,17 @@ export function makeTopicLeafs(data) {
 }
 
 export function searchTopic(data) {
+  // console.log(data);
   const topic_id = { topic_id: data.topic_id };
   const needHelp = { needHelp: data.needHelp };
+  const user_id = { user_id: data.user.user_id };
   const creation_time = { creation_time: data.creation_time };
   const rootLeaf = { rootLeaf: makeLeaf(data.rootLeaf) };
   const bestLeaf = { bestLeaf: makeLeaf(data.bestLeaf) };
   // const leafs = { leafs: data.leafs.map((data) => makeLeaf(data)) };
   const response = {
     ...topic_id,
+    ...user_id,
     ...needHelp,
     ...creation_time,
     ...rootLeaf,
