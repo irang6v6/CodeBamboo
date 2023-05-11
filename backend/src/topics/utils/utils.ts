@@ -1,6 +1,7 @@
 export function makeLeaf(data) {
   // console.log(data);
   const nickname = { nickname: data.user.nickname };
+  const image = { image: data.user.image };
   const user_id = { user_id: data.user.user_id };
   const title = { title: data.title };
   const content = { content: data.content };
@@ -13,6 +14,7 @@ export function makeLeaf(data) {
     ...user_id,
     ...nickname,
     ...title,
+    ...image,
     ...content,
     ...type,
     ...codes,
@@ -26,7 +28,6 @@ export function makeLeaf(data) {
 export function makeTopicLeafs(data) {
   const likeCnt = { likeCnt: data.likes.length };
   const { user, likes, topic, ...obj } = data;
-  // console.log(user);
   const user_id = { user_id: user.user_id };
   const nickname = { nickname: user.nickname };
   data = obj;

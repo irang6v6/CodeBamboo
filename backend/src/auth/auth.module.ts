@@ -17,7 +17,13 @@ import { JwtStrategy } from './jwt.strategy';
       signOptions: { expiresIn: '30d' },
     }),
   ],
-  providers: [ AuthService, NaverService, KakaoService, GithubService, JwtStrategy], 
+  providers: [
+    AuthService,
+    NaverService,
+    KakaoService,
+    GithubService,
+    JwtStrategy,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}
