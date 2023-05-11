@@ -33,12 +33,15 @@ authApi.interceptors.response.use(
         const newAccessToken = await handleLogout();
         console.log('액세스 토큰 재발급 : ', newAccessToken)
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        console.log('오리지널 리퀘스트 재요청')
         return authApi(originalRequest);
       } catch (error) {
+        console.log('오리지널 리퀘스트 재전송 실패 : ', error)
         return Promise.reject(error);
       }
+    } else {
+      console.log('에러 타입은 ? : ', error.response)
     }
-
     return Promise.reject(error);
   }
 );
