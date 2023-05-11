@@ -79,13 +79,24 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
     </>
   );
 
-  return (
+  const MenuOpenBackground = (
     <div
-      className="bg-inherit flex flex-col
-                    absolute top-full right-0 h-80 w-1/2 
-                    md:static md:h-full md:w-auto md:justify-between"
-    >
-      {HoverBarItems}
-    </div>
+      className="bg-transparent absolute top-0 right-0 w-full h-screen
+              md:hidden"
+      onClick={() => setIsMenuOpen(false)}
+    ></div>
+  );
+
+  return (
+    <>
+      <div
+        className="bg-inherit z-10 flex flex-col
+                      absolute top-full right-0 h-80 w-1/2 
+                      md:static md:h-full md:w-auto md:justify-between"
+      >
+        {HoverBarItems}
+      </div>
+      {MenuOpenBackground}
+    </>
   );
 };

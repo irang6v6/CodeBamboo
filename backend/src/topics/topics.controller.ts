@@ -7,13 +7,15 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { TopicsService } from './topics.service';
 import { CreateTopicDto } from './dto/create.topic.dto';
 import { SimpleTopicDto } from './dto/simple.topic.dto';
 import { User } from 'src/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Request } from 'express';
 
 @UseGuards(JwtAuthGuard)
 @Controller('topic')
@@ -41,8 +43,9 @@ export class TopicsController {
   }
 
   @Post()
-  create(@Body() createTopicDto) {
-    this.topicsService.create(createTopicDto);
+  create(@Body() createTopicDto, @Req() req: Request) {
+    const user_id = req.user['user_id'];
+    return this.topicsService.create(createTopicDto, user_id);
   }
 
   @Patch('help/:id')

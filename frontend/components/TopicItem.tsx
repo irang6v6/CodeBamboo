@@ -6,7 +6,7 @@ interface Props {}
 export const TopicItem = ({}: Props) => {
   return (
     <div>
-      <Link href={`/topics/${1}`}>TopicItem 1</Link>
+      <Link href={`/topics/${7}`}>TopicItem 7</Link>
     </div>
   );
 };

@@ -8,12 +8,14 @@ import {
   Patch,
   Post,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { LeafsService } from './leafs.service';
 import { CreateLeafDto } from './dto/create.leaf.dto';
 import { SimpleLeafDto } from './dto/simple.leaf.dto';
 import { UpdateLeafDto } from './dto/update.leaf.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Request } from 'express';
 
 @UseGuards(JwtAuthGuard)
 @Controller('leaf')
@@ -36,8 +38,9 @@ export class LeafsController {
   }
 
   @Post()
-  create(@Body() createLeaf) {
-    this.leafsService.create(createLeaf);
+  create(@Body() createLeaf, @Req() req: Request) {
+    const user_id = req.user['user_id'];
+    return this.leafsService.create(createLeaf, user_id);
   }
   // @Post()
   // create(@Body() createLeafDto: CreateLeafDto) {

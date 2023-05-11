@@ -14,8 +14,8 @@ import useIsMobile from '@/hooks/useIsMobile';
 export const Editor = () => {
   const [code, setCode] = useRecoilState(codeState);
   const isMobile = useIsMobile();
-  const [selectedLanguage, setSelectedLanguage] = useState(code[0].language);
-  const [initialCode, setInitialCode] = useState(code[0].content || "")
+  const [selectedLanguage, setSelectedLanguage] = useState('Content');
+  const [initialCode, setInitialCode] = useState("")
 
   useEffect(() => {
     if (isMobile) return;
@@ -71,7 +71,7 @@ export const Editor = () => {
   };
 
   return (
-    <div className='flex h-full
+    <div className='flex h-full w-full
                     flex-col
                     md:flex-row'>
       <div className='flex flex-col h-full

@@ -45,7 +45,7 @@
   }
 
   .bamboo-button {
-    @apply h-fit w-fit py-3 px-4 bg-bamboo text-white rounded-lg;
+    @apply h-fit w-fit py-3 px-4 bg-bamboo text-white rounded-lg cursor-pointer shadow-sm hover:bg-green-700;
   }
 
   .header {
@@ -110,11 +110,11 @@
 }
 
 .article-input {
-  @apply bg-gray-100 rounded-sm w-full mt-1 mb-3 p-2;
+  @apply bg-gray-100 rounded-sm w-full mt-1 mb-3 p-2 cursor-text shadow-md;
 }
 
 .editor-tab {
-  @apply shrink-0 h-auto m-2 rounded-md flex items-center justify-center;
+  @apply shrink-0 h-auto m-2 rounded-md flex items-center justify-center cursor-pointer shadow-sm;
 }
 
 .bgImg-position {
@@ -131,5 +131,5 @@
 .scroll-arrow {
   background-image: url('/images/scroll-arrow.png');
   background-size: contain;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; 
 }

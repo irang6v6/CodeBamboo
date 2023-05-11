@@ -1,10 +1,9 @@
 import React from 'react';
 import { Editor } from '@/components/editor/Editor';
 
-interface Props {
-}
+interface Props {}
 
-export const Topics = ({ } : Props) => {
+export const Topics = ({}: Props) => {
   return (
     <>
       <Editor />
@@ -12,4 +11,4 @@ export const Topics = ({ } : Props) => {
   );
 };
 
-export default Topics
+export default Topics;

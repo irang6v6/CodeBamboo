@@ -68,19 +68,19 @@ export class LeafsService {
     return response;
   }
 
-  async create(data): Promise<void> {
+  async create(data, userId): Promise<void> {
     // console.log(data);
     //user와 topic에 맞추어줌.
-    const userId = { user: { user_id: data.user_id } };
+    const user = { user: { user_id: userId } };
     const topicId = { topic: { topic_id: data.topic_id } };
 
     //type 코드 없으면0, 있으면1 처리
     let type = { type: 1 };
-    if (data.code.length == 0) {
+    if (data.codes.length == 0) {
       type = { type: 0 };
     }
     //code만 따로 저장
-    const createCode = data.code;
+    const createCode = data.codes;
 
     //여기다가 leafTree만들어보자.
 
@@ -119,7 +119,7 @@ export class LeafsService {
 
     let json = {
       ...data,
-      ...userId,
+      ...user,
       ...topicId,
       ...type,
       ...step,
@@ -143,6 +143,7 @@ export class LeafsService {
       const newCode = this.codeRepository.create(json);
       await this.codeRepository.save(newCode);
     }
+    return data.topic_id;
   }
 
   //   async deleteOne(id: number): Promise<void> {

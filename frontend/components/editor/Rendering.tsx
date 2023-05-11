@@ -11,7 +11,7 @@ export const Rendering = () => {
 
   const srcCode = `
     <html>
-      <body>${html}</body>
+      <body>${html ? html : ""}</body>
       <style>${css}</style>
       <script>${js}</script>
     </html>
