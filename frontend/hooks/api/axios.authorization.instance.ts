@@ -40,7 +40,7 @@ authApi.interceptors.response.use(
         return Promise.reject(error);
       }
     } else {
-      console.log('에러 타입은 ? : ', error.response)
+      console.log('토큰 만료에러가 아닙니다. 에러 타입은 ? : ', error.response)
     }
     return Promise.reject(error);
   }

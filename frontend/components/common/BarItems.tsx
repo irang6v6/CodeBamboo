@@ -5,26 +5,19 @@ import { loginModalState, userDefault, userState } from '@/recoil/user';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 import authApi from '@/hooks/api/axios.authorization.instance';
+import useLogout from '@/hooks/auth/useLogout';
 
 interface Props {
   isHovered: boolean;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const queryFn = async () => {
-  // 로그아웃 하시겠습니까? 로직 추가..
-  try {
-    const response = await authApi.post('auth/logout');
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
   const [user, setUser] = useRecoilState(userState);
   const [_, setIsOpen] = useRecoilState(loginModalState);
   const router = useRouter()
+
+  const logoutMutaion = useLogout()
 
   const handleModalToggle = (event: React.MouseEvent) => {
     setIsOpen((prev) => !prev);
@@ -33,20 +26,10 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
     router.push(`/users/${user.user_id}`)
   }
 
-  const logoutMutation = useMutation(queryFn, {
-    onSuccess: (data) => {
-      console.log(data);
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('provider');
-      setUser(userDefault);
-      router.push('/');
-    },
-  });
-
   const HoverBarItems = isHovered ? (
     <>
       <div onClick={() => setIsMenuOpen(false)} className='md:flex md:flex-col md:items-start md:ps-[6px]'>
-        <Link href={'/topics'} className='md:flex md:items-center md:justify-between md:w-[7.5rem]'>
+        <Link href={'/topics'} className='md:flex md:items-center md:justify-between md:w-[7.5rem]'> 
           <img src="/images/icons/more.png" className="md:mt-8 md:h-9" />
           <div className='md:mt-8 md:h-9 md:text-xl md:tracking-wider'><span className='md:text-3xl md:font-semibold'>C</span>reate</div>
         </Link>
@@ -65,9 +48,9 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
           serveUserpage
         }
       >
-        <img src={user.image} alt="" className="h-12" 
+        <img src={user.image} alt="" className="h-12 w-12 rounded-lg shadow-sm bg-auto" 
         />
-        <div>
+        <div className='ml-auto'>
           {user.isLoggedIn ? (
             <>
               <p className="md:w-[4.5rem]">{user.nickname}</p>
@@ -82,12 +65,13 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
         md:w-[4rem] md:text-[10px] md:absolute md:bottom-5 md:right-3 
         "
         onClick={()=>{
-          if (window.confirm('로그아웃 하시겠습니까?')) logoutMutation.mutate()
+          if (window.confirm('로그아웃 하시겠습니까?')) logoutMutaion.mutate()
         }}
         >로그아웃</button>
       }
     </>
   ) : (
+    // 호버 아닐 때
     <>
       <div className="flex flex-col items-center 
         md:flex md:flex-col md:justify-start">
@@ -106,7 +90,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
         :
           serveUserpage
         }>
-        <img src={user.image} alt="" className="h-12" 
+        <img src={user.image} alt="" className="h-12 w-12 rounded-lg shadow-sm bg-auto" 
         />
       </div>
     </>
