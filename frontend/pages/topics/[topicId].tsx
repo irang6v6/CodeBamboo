@@ -16,8 +16,8 @@ export const TopicDetail = ({}: Props) => {
   const setSelectedLeaf = useSetRecoilState(selectedLeafState);
   const setLeafs = useSetRecoilState(LeafState);
 
-  const queryFn = async (topicId:any) => {
-    if(!topicId) return;
+  const queryFn = async (topicId: any) => {
+    if (!topicId) return;
     try {
       const response = await authApi.get(`topic/${topicId}`);
       return response.data;
@@ -26,11 +26,14 @@ export const TopicDetail = ({}: Props) => {
     }
   };
 
-  const getTopic = useQuery(['topic', topicId], ()=>queryFn(topicId), {
+  const getTopic = useQuery(['topic', topicId], () => queryFn(topicId), {
     onSuccess: (data) => {
-      setCode(data.bestLeaf.codes)
-      setSelectedLeaf({user_id: data.bestLeaf.user_id, leaf_id: data.bestLeaf.leaf_id})
-      setLeafs(data.leafs)
+      setCode(data?.bestLeaf.codes);
+      setSelectedLeaf({
+        user_id: data?.bestLeaf.user_id,
+        leaf_id: data?.bestLeaf.leaf_id,
+      });
+      setLeafs(data?.leafs);
     },
   });
 
@@ -43,8 +46,8 @@ export const TopicDetail = ({}: Props) => {
   }
 
   return (
-    <div className='flex flex-row w-full h-full'>
-      <Log/>
+    <div className="flex flex-row w-full h-full">
+      <Log />
       <Editor />
     </div>
   );
