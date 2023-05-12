@@ -5,6 +5,7 @@ export interface CodeInF {
 }
 
 export interface LeafItemInF {
+  user_id: number;
   nickname: string;
   title: string;
   content: string;

@@ -64,6 +64,7 @@ export const Intro = () => {
 
   return (
     <div
+      className="intro-container"
       style={{
         opacity: `${scrollPercent > 41 ? 1 - (scrollPercent - 41) / 50 : 1}`,
       }}

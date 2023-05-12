@@ -4,6 +4,7 @@ import { TopicItemInF } from './TopicInterface';
 import useIsMobile from '@/hooks/useIsMobile';
 import Image from 'next/image';
 import HandImage from '@/public/images/hand.png';
+import { useRouter } from 'next/router';
 
 interface Props extends TopicItemInF {
   key: number;
@@ -16,6 +17,7 @@ export const TopicItem = ({
   bestLeaf,
 }: Props) => {
   const isMobile = useIsMobile();
+  const router = useRouter();
   const needHelpPing = (
     <div
       className="absolute
@@ -40,18 +42,21 @@ export const TopicItem = ({
       <div className="w-[90%] h-[25%] flex justify-evenly">
         <img
           className="bg-white rounded-xl hover:shadow-lg hover:transition hover:cursor-pointer"
-          src={`${bestLeaf.image}`}
+          src={`${rootLeaf.image}`}
           alt="user Image"
+          onClick={() => {
+            router.push(`/users/${rootLeaf.user_id}`);
+          }}
         />
         <div className="pl-[5%] w-[65%] flex flex-col justify-between">
           <div
             className="bg-white text-xl h-[50%] rounded-xl p-[2%]
                         md:hover:text-green-300 md:hover:transition"
           >
-            {bestLeaf.title}
+            <Link href={`/topics/${topic_id}`}>{rootLeaf.title}</Link>
           </div>
           <div className="bg-white text-base h-auto rounded-lg p-[1%]">
-            {bestLeaf.nickname}
+            <Link href={`/users/${rootLeaf.user_id}`}>{rootLeaf.nickname}</Link>
           </div>
         </div>
       </div>
