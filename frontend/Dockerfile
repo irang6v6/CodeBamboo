@@ -6,7 +6,7 @@ WORKDIR /usr/src/front
 # Copy the package.json and package-lock.json files to the working directory
 COPY ./package* /usr/src/front/
 # Install the dependencies
-RUN npm install
+RUN npm i --legacy-peer-deps
 # Copy the rest of the source code to the working directory
 COPY ./ /usr/src/front/
 # Build the React app
