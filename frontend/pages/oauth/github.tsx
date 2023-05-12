@@ -1,31 +1,30 @@
-import { Inter } from 'next/font/google'
-import { useQuery } from 'react-query'
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useLogin } from '@/hooks/auth/useLogin';
 
-const inter = Inter({ subsets: ['latin'] })
+export default function Github() {
+  const router = useRouter()
+  const code = router.query.code as string | undefined;
+  
+  const loginMutation = useLogin(code, 'github')
 
-const fetchUser = async () => {
-  const BASE_URL = 'http://localhost:8000'
-  const response = await fetch(BASE_URL+'/users/1', {
-    method: 'GET',
-  })
-  const data = await response.json()
-  return data
-}
+  useEffect(() => {
+    if (code) {
+      loginMutation.mutate();
+    }
+  }, [code, loginMutation.mutate]);
+  
+  if (loginMutation.isLoading) {
+    return <div>깃허브 인증 처리 중입니다...</div>;
+  }
 
-export default function Kakao() {
-  // const { isLoading, isError, data: seoyong } = useQuery('user', fetchUser)
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>
-  // }
-
-  // if (isError) {
-  //   return <div>Error fetching user data</div>
-  // }
+  if (loginMutation.isError) {
+    return <div>Error fetching user data</div>;
+  }
 
   return (
     <>
-    <h1>hihi</h1>
+    <h1>곧 인증작업이 시작됩니다...</h1>
     </>
   );
 }

@@ -1,46 +1,36 @@
-import { Inter } from 'next/font/google'
-import { useQuery } from 'react-query'
+import { Intro } from '@/components/main/Intro';
+import Main from '@/components/main/Main';
+import { useEffect } from 'react';
+import { isHomeState } from '@/recoil/isHome';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { userState } from '@/recoil/user';
 
-const inter = Inter({ subsets: ['latin'] })
-
-const fetchUser = async () => {
-  const BASE_URL = 'https://k8a801.p.ssafy.io/api'
-  const response = await fetch(BASE_URL+'/users/1', {
-    method: 'GET',
-  })
-  const data = await response.json()
-  return data
-}
+export const scrollTo700vh = () => {
+  window.scrollTo({
+    top: window.innerHeight * 7,
+  });
+};
 
 export default function Home() {
-  const { isLoading, isError, data: seoyong } = useQuery('user', fetchUser)
-  const API_KEY_KAKAO = process.env.REACT_APP_API_KEY_KAKAO
-  const REDIRECT_URI_SITE = process.env.REACT_APP_REDIRECT_URI
-  const OAUTH_KAKAO = `https://kauth.kakao.com/oauth/authorize?client_id=${API_KEY_KAKAO}&redirect_uri=${REDIRECT_URI_SITE+'kakao'}&response_type=code`
-  console.log(API_KEY_KAKAO, REDIRECT_URI_SITE)
+  const setIsHome = useSetRecoilState(isHomeState);
+  const user = useRecoilValue(userState);
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  useEffect(() => {
+    setIsHome(true);
 
-  if (isError) {
-    return <div>Error fetching user data</div>
-  }
+    if (user.isLoggedIn) {
+      scrollTo700vh();
+    }
+
+    return () => {
+      setIsHome(false);
+    };
+  }, []);
 
   return (
-    <>
-    <div>
-      <ol>
-        <li>아이디: {seoyong?.id}</li>
-        <li>이름: {seoyong?.name}</li>
-        <li>나이: {seoyong?.age}</li>
-        <li>포지션: {seoyong?.position}</li>
-        <li>기술 스택: {seoyong?.skills}</li>
-      </ol>
+    <div className="w-full h-[800vh]">
+      <Intro />
+      <Main />
     </div>
-    <button><a href={OAUTH_KAKAO}>카카오 로그인</a></button>
-    <button>네이버 로그인</button>
-    <button>깃허브 로그인</button>
-    </>
   );
 }
