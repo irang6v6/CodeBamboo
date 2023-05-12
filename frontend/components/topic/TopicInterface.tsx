@@ -24,3 +24,8 @@ export interface TopicItemInF {
   rootLeaf: LeafItemInF;
   bestLeaf: LeafItemInF;
 }
+
+export interface mainTopicListInF {
+  popular: TopicItemInF[];
+  trending: TopicItemInF[];
+}

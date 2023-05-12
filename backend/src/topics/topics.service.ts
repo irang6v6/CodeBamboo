@@ -82,8 +82,8 @@ export class TopicsService {
       trendingRespone.push(searchTopic(trendingOne));
     }
     const response = {
-      ...{ popular: popularRespone },
-      ...{ trending: trendingRespone },
+      ...{ popular: popularRespone.slice(0, 12) },
+      ...{ trending: trendingRespone.slice(0, 12) },
     };
     return response;
   }
