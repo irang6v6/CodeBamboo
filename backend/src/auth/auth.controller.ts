@@ -93,6 +93,7 @@ export class AuthController {
   @Get('/keep-login-state')
   async loginState(@Req() req: Request){
     const refreshToken = req.cookies['refresh_token']
+    if (!refreshToken) throw new Error('로그인되지 않은 사용자입니다.')
     const decoded = this.jwtService.verify(refreshToken, {secret:process.env.SECRET})
     // console.log(decoded.user_id)
     const user = await this.userService.getUser(decoded.user_id)

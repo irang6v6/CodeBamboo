@@ -25,7 +25,9 @@ export const Layout = ({ children }: Props) => {
 
   // 로그인 상태 유지. 여기서는 반환되는 리스폰스 data가 필요없으므로, 쿼리사용하지 않았음.
   useEffect(()=>{
-    keepLoggedIn()
+    if(localStorage.getItem('access_token')) {
+      keepLoggedIn()
+    }
   },[])
 
   return (

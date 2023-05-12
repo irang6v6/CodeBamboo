@@ -17,7 +17,6 @@ import { User } from 'src/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 
-@UseGuards(JwtAuthGuard)
 @Controller('topic')
 export class TopicsController {
   constructor(private readonly topicsService: TopicsService) {}
@@ -42,12 +41,14 @@ export class TopicsController {
     return this.topicsService.getOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createTopicDto, @Req() req: Request) {
     const user_id = req.user['user_id'];
     return this.topicsService.create(createTopicDto, user_id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('help/:id')
   closeHelp(@Param('id') id: number) {
     return this.topicsService.closeHelp(id);
@@ -57,7 +58,7 @@ export class TopicsController {
   //   update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
   //     this.usersService.update(id, updateUserDto);
   //   }
-
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(@Param('id') id: number) {
     this.topicsService.deleteOne(id);
