@@ -20,5 +20,5 @@ export class UpdateLeafDto {
   content: string;
 
   @IsOptional()
-  code: Code;
+  codes: Code;
 }

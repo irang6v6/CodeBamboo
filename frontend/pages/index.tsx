@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { isHomeState } from '@/recoil/isHome';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userState } from '@/recoil/user';
+import SearchModal from '@/components/common/SearchModal';
 
 export const scrollTo700vh = () => {
   window.scrollTo({
@@ -14,23 +15,18 @@ export const scrollTo700vh = () => {
 export default function Home() {
   const setIsHome = useSetRecoilState(isHomeState);
   const user = useRecoilValue(userState);
-
   useEffect(() => {
     setIsHome(true);
-
-    if (user.isLoggedIn) {
-      scrollTo700vh();
-    }
-
+    if (user.isLoggedIn) scrollTo700vh();
     return () => {
       setIsHome(false);
     };
   }, []);
-
   return (
     <div className="w-full h-[800vh]">
       <Intro />
       <Main />
+      <SearchModal />
     </div>
   );
 }

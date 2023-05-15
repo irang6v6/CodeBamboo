@@ -47,20 +47,28 @@ export class TopicsService {
     });
     // const popularOne = popularTopic(getall[0]);
     const popular = getall.map((data) => popularTopic(data));
-    // console.log(popular);
     popular.sort((a, b) => {
       return b.value - a.value;
     });
-    console.log(popular);
+    // console.log(popular);
     const trending = getall.map((data) => trendingTopic(data));
     // console.log(trending);
+    let popularLength = 0;
+    if (popular.length <= 6) {
+      popularLength = popular.length;
+    }
+    if (trending.length <= popularLength) {
+      popularLength = trending.length;
+    } else {
+      popularLength = 6;
+    }
     trending.sort((a, b) => {
       return b.value - a.value;
     });
     // console.log(trending);
     const popularRespone = [];
     const trendingRespone = [];
-    for (let index = 0; index < 6; index++) {
+    for (let index = 0; index < popularLength; index++) {
       const popularOne = await this.topicRepository.findOne({
         relations: {
           user: true,
@@ -113,7 +121,7 @@ export class TopicsService {
     //닉네임이나 타이틀로 검색 안되면 []로 들어와서 길이를 재서 유무 판별
     if (userTopics.length == 0 && titleTopics.length == 0) {
       throw new NotFoundException(
-        `'${userInput}'라는 검색결과를 찾을 수 없습니다.`,
+        `'${userInput}'(이)라는 검색결과를 찾을 수 없습니다.`,
       );
     } else if (userTopics.length > 0) {
       const topics = userTopics.map((data) => searchTopic(data));
@@ -125,23 +133,40 @@ export class TopicsService {
   }
 
   //getOne에서는 모든 리프를 makeTopicLeafs
-  async getOne(id: number) {
+  async getOne(id: number, user_id: number) {
     const topic = await this.topicRepository.findOne({
       where: { topic_id: id },
       relations: {
         user: true,
-        rootLeaf: { codes: true, user: true, likes: true },
-        bestLeaf: { codes: true, user: true, likes: true },
-        leafs: { codes: true, user: true, likes: true },
+        rootLeaf: {
+          codes: true,
+          user: true,
+          likes: { user: true },
+          bookmarks: { user: true },
+        },
+        bestLeaf: {
+          codes: true,
+          user: true,
+          likes: { user: true },
+          bookmarks: { user: true },
+        },
+        leafs: {
+          codes: true,
+          user: true,
+          likes: { user: true },
+          bookmarks: { user: true },
+        },
       },
     });
     // console.log(topic);
     const topic_id = { topic_id: topic.topic_id };
     const needHelp = { needHelp: topic.needHelp };
     const creation_time = { creation_time: topic.creation_time };
-    const rootLeaf = { rootLeaf: makeTopicLeafs(topic.rootLeaf) };
-    const bestLeaf = { bestLeaf: makeTopicLeafs(topic.bestLeaf) };
-    const leafs = { leafs: topic.leafs.map((data) => makeTopicLeafs(data)) };
+    const rootLeaf = { rootLeaf: makeTopicLeafs(topic.rootLeaf, user_id) };
+    const bestLeaf = { bestLeaf: makeTopicLeafs(topic.bestLeaf, user_id) };
+    const leafs = {
+      leafs: topic.leafs.map((data) => makeTopicLeafs(data, user_id)),
+    };
     const response = {
       ...topic_id,
       ...needHelp,
@@ -154,6 +179,7 @@ export class TopicsService {
     if (!topic) {
       throw new NotFoundException(`topic id ${id} not found`);
     }
+    // console.log(response);
     return response;
   }
 
@@ -213,18 +239,18 @@ export class TopicsService {
   }
 
   async deleteOne(id: number): Promise<void> {
-    const simpleUserDto = await this.getOne(id);
-    console.log(simpleUserDto.leafs.length);
-    if (!simpleUserDto) {
-      throw new NotFoundException(`'${id}'번 토픽을 찾을 수 없습니다.`);
-    }
-    if (simpleUserDto.leafs.length > 1) {
-      throw new UnauthorizedException(
-        `'${id}'번 토픽은 2개 이상의 리프를 가지고 있어 삭제가 불가능합니다.`,
-      );
-    } else if (simpleUserDto.leafs.length === 1) {
-      await this.topicRepository.delete(id);
-    }
+    // const simpleUserDto = await this.getOne(id);
+    // // console.log(simpleUserDto.leafs.length);
+    // if (!simpleUserDto) {
+    //   throw new NotFoundException(`'${id}'번 토픽을 찾을 수 없습니다.`);
+    // }
+    // if (simpleUserDto.leafs.length > 1) {
+    //   throw new UnauthorizedException(
+    //     `'${id}'번 토픽은 2개 이상의 리프를 가지고 있어 삭제가 불가능합니다.`,
+    //   );
+    // } else if (simpleUserDto.leafs.length === 1) {
+    //   await this.topicRepository.delete(id);
+    // }
   }
 
   async closeHelp(id: number): Promise<void> {
