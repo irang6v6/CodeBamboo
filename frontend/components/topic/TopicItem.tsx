@@ -36,7 +36,7 @@ export const TopicItem = ({
     >
       {needHelp && needHelpPing}
       <div
-        className="relative bg-white w-[90%] h-[60%] rounded-xl p-[3%] overflow-hidden hover:cursor-pointer"
+        className="relative bg-white w-[90%] h-[60%] rounded-xl overflow-hidden hover:cursor-pointer"
         onClick={() => router.push(`/topics/${topic_id}`)}
       >
         <div className="absolute top-0 left-0 w-full h-full bg-transparent z-40"></div>

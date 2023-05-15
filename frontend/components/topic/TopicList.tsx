@@ -72,7 +72,9 @@ export const TopicList = ({ topicList }: Props) => {
       <div
         className={`w-screen flex
       md:w-full md:h-[53vh] md:items-end md:px-5 md:transition`}
-        style={{ transform: !isMobile ? `translateX(${-40 * viewPart}%)` : '' }}
+        style={{
+          transform: !isMobile ? `translateX(${-40 * viewPart}rem)` : '',
+        }}
       >
         {isClient && topicListItems}
       </div>
