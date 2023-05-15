@@ -44,7 +44,7 @@ export class LeafsService {
     //닉네임이나 타이틀로 검색 안되면 []로 들어와서 길이를 재서 유무 판별
     if (userLeafs.length == 0 && titleLeafs.length == 0) {
       throw new NotFoundException(
-        `'${userInput}'라는 검색결과를 찾을 수 없습니다.`,
+        `'${userInput}'(이)라는 검색결과를 찾을 수 없습니다.`,
       );
     } else if (userLeafs.length > 0) {
       const user = userLeafs.map((data) => makeLeaf(data));
@@ -57,7 +57,7 @@ export class LeafsService {
 
   async getOne(id: number) {
     const leaf = await this.leafRepository.findOne({
-      relations: { user: true, likes: true, codes: true },
+      relations: { user: true, likes: true, codes: true, topic: true },
       where: { leaf_id: id },
     });
     // console.log(leaf);
@@ -131,6 +131,7 @@ export class LeafsService {
 
     //재정의한 객체를 leaf에 저장
     const createLeaf = await this.leafRepository.save(json);
+    // const saveLeaf = await this.leafRepository.save(createLeaf);
     //leaf_id 가져오기
     const leaf_id = createLeaf.leaf_id;
 
@@ -168,12 +169,12 @@ export class LeafsService {
           .where('leaf_id = :leaf_id', { leaf_id: id })
           .execute();
       }
-      if (updateLeafDto.code) {
-        const leafCodeLength = Object.keys(updateLeafDto.code).length;
+      if (updateLeafDto.codes) {
+        const leafCodeLength = Object.keys(updateLeafDto.codes).length;
         type = 1;
 
         for (let index = 0; index < leafCodeLength; index++) {
-          const element = updateLeafDto.code[index];
+          const element = updateLeafDto.codes[index];
           // console.log(element);
           const json = { ...element, ...leaf_id };
           // console.log(json);
