@@ -50,7 +50,7 @@ const queryFn = async (userId: string) => {
 const ProfilePage = ({ userId, myPage }: Props) => {
   const isMobile = useIsMobile();
   const [menu, setMenu] = useState("topics");
-  const [myState, setMyState] = useRecoilState(userState)
+  const [myState, setMyState] = useRecoilState(userState);
 
   const {
     register: registerNickname,
@@ -59,8 +59,10 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     setValue,
     reset,
     watch,
-    setFocus
+    setFocus,
   } = useForm();
+
+  const registerIntro = useForm()
 
   // 유저 정보 API
   const [user, setUser] = useState(userDefault);
@@ -74,36 +76,52 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   });
 
   // 닉네임, 자기소개 Form
-  const nicknameRef = useRef();
-  const introduceRef = useRef();
-
   useEffect(() => {
     if (getUser.isSuccess) {
-      reset({ 'nickname': getUser.data.nickname });
+      reset({ nickname: getUser.data.nickname });
+      registerIntro.reset({ introduce: getUser.data.introduce });
     }
   }, [getUser.data, getUser.isSuccess, reset]);
 
-  const onNicknameSubmit = async() => {
-    if (user.nickname === watch('nickname')) {
-      setFocus('nickname')
+  const onNicknameSubmit = async () => {
+    if (user.nickname === watch("nickname")) {
+      setFocus("nickname");
     } else {
-      console.log(watch('nickname'))
-      if (window.confirm('닉네임 수정하시겠습니까?')) {
+      console.log(watch("nickname"));
+      if (window.confirm("닉네임 수정하시겠습니까?")) {
         try {
-          await authApi.patch('user/'+userId, {nickname:watch('nickname')}).then(res=>res.data)
-          setMyState({...myState, nickname:watch('nickname')})
-          alert('닉네임 저장 완료!')
+          await authApi
+            .patch("user/" + userId, { nickname: watch("nickname") })
+            .then((res) => res.data);
+          setMyState({ ...myState, nickname: watch("nickname") });
+          alert("닉네임 저장 완료!");
         } catch (error) {
-          console.error(error)
+          console.error(error);
         }
       }
-    };
-  }
+    }
+  };
 
-  const onSelfIntroSubmit = (data) => {
-    console.log(data);
-    console.log('value : ', nicknameRef?.current?.value())
-    // Update self-introduction on your backend
+  const onSelfIntroSubmit = async() => {
+    const watch = registerIntro.watch("introduce")
+    console.log(user.introduce)
+    console.log(watch)
+    if (user.introduce === watch) {
+      registerIntro.setFocus("introduce");
+    } else {
+      console.log(watch);
+      if (window.confirm("자기소개 수정하시겠습니까?")) {
+        try {
+          await authApi
+            .patch("user/" + userId, { introduce: watch })
+            .then((res) => res.data);
+          setMyState({ ...myState, introduce: watch });
+          alert("자기소개 저장 완료!");
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
   };
 
   const [topics, setTopics] = useState();
@@ -161,7 +179,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       {!isMobile && (
         <header
           className="header mx-8 mt-8 h-1/3 justify-end bg-transparent ps-[5rem] w-11/12 pb-8
-          md:w-11/12 md:self-center"
+          md:w-full md:self-center md:ms-0"
         >
           <img
             src="/images/bg-bamboo.png"
@@ -178,54 +196,60 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       >
         {/* 프로필 섹션 */}
         <section
-          className="section h-[40%] min-h-[17rem] justify-around rounded-t-3xl rounded-b border-4 border-bamboo bg-transparent
-          md:w-1/3 md:h-full md:px-12 md:me-8
+          className="section h-[40%] min-h-[17rem] justify-around rounded-t-3xl rounded-b bg-transparent shadow-neutral-300 shadow-lg border-2 border-gray-200
+          md:w-1/3 md:h-full md:px-12 md:me-8 md:rounded-xl
         "
         >
           {/* 프사 & 닉네임 & 이메일있는 아티클 */}
           <article
-            className="article items-center relative h-24 bg-transparent
+            className="article items-center relative h-24 bg-transparent 
           "
           >
             <img
               src={user.image}
               alt=""
-              className="min-w-[5rem] max-h-[5rem] max-w-[5rem] min-h-[5rem] absolute bottom-12 rounded-lg drop-shadow-lg bg-auto z-10
+              className="min-w-[5rem] max-h-[5rem] max-w-[5rem] min-h-[5rem] absolute bottom-12 rounded-lg drop-shadow-lg bg-cover  object-cover z-10
              md:w-[7rem] md:bottom-20 md:aspect-square md:max-w-[50%]
              md:max-h-[7rem]
             "
             />
             <div
               className="absolute bottom-6 font-bold text-sm text-center 
-               md:bottom-11 md:text-base
+               md:bottom-10 md:text-base
             "
             >
-              {myPage?
+              {myPage ? (
                 <form onSubmit={handleNicknameSubmit(onNicknameSubmit)}>
-                {/* <label htmlFor="nickname">{user.nickname}</label> */}
-                <input
-                  id="nickname"
-                  {...registerNickname("nickname", { required: true, pattern:/^[\uAC00-\uD7AFa-zA-Z0-9_\-]{2,15}$/
-                })}
-                  className="text-center h-6 w-28 max-w-[50%] min-w-max cursor-pointer  placeholder-black"
-                  defaultValue={user.nickname}
-
-                />
-                <button type="submit">
-                  <CiEdit
-                    size={20}
-                    className="absolute -right-5 z-10 cursor-pointer top-[0.2rem]"
+                  {/* <label htmlFor="nickname">{user.nickname}</label> */}
+                  <input
+                    id="nickname"
+                    {...registerNickname("nickname", {
+                      required: true,
+                      pattern: /^[\uAC00-\uD7AFa-zA-Z0-9_\-]{2,15}$/,
+                    })}
+                    className="text-center h-6 min-w-[8rem] max-w-[50%] cursor-pointer  placeholder-black"
+                    defaultValue={user.nickname}
+                    // onBlur={() => setValue('nickname', user.nickname)}
                   />
-                </button>
-                {nicknameErrors.nickname && <p className="absolute bottom-6 text-center text-red-400 pointer-events-none z-10">유효하지 않은 닉네임입니다</p>}
-              </form>
-              :
-              user.nickname  
-            }
+                  <button type="submit">
+                    <CiEdit
+                      size={20}
+                      className="absolute z-10 cursor-pointer top-[0.2rem]"
+                    />
+                  </button>
+                  {nicknameErrors.nickname && (
+                    <p className="absolute top-full left-0 text-center  text-xs text-red-400 pointer-events-none z-10">
+                      유효하지 않은 닉네임입니다
+                    </p>
+                  )}
+                </form>
+              ) : (
+                user.nickname
+              )}
             </div>
             <p
-              className="absolute bottom-2 text-neutral-400 text-sm
-               md:bottom-6
+              className="absolute bottom-0 text-neutral-400 text-sm
+               md:bottom-2
             "
             >
               {user.email}
@@ -238,33 +262,48 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           "
           >
             <div
-              className="h-2/3 overflow-y-auto md:overflow-y-clip md:overflow-x-auto
+              className="h-2/3
             "
             >
               <p
                 className="text-xs text-gray-500 border-b-4 border-b-lime-300 w-12
-                 md:w-16
+                 md:w-16 md:text-sm
               "
               >
                 Introduce
               </p>
-              <div
-                className="text-md
-              xs:text-md
-              "
-              >
-                {user.introduce}
+                {myPage ? (
+                  <form action="" onSubmit={registerIntro.handleSubmit(onSelfIntroSubmit)} className="relative">
+                    <textarea
+                      className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none"
+                      {...registerIntro.register("introduce", {
+                        // required: true,
+                        maxLength: 40,
+                      })}
+                      defaultValue={user.introduce}
+                    />
+                    <button type="submit">
+                      <CiEdit
+                        size={30}
+                        className=" absolute bottom-1 z-10 cursor-pointer
+                        md:right-10
+                        "
+                      />
+                    </button>
+                  </form>
+                ) : (
+                  user.introduce
+                )}
               </div>
-            </div>
           </article>
           {/* 카운트카운트 */}
           <>{cntDiv(isMobile)}</>
         </section>
         {/* 데탑화면에서 하나로 묶기용 div */}
-        <div className="md:w-2/3 md:h-full h-[45%]">
+        <div className="md:w-2/3 md:h-full h-[45%] shadow-neutral-300 shadow-lg border-2 border-gray-200 rounded-xl">
           {/* 메뉴 토클 버튼있는 섹션 */}
           <section
-            className="section h-9 flex-row justify-between w-full my-1.5 px-1 self-center bg-transparent
+            className="section h-9 flex-row justify-between w-full my-1.5 px-1 self-center bg-transparent 
           md:absolute md:max-w-sm md:grid-cols-3 md:grid md:gap-2
           "
           >
