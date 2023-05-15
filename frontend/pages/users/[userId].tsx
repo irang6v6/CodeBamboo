@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useRecoilValue } from 'recoil';
 import { userState } from '@/recoil/user';
-import ProfilePage from "@/components/user/profilePage";
+import ProfilePage from "@/components/user/ProfilePage";
 
 interface Props {
 }
