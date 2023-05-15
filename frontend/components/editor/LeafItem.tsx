@@ -10,7 +10,12 @@ import {
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import authApi from '@/hooks/api/axios.authorization.instance';
 import { HiCode } from 'react-icons/hi';
-import { RiThumbUpLine, RiBookmarkLine } from 'react-icons/ri';
+import {
+  RiThumbUpLine,
+  RiThumbUpFill,
+  RiBookmarkLine,
+  RiBookmarkFill,
+} from 'react-icons/ri';
 
 interface LeafItemProps {
   leaf: LeafObject;
@@ -49,19 +54,25 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
       content: leaf.content,
     });
   };
-  // const [isLiked, setIsLiked] = useState(leaf.isLiked)
-  // const [isBookmarked, setIsBookmarked] = useState(leaf.isBookmarked)
+  const [isLiked, setIsLiked] = useState(leaf.isLiked);
+  const [isBookmarked, setIsBookmarked] = useState(leaf.isBookmarked);
 
   const mutateLike = useMutation(() => queryLikeFn(leaf.leaf_id), {
-    // onSuccess: () => {},
-    // onMutate:()=>{
-    // }
+    onSuccess: () => {
+      console.log('좋아요 성공');
+    },
+    onMutate: () => {
+      setIsLiked(!isLiked);
+    },
   });
 
   const mutateBookmark = useMutation(() => queryBookmarkFn(leaf.leaf_id), {
-    // onSuccess: () => {},
-    // onMutate:()=>{
-    // }
+    onSuccess: () => {
+      console.log('즐겨찾기 성공');
+    },
+    onMutate: () => {
+      setIsBookmarked(!isBookmarked);
+    },
   });
 
   return (
@@ -81,7 +92,11 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
           mutateLike.mutate();
         }}
       >
-        <RiThumbUpLine className="text-[1.5rem]" />
+        {isLiked ? (
+          <RiThumbUpFill className="text-[1.5rem]" />
+        ) : (
+          <RiThumbUpLine className="text-[1.5rem]" />
+        )}
       </div>
       <span className="text-[0.5rem]">{leaf.likeCnt}</span>
       <div
@@ -91,7 +106,11 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
           mutateBookmark.mutate();
         }}
       >
-        <RiBookmarkLine className="text-[1.5rem]" />
+        {isBookmarked ? (
+          <RiBookmarkFill className="text-[1.5rem]" />
+        ) : (
+          <RiBookmarkLine className="text-[1.5rem]" />
+        )}
       </div>
     </div>
   );

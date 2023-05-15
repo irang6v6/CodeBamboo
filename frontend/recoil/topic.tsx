@@ -56,27 +56,13 @@ export interface LeafObject {
   is_root: boolean;
   codes: CodeObject[];
   user_id: number;
+  isLiked: boolean;
+  isBookmarked: boolean;
 }
 
 export const LeafState = atom<LeafObject[]>({
   key: 'LeafState',
-  default: [
-    {
-      leaf_id: 6,
-      user_id: 7,
-      nickname: '태형',
-      title: '헬로우',
-      content: '마이네임',
-      step: 1,
-      ref_order: 0,
-      parent_leaf_id: 2,
-      exportCnt: 6,
-      likeCnt: 5,
-      type: 1,
-      is_root: true,
-      codes: [],
-    },
-  ],
+  default: [],
 });
 
 export interface selectedObject {

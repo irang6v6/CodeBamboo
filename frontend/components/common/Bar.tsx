@@ -39,14 +39,14 @@ export const Bar = () => {
       {isMobile ? (
         <img src="/images/icons/bar_icon.png" alt="Bar Icon" />
       ) : (
-        <div className='flex items-center mt-4 justify-between w-[7.5rem]'>
+        <div className='flex items-center mt-4 justify-between'>
         <img
           src="/images/icons/logo_icon.png"
           className=""
           alt="Logo Icon"
           />
           {isHovered && 
-          <div className='flex flex-col font-bold tracking-wide'>
+          <div className='flex flex-col font-bold tracking-wide ml-3'>
           {/* <p>Code</p> */}
           <p><span className='md:text-3xl md:font-semibold'>H</span>ome</p>
           </div>
