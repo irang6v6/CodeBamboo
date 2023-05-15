@@ -28,6 +28,15 @@ const queryLeafFn = async (body: any) => {
   }
 };
 
+const queryLeafEditFn = async (leafId:number|null, body: any) => {
+  try {
+    const response = await authApi.patch(`leaf/${leafId}`, body);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const Article = ({}: Props) => {
   const router = useRouter();
   const topicId = router.query.topicId;
@@ -41,6 +50,7 @@ export const Article = ({}: Props) => {
   const {
     register,
     formState: { errors },
+    watch,
     handleSubmit,
   } = useForm({
     defaultValues: {
@@ -60,6 +70,20 @@ export const Article = ({}: Props) => {
       router.push(`/topics/${topicId}`);
     },
   });
+
+  const mutateLeafEdit = useMutation((body: any) => queryLeafEditFn(selectedLeaf.leaf_id, body), {
+    onSuccess: (topicId) => {
+      router.push(`/topics/${topicId}`);
+    },
+  });
+
+  const EditLeaf = () => {
+    const body = {
+      ...watch(),
+      codes:code,
+    }
+    mutateLeafEdit.mutate(body)
+  }
 
   useEffect(() => {
     setLocalArticle(article);
@@ -146,6 +170,12 @@ export const Article = ({}: Props) => {
               {!needHelp ? `Help!` : <GrFlagFill />}
             </div>
           )}
+          { selectedLeaf.user_id === user.user_id &&
+            <div 
+              className="bamboo-button"
+              onClick={()=>EditLeaf()}>
+              Edit
+            </div> }
           <button className="bamboo-button">
             {!selectedLeaf.leaf_id ? 'Submit' : 'Reply'}
           </button>

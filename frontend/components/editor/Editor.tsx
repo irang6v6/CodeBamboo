@@ -11,7 +11,7 @@ import useIsMobile from '@/hooks/useIsMobile';
 export const Editor = () => {
   const [code, setCode] = useRecoilState(codeState);
   const isMobile = useIsMobile();
-  const [selectedLanguage, setSelectedLanguage] = useState('Content');
+  const [selectedLanguage, setSelectedLanguage] = useState('HTML');
   const [initialCode, setInitialCode] = useState('');
 
   useEffect(() => {

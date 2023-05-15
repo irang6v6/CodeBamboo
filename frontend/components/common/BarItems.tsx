@@ -143,7 +143,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
     return (
         <>
             <div
-                className="bg-inherit z-10 flex flex-col
+                className="z-10 flex flex-col
                       absolute top-full right-0 h-80 w-1/2 
                       md:static md:h-full md:w-auto md:justify-between"
             >
