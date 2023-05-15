@@ -11,7 +11,7 @@ export const Rendering = () => {
 
   const srcCode = `
     <html>
-      <body>${html ? html : ""}</body>
+      <body>${html ? html : ''}</body>
       <style>${css}</style>
       <script>${js}</script>
     </html>
@@ -26,8 +26,9 @@ export const Rendering = () => {
   }, [srcCode]);
 
   return (
-    <div className='h-full w-full border md:h-1/2'>
+    <div className="h-full w-full border md:h-1/2">
       <iframe
+        className="h-full w-full"
         srcDoc={src}
         sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-scripts allow-top-navigation-by-user-activation allow-downloads allow-presentation"
         allow="accelerometer; camera; encrypted-media; display-capture; geolocation; gyroscope; microphone; midi; clipboard-read; clipboard-write"

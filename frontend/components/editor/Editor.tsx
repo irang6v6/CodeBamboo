@@ -50,12 +50,12 @@ export const Editor = () => {
       .map((e) => e.language);
 
     return (
-      <div className="flex flex-row h-16 overflow-x-scroll scrollbar-hide">
+      <div className="flex flex-row h-16 overflow-x-scroll scrollbar-hide shrink-0 w-full">
         {tabs.map((tab) => (
           <div
             key={tab}
             onClick={() => setSelectedLanguage(tab)}
-            className={`editor-tab w-24 ${
+            className={`editor-tab h-16 w-24 ${
               selectedLanguage === tab
                 ? 'font-bold bg-bamboo text-white'
                 : 'bg-gray-300'
@@ -82,17 +82,17 @@ export const Editor = () => {
 
   return (
     <div
-      className="flex h-full w-full
+      className="flex h-full 
                     flex-col
                     md:flex-row"
     >
       <div
-        className="flex flex-col h-full
+        className="box-border flex flex-col h-full
       
                       md:w-1/2"
       >
         <Tabs />
-        <div className="h-full">
+        <div className="h-full overflow-y-hidden">
           {selectedLanguage !== 'Content' ? (
             <CodeItem
               className="h-full
@@ -104,6 +104,9 @@ export const Editor = () => {
                 mode: 'xml',
                 theme: 'material',
                 lineNumbers: true,
+                scrollbarStyle: 'null',
+                lineWrapping: true,
+                // cursorScrollMargin: 5,
                 // imeMode: 'disabled',
                 // spellcheck: false,
                 // inputStyle: "contenteditable",
