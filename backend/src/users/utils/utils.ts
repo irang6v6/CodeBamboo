@@ -44,12 +44,14 @@ export function transformUserTopics(userTopics: Topic[]): UserTopics[] {
 
 // 해당 토픽의 가장 좋아요수가 높은 리프 ID[DB상의 id] 반환
 export function searchBestLeafId(topicLeafs: Leaf[]) {
-  let bestLeafId = 1;
-  let bestLeafLikes = 0;
-  for (let i = 0; i < topicLeafs.length; i++) {
-    if (topicLeafs[i].likes.length > bestLeafLikes) {
-      bestLeafId = i + 1;
-      bestLeafLikes = topicLeafs[i].likes.length;
+  let bestLeafId = topicLeafs[0].leaf_id;
+  let bestLeafLikes = topicLeafs[0].likes.length;
+  if (topicLeafs.length > 1) {
+    for (let i = 1; i < topicLeafs.length; i++) {
+      if (topicLeafs[i].likes.length > bestLeafLikes) {
+        bestLeafId = topicLeafs[i].leaf_id;
+        bestLeafLikes = topicLeafs[i].likes.length;
+      }
     }
   }
   return bestLeafId;

@@ -35,10 +35,13 @@ export class TopicsController {
   search(@Query('input') userInput: string) {
     return this.topicsService.search(userInput);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  getOne(@Param('id') id: number) {
-    return this.topicsService.getOne(id);
+  getOne(@Param('id') id: number, @Req() req: Request) {
+    // console.log('userId', req.user);
+    const user_id = req.user['user_id'];
+    // console.log('user_ID임다', user_id);
+    return this.topicsService.getOne(id, user_id);
   }
 
   @UseGuards(JwtAuthGuard)

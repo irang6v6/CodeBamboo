@@ -17,7 +17,21 @@ export const TopicItemRendering = ({ codes, topic_id }: Props) => {
   const srcCode = `
     <html>
       <body>${html ? html : ''}</body>
-      <style>${css}</style>
+      <style>
+      body,html{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; 
+      }
+      body{
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+      }
+      ${css}
+      </style>
       <script>${js}</script>
     </html>
   `;
@@ -31,15 +45,12 @@ export const TopicItemRendering = ({ codes, topic_id }: Props) => {
   }, [srcCode]);
 
   return (
-    <div
-      className="h-full w-full hover:cursor-pointer"
-      onClick={() => router.push(`/topics/${topic_id}`)}
-    >
+    <div className="h-full w-full scrollBar-hide">
       <iframe
+        className="h-full w-full"
         srcDoc={src}
         sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-scripts allow-top-navigation-by-user-activation allow-downloads allow-presentation"
         allow="accelerometer; camera; encrypted-media; display-capture; geolocation; gyroscope; microphone; midi; clipboard-read; clipboard-write"
-        scrolling="auto"
         // allowTransparency={true} // TS 에러가 나거나 콘솔에 뜸
         loading="lazy"
       />

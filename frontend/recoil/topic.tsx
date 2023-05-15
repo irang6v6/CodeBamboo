@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 import { TopicItemInF } from '../components/topic/TopicInterface';
 
 export interface CodeObject {
-  codeId: number;
+  code_id: number | null;
   language: string;
   content: string | null;
 }
@@ -12,21 +12,19 @@ export const codeState = atom<CodeObject[]>({
   key: 'codeState',
   default: [
     {
-      codeId: 3,
-      language: 'JavaScript',
+      code_id: null,
+      language: 'HTML',
       content: '',
     },
     {
-      codeId: 1,
-      language: 'HTML',
-      content: '<h1>예시 코드</h1>',
+      code_id: null,
+      language: 'CSS',
+      content: '',
     },
     {
-      codeId: 2,
-      language: 'CSS',
-      content: `h1 {
-	color: green
-}`,
+      code_id: null,
+      language: 'JavaScript',
+      content: '',
     },
   ],
 });
@@ -39,9 +37,8 @@ export interface ArticleObject {
 export const articleState = atom<ArticleObject>({
   key: 'articleState',
   default: {
-    title: '알갱이 쏟아지는 효과 간단한 구현',
-    content:
-      '쉬는 날에 심심해서 구현해봤습니다 ㅎㅎ 여기에 색깔 조합만 잘 넣으시면 완성될 것 같네요 ㅎㅎ',
+    title: '',
+    content: '',
   },
 });
 
@@ -83,15 +80,15 @@ export const LeafState = atom<LeafObject[]>({
 });
 
 export interface selectedObject {
-  leaf_id: number;
-  user_id: number;
+  leaf_id: number | null;
+  user_id: number | null;
 }
 
 export const selectedLeafState = atom<selectedObject>({
   key: 'selectedLeafState',
   default: {
-    user_id: 999,
-    leaf_id: 999,
+    user_id: null,
+    leaf_id: null,
   },
 });
 

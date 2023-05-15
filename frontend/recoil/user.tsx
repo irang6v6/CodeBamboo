@@ -7,7 +7,7 @@ export interface userObject {
   introduce: string | null;
   nickname: string;
   provider: string;
-  user_id: number;
+  user_id: number | null;
 }
 
 export const userDefault = {
@@ -18,7 +18,7 @@ export const userDefault = {
   introduce: "Hello, Bamboos!",
   nickname: "Panda123",
   provider: "kakao",
-  user_id: 999,
+  user_id: null,
 }
 
 export const userState = atom<userObject>({
