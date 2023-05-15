@@ -3,10 +3,12 @@ import { useRecoilValue } from 'recoil';
 import { LeafState } from '@/recoil/topic';
 import { LeafItem } from './LeafItem';
 import { GrTree } from 'react-icons/gr';
+import useIsMobile from '@/hooks/useIsMobile';
 
 export const Log = () => {
   const leafs = useRecoilValue(LeafState);
   const [isLogOpen, setIsLogOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const LeafItems = () => {
     return (
@@ -32,19 +34,22 @@ export const Log = () => {
 
   return (
   <>
-    {!isLogOpen ?
-      <div
-        className='flex justify-center items-center bg-white rounded-full h-20 w-20 fixed left-8 bottom-10 border-4 border-bamboo'
-        onClick={()=>setIsLogOpen(true)}
-      >
-        <GrTree className='text-[3rem] text-white'/>
-      </div>
+    {isMobile ? 
+      !isLogOpen ?
+        <div
+          className='flex justify-center items-center bg-white rounded-full h-20 w-20 fixed left-8 bottom-10 border-4 border-bamboo'
+          onClick={()=>setIsLogOpen(true)}
+        >
+          <GrTree className='text-[3rem] text-white'/>
+        </div>
+        :
+        <div>
+          <LeafItems />
+          {LogOpenBackground}
+        </div>
       :
-      <div>
-        <LeafItems />
-        {LogOpenBackground}
-      </div>
-    }
+      <LeafItems />
+      }
   </>
   );
 };

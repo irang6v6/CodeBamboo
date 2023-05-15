@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import { loginModalState, userDefault, userState } from '@/recoil/user';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
@@ -14,7 +14,7 @@ interface Props {
 
 export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
   const [user, setUser] = useRecoilState(userState);
-  const [_, setIsOpen] = useRecoilState(loginModalState);
+  const setIsOpen = useSetRecoilState(loginModalState);
   const router = useRouter()
 
   const logoutMutaion = useLogout()

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { codeState } from '@/recoil/topic';
 import { UnControlled as CodeItem } from 'react-codemirror2';
@@ -19,7 +19,7 @@ export const Editor = () => {
 
   useEffect(() => {
     if (isMobile) return;
-    setSelectedLanguage(code[0].language);
+    setSelectedLanguage(code[0]?.language);
   }, [isMobile]);
 
   useEffect(() => {
