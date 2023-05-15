@@ -29,7 +29,7 @@ export default function Main() {
       >
         Popular
       </p>
-      <TopicList topicList={mainTopicList.popular.slice(0, 3)} />
+      <TopicList topicList={mainTopicList.popular.slice(0, 6)} />
       <p
         className="m-5
                   text-3xl
@@ -37,17 +37,7 @@ export default function Main() {
       >
         Trending
       </p>
-      <TopicList topicList={mainTopicList.trending.slice(0, 3)} />
-      <p
-        className="m-5
-                  text-3xl
-                  md:mx-20 md:mt-7 md:text-5xl"
-      >
-        Interesting people
-        {isMobile ? <br /> : ' '}
-        to follow
-      </p>
-      <UserItem />
+      <TopicList topicList={mainTopicList.trending.slice(0, 6)} />
     </div>
   );
 }
