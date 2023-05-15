@@ -12,7 +12,21 @@ export const Rendering = () => {
   const srcCode = `
     <html>
       <body>${html ? html : ''}</body>
-      <style>${css}</style>
+      <style>
+      body,html{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; 
+      }
+      body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      ${css}
+      </style>
       <script>${js}</script>
     </html>
   `;

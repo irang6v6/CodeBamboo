@@ -40,7 +40,7 @@ export const TopicList = ({ topicList }: Props) => {
   const rightArrow =
     viewPart !== 3 ? (
       <Image
-        className="absolute right-[10%] top-[50%] -translate-y-[50%] opacity-60 hover:scale-125 hover:opacity-100 transition hover:cursor-pointer z-50"
+        className="absolute right-[2%] top-[50%] -translate-y-[50%] opacity-60 hover:scale-125 hover:opacity-100 transition hover:cursor-pointer z-50"
         src={rightArrowImg}
         alt="오른쪽 화살표"
         onClick={rightArrowClickHandler}

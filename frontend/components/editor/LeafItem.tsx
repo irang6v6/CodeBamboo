@@ -53,17 +53,15 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
   // const [isBookmarked, setIsBookmarked] = useState(leaf.isBookmarked)
 
   const mutateLike = useMutation(() => queryLikeFn(leaf.leaf_id), {
-    onSuccess: () => {},
-    onMutate:()=>{
-
-    }
+    // onSuccess: () => {},
+    // onMutate:()=>{
+    // }
   });
 
   const mutateBookmark = useMutation(() => queryBookmarkFn(leaf.leaf_id), {
-    onSuccess: () => {},
-    onMutate:()=>{
-      
-    }
+    // onSuccess: () => {},
+    // onMutate:()=>{
+    // }
   });
 
   return (
