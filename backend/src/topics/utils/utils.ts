@@ -10,6 +10,7 @@ export function makeLeaf(data) {
   const parentLeafId = { parentLeafId: data.parent_leaf_id };
   const exportCnt = { exportCnt: data.export };
   const likeCnt = { likeCnt: data.likes.length };
+  // console.log(isLiked);
   const response = {
     ...user_id,
     ...nickname,
@@ -25,18 +26,46 @@ export function makeLeaf(data) {
   return response;
 }
 
-export function makeTopicLeafs(data) {
+export function makeTopicLeafs(data, my_id: number) {
+  // console.log(data);
   const likeCnt = { likeCnt: data.likes.length };
+  const user_id = { user_id: data.user.user_id };
+  const likeList = data.likes;
+  const bookmarkList = data.bookmarks;
+  // console.log(bookmarkList.length);
+  let isBookmarked = { isBookmarked: false };
+  let isLiked = { isLiked: false };
+  const findLiked = () => {
+    for (let index = 0; index < likeList.length; index++) {
+      const element = likeList[index];
+      if (element.user.user_id === my_id) {
+        isLiked = { isLiked: true };
+      }
+    }
+  };
+  findLiked();
+  const findBookmarked = () => {
+    for (let index = 0; index < bookmarkList.length; index++) {
+      const element = bookmarkList[index];
+      if (element.user.user_id === my_id) {
+        isBookmarked = { isBookmarked: true };
+      }
+    }
+  };
+  findBookmarked();
   const { user, likes, topic, ...obj } = data;
-  const user_id = { user_id: user.user_id };
   const nickname = { nickname: user.nickname };
+
   data = obj;
   const response = {
     ...user_id,
     ...nickname,
     ...likeCnt,
+    ...isLiked,
+    ...isBookmarked,
     ...data,
   };
+  // console.log(response);
   return response;
 }
 

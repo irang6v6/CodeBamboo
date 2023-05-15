@@ -67,25 +67,28 @@ export class UsersController {
   // [6] 특정 유저가 즐겨찾기한 리프 조회
   // 헤더값으로 요청한 유저의 아이디값을 알아야함
   // 현재 더미 userId: 2 전달
+  @UseGuards(JwtAuthGuard)
   @Get('bookmark')
-  getBookmarkLeafs() {
-    return this.usersService.getBookmarkLeafs(2);
+  getBookmarkLeafs(@Req() req: Request) {
+    return this.usersService.getBookmarkLeafs(req.user['user_id']);
   }
 
   // [7] 즐겨찾기 추가 및 제거
   // 헤더값으로 요청한 유저의 아이디값을 알아야함
   // 현재 더미 userId: 2 전달
+  @UseGuards(JwtAuthGuard)
   @Post('bookmark/:id')
-  addBookmarkLeaf(@Param('id') leafId: number) {
-    return this.usersService.addBookmarkLeaf(2, leafId);
+  addBookmarkLeaf(@Param('id') leafId: number, @Req() req: Request) {
+    return this.usersService.addBookmarkLeaf(req.user['user_id'], leafId);
   }
 
   // [8] 리프 좋아요 추가 및 삭제
   // 헤더값으로 요청한 유저의 아이디값을 알아야함
   // 현재 더미 userId: 2 전달
+  @UseGuards(JwtAuthGuard)
   @Post('like/:id')
-  addLikeLeaf(@Param('id') leafId: number) {
-    return this.usersService.addLikeLeaf(2, leafId);
+  addLikeLeaf(@Param('id') leafId: number, @Req() req: Request) {
+    return this.usersService.addLikeLeaf(req.user['user_id'], leafId);
   }
 
   // [9] 유저 id로 정보 조회
@@ -101,6 +104,7 @@ export class UsersController {
   // [11] 유저 정보 수정
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    console.log('body :', updateUserDto)
     return this.usersService.update(id, updateUserDto);
   }
 }

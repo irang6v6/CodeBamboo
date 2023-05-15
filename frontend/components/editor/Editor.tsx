@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { codeState } from '@/recoil/topic';
 import { UnControlled as CodeItem } from 'react-codemirror2';
-// import 'codemirror/mode/xml/xml';
-// import 'codemirror/mode/css/css';
-// import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import { Rendering } from './Rendering';
@@ -14,12 +11,12 @@ import useIsMobile from '@/hooks/useIsMobile';
 export const Editor = () => {
   const [code, setCode] = useRecoilState(codeState);
   const isMobile = useIsMobile();
-  const [selectedLanguage, setSelectedLanguage] = useState('Content');
+  const [selectedLanguage, setSelectedLanguage] = useState('HTML');
   const [initialCode, setInitialCode] = useState('');
 
   useEffect(() => {
     if (isMobile) return;
-    setSelectedLanguage(code[0].language);
+    setSelectedLanguage(code[0]?.language);
   }, [isMobile]);
 
   useEffect(() => {
@@ -53,12 +50,12 @@ export const Editor = () => {
       .map((e) => e.language);
 
     return (
-      <div className="flex flex-row h-16 overflow-x-scroll scrollbar-hide">
+      <div className="flex flex-row h-16 overflow-x-scroll scrollbar-hide shrink-0 w-full">
         {tabs.map((tab) => (
           <div
             key={tab}
             onClick={() => setSelectedLanguage(tab)}
-            className={`editor-tab w-24 ${
+            className={`editor-tab h-16 w-24 ${
               selectedLanguage === tab
                 ? 'font-bold bg-bamboo text-white'
                 : 'bg-gray-300'
@@ -90,12 +87,12 @@ export const Editor = () => {
                     md:flex-row"
     >
       <div
-        className="flex flex-col h-full
+        className="box-border flex flex-col h-full
       
                       md:w-1/2"
       >
         <Tabs />
-        <div className="h-full">
+        <div className="h-full overflow-y-hidden">
           {selectedLanguage !== 'Content' ? (
             <CodeItem
               className="h-full
@@ -107,6 +104,9 @@ export const Editor = () => {
                 mode: 'xml',
                 theme: 'material',
                 lineNumbers: true,
+                scrollbarStyle: 'null',
+                lineWrapping: true,
+                // cursorScrollMargin: 5,
                 // imeMode: 'disabled',
                 // spellcheck: false,
                 // inputStyle: "contenteditable",
