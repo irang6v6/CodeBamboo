@@ -104,6 +104,7 @@ export class UsersController {
   // [11] 유저 정보 수정
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    console.log('body :', updateUserDto)
     return this.usersService.update(id, updateUserDto);
   }
 }

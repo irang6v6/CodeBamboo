@@ -69,7 +69,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
                 <img
                     src={user.image}
                     alt=""
-                    className="h-12 w-12 rounded-lg shadow-sm bg-auto"
+                    className="h-12 w-12 rounded-lg shadow-sm object-cover"
                 />
                 <div className="ml-auto">
                     {user.isLoggedIn ? (
@@ -126,7 +126,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
                 <img
                     src={user.image}
                     alt=""
-                    className="h-12 w-12 rounded-lg shadow-sm bg-auto"
+                    className="h-12 w-12 rounded-lg shadow-sm object-cover"
                 />
             </div>
         </>
