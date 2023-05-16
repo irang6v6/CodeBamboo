@@ -53,7 +53,7 @@ export function makeTopicLeafs(data, my_id: number) {
     }
   };
   findBookmarked();
-  const { user, likes, topic, ...obj } = data;
+  const { user, likes, topic, bookmarks, ...obj } = data;
   const nickname = { nickname: user.nickname };
 
   data = obj;
