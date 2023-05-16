@@ -50,6 +50,9 @@ const queryFn = async (userId: string) => {
 const ProfilePage = ({ userId, myPage }: Props) => {
   const isMobile = useIsMobile();
   const [menu, setMenu] = useState("topics");
+  const [isInputFocused, setInputFocus] = useState(false);
+  const [isTextAreaFocused, setTextAreaFocus] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(false)
   const [myState, setMyState] = useRecoilState(userState);
 
   const {
@@ -143,7 +146,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     {
       onSuccess: (data) => {
         // console.log(data)
-        setLeafs(data);
+        // setLeafs(data);
       },
     }
   );
@@ -190,19 +193,34 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       )}
       {/* 메인 컨텐츠 박스 */}
       <main
-        className="main rounded mx-4 mb-3 mt-5 h-[95%] bg-transparent pt-9 
+        className="main rounded mx-4 mb-3 md:mb-3 mt-5 h-[88.5%] bg-transparent pt-9
        md:mx-8 md:w-11/12 md:mt-0 md:flex-row md:h-[60%] md:ps-[5rem] md:pt-0
       "
       >
         {/* 프로필 섹션 */}
         <section
-          className="section h-[40%] min-h-[17rem] justify-around rounded-t-3xl rounded-b bg-transparent shadow-neutral-300 shadow-lg border-2 border-gray-200
+          className="section h-[40%] min-h-[17rem] justify-around rounded-t-3xl rounded-b bg-transparent shadow-neutral-300 md:shadow-lg md:border-2 border-gray-200 relative
           md:w-1/3 md:h-full md:px-12 md:me-8 md:rounded-xl
         "
         >
+          {!myPage && (
+            isFollowed?
+            <button className="pink-button absolute bg-bamboo text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7 px-2
+            md:tracking-wider md:h-8 md:right-[3%]
+            "
+            onClick={()=>setIsFollowed(false)}
+            >Following</button>
+            :
+            <button className="pink-button absolute text-bamboo bg-white text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7
+            md:tracking-wider md:h-8 md:right-[3%]
+            "
+            onClick={()=>setIsFollowed(true)}
+            >Follow</button>
+          )
+          }
           {/* 프사 & 닉네임 & 이메일있는 아티클 */}
           <article
-            className="article items-center relative h-24 bg-transparent 
+            className="article items-center relative h-24 bg-transparent
           "
           >
             <img
@@ -229,19 +247,22 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                     })}
                     className="text-center h-6 min-w-[8rem] max-w-[50%] cursor-pointer  placeholder-black hover:border-2 hover:border-black rounded-md"
                     defaultValue={user.nickname}
-                    // onBlur={() => setValue('nickname', user.nickname)}
+                    onFocus={() => setInputFocus(true)}
+                    onBlur={()=>setTimeout(()=>setInputFocus(false), 300)}
                   />
+                  {isInputFocused &&
                   <button type="submit">
                     <CiEdit
                       size={20}
-                      className="absolute z-10 cursor-pointer top-[0.2rem]"
-                    />
+                      className="absolute right-4 z-10 cursor-pointer top-[0.2rem]"
+                      />
                   </button>
+                  }
                   {nicknameErrors.nickname && (
-                    <p className="absolute top-full left-0 text-center  text-xs text-red-400 pointer-events-none z-10">
-                      유효하지 않은 닉네임입니다
+                    <p className="absolute top-full left-0 text-center text-xs text-red-400 pointer-events-none z-10">
+                    유효하지 않은 닉네임입니다
                     </p>
-                  )}
+                    )}
                 </form>
               ) : (
                 user.nickname
@@ -281,15 +302,19 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                         maxLength: 40,
                       })}
                       defaultValue={user.introduce}
+                      onFocus={() => setTextAreaFocus(true)}
+                      onBlur={()=>setTimeout(()=>setTextAreaFocus(false), 300)}
                     />
+                    {isTextAreaFocused &&
                     <button type="submit">
                       <CiEdit
                         size={30}
-                        className=" absolute bottom-1 z-10 cursor-pointer
+                        className=" absolute bottom-2 z-10 cursor-pointer
                         md:right-10
                         "
-                      />
+                        />
                     </button>
+                    }
                   </form>
                 ) : (
                   user.introduce
@@ -300,67 +325,93 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           <>{cntDiv(isMobile)}</>
         </section>
         {/* 데탑화면에서 하나로 묶기용 div */}
-        <div className="md:w-2/3 md:h-full h-[45%] shadow-neutral-300 shadow-lg border-2 border-gray-200 rounded-xl">
+        <div className="md:w-2/3 md:h-full h-[auto] shadow-neutral-300 md:shadow-lg md:border-t-2 md:border-2 border-gray-200 rounded-xl">
           {/* 메뉴 토클 버튼있는 섹션 */}
           <section
-            className="section h-9 flex-row justify-between w-full my-1.5 px-1 self-center bg-transparent 
-          md:absolute md:max-w-sm md:grid-cols-3 md:grid md:gap-2
+            className="section h-[2rem] flex-row justify-between w-full px-1 self-center bg-transparent
+          md:absolute md:max-w-sm md:grid-cols-3 md:grid md:gap-2 md:my-1.5 md:h-[2.6rem]
           "
           >
             <div
-              className={`${menu === "topics" ? "bg-bamboo" : "bg-gray-300"}
-            article rounded-md w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center 
+              className={`${menu === "topics" ? "border-bamboo" : "border-none"} border-b-4 bg-transparent box-content
+            article w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center h-[2rem] z-10 
+            md:h-[2.6rem]
             `}
               onClick={() => setMenu("topics")}
             >
               Topics
             </div>
             <div
-              className={`${menu === "follow" ? "bg-bamboo" : "bg-gray-300"}
-            article rounded-md w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center 
+              className={`${menu === "follow" ? "border-bamboo" : "border-none"} border-b-4 bg-transparent box-content
+            article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
+            md:h-[2.6rem]
             `}
               onClick={() => setMenu("follow")}
             >
               Bookmark
             </div>
             <div
-              className={`${menu === "following" ? "bg-bamboo" : "bg-gray-300"}
-            article rounded-md w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center 
+              className={`${menu === "following" ? "border-bamboo" : "border-none"} border-b-4 bg-transparent box-content
+            article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
+            md:h-[2.6rem]
             `}
               onClick={() => setMenu("following")}
             >
-              Follow
+              Following
             </div>
           </section>
           {/* 선택된 메뉴에 따라 내용 보여주는 섹션 */}
           <section
-            className="section h-5/6 min-h-[13rem] bg- justify-center bg-transparent
+            className="section h-5/6 min-h-[15rem] bg- justify-center bg-transparent
             md:h-full md:pt-12
           "
           >
             {menu === "topics" && (
-              <article className="article h-full justify-center items-center bg-gray-300 rounded-md">
-                <div className="w-5/6 h-5/6 flex justify-center items-center border-3 bg-white rounded-md">
+              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  토픽 아이템
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  토픽 아이템
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  토픽 아이템
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
                   토픽 아이템
                 </div>
               </article>
             )}
             {menu === "follow" && (
-              <article
-                className="article h-full rounded-md border-4 border-bamboo bg-transparent
-              md:border-l-0 md:px-6 md:py-6
-              "
-              >
-                즐겨찾기
+              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  즐겨찾기한 리프                 
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  즐겨찾기한 리프                 
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  즐겨찾기한 리프                 
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  즐겨찾기한 리프                 
+                </div>
               </article>
             )}
             {menu === "following" && (
-              <article
-                className="article h-full rounded-md border-4 border-bamboo bg-transparent
-              md:border-l-0 md:px-6 md:py-6
-             "
-              >
-                팔로우 || 팔로워
+              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  내가 팔로우하는 유저들의 리프                 
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  내가 팔로우하는 유저들의 리프                 
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  내가 팔로우하는 유저들의 리프                 
+                </div>
+                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
+                  내가 팔로우하는 유저들의 리프                 
+                </div>
               </article>
             )}
           </section>
