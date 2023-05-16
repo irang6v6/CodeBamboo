@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { userDefault, userState } from "@/recoil/user";
-import useIsMobile from "@/hooks/useIsMobile";
-import authApi from "@/hooks/api/axios.authorization.instance";
-import { useMutation, useQuery } from "react-query";
-import { useForm } from "react-hook-form";
-import { CiEdit } from "react-icons/ci";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { userDefault, userState } from '@/recoil/user';
+import useIsMobile from '@/hooks/useIsMobile';
+import authApi from '@/hooks/api/axios.authorization.instance';
+import { useMutation, useQuery } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { CiEdit } from 'react-icons/ci';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 interface Props {
   userId: string;
@@ -39,7 +39,7 @@ const cntDiv = (isMobile: boolean) => {
 
 const queryFn = async (userId: string) => {
   try {
-    const response = await authApi.get("user/" + userId);
+    const response = await authApi.get('user/' + userId);
     // setUser, res.data
     return response.data;
   } catch (error) {
@@ -49,7 +49,7 @@ const queryFn = async (userId: string) => {
 
 const ProfilePage = ({ userId, myPage }: Props) => {
   const isMobile = useIsMobile();
-  const [menu, setMenu] = useState("topics");
+  const [menu, setMenu] = useState('topics');
   const [myState, setMyState] = useRecoilState(userState);
 
   const {
@@ -62,11 +62,11 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     setFocus,
   } = useForm();
 
-  const registerIntro = useForm()
+  const registerIntro = useForm();
 
   // 유저 정보 API
   const [user, setUser] = useState(userDefault);
-  const getUser = useQuery(["users", userId], () => queryFn(userId), {
+  const getUser = useQuery(['users', userId], () => queryFn(userId), {
     // 원하는 시점에 쿼리를 호출할 수 있게 하는 옵션
     enabled: !!userId,
     onSuccess: (data) => {
@@ -84,17 +84,17 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   }, [getUser.data, getUser.isSuccess, reset]);
 
   const onNicknameSubmit = async () => {
-    if (user.nickname === watch("nickname")) {
-      setFocus("nickname");
+    if (user.nickname === watch('nickname')) {
+      setFocus('nickname');
     } else {
-      console.log(watch("nickname"));
-      if (window.confirm("닉네임 수정하시겠습니까?")) {
+      console.log(watch('nickname'));
+      if (window.confirm('닉네임 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch("user/" + userId, { nickname: watch("nickname") })
+            .patch('user/' + userId, { nickname: watch('nickname') })
             .then((res) => res.data);
-          setMyState({ ...myState, nickname: watch("nickname") });
-          alert("닉네임 저장 완료!");
+          setMyState({ ...myState, nickname: watch('nickname') });
+          alert('닉네임 저장 완료!');
         } catch (error) {
           console.error(error);
         }
@@ -102,21 +102,21 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     }
   };
 
-  const onSelfIntroSubmit = async() => {
-    const watch = registerIntro.watch("introduce")
-    console.log(user.introduce)
-    console.log(watch)
+  const onSelfIntroSubmit = async () => {
+    const watch = registerIntro.watch('introduce');
+    console.log(user.introduce);
+    console.log(watch);
     if (user.introduce === watch) {
-      registerIntro.setFocus("introduce");
+      registerIntro.setFocus('introduce');
     } else {
       console.log(watch);
-      if (window.confirm("자기소개 수정하시겠습니까?")) {
+      if (window.confirm('자기소개 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch("user/" + userId, { introduce: watch })
+            .patch('user/' + userId, { introduce: watch })
             .then((res) => res.data);
           setMyState({ ...myState, introduce: watch });
-          alert("자기소개 저장 완료!");
+          alert('자기소개 저장 완료!');
         } catch (error) {
           console.error(error);
         }
@@ -124,33 +124,33 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     }
   };
 
-  const [topics, setTopics] = useState();
-  const getTopics = useQuery(
-    ["user/topic", userId],
-    () => authApi.get("user/topic/" + userId).then((res) => res.data),
-    {
-      onSuccess: (data) => {
-        // console.log(data)
-        setTopics(data);
-      },
-    }
-  );
+  // const [topics, setTopics] = useState();
+  // const getTopics = useQuery(
+  //   ["user/topic", userId],
+  //   () => authApi.get("user/topic/" + userId).then((res) => res.data),
+  //   {
+  //     onSuccess: (data) => {
+  //       // console.log(data)
+  //       setTopics(data);
+  //     },
+  //   }
+  // );
 
-  const [leafs, setLeafs] = useState();
-  const getLeafs = useQuery(
-    ["user/leaf", userId],
-    () => authApi.get("user/leaf/" + userId),
-    {
-      onSuccess: (data) => {
-        // console.log(data)
-        setLeafs(data);
-      },
-    }
-  );
+  // const [leafs, setLeafs] = useState();
+  // const getLeafs = useQuery(
+  //   ["user/leaf", userId],
+  //   () => authApi.get("user/leaf/" + userId),
+  //   {
+  //     onSuccess: (data) => {
+  //       // console.log(data)
+  //       setLeafs(data);
+  //     },
+  //   }
+  // );
 
   const getBookmarks = useQuery(
-    ["user/bookmar", userId],
-    () => authApi.get("user/bookmark"),
+    ['user/bookmar', userId],
+    () => authApi.get('user/bookmark'),
     {
       onSuccess: (data) => {
         // console.log(data);
@@ -160,8 +160,8 @@ const ProfilePage = ({ userId, myPage }: Props) => {
 
   // 해당 유저가 팔로우하고 있는 목록들
   const getFollowings = useQuery(
-    ["user/following", userId],
-    () => authApi.get("user/following/" + userId),
+    ['user/following', userId],
+    () => authApi.get('user/following/' + userId),
     {
       onSuccess: (data) => {
         // console.log(data);
@@ -223,7 +223,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                   {/* <label htmlFor="nickname">{user.nickname}</label> */}
                   <input
                     id="nickname"
-                    {...registerNickname("nickname", {
+                    {...registerNickname('nickname', {
                       required: true,
                       pattern: /^[\uAC00-\uD7AFa-zA-Z0-9_\-]{2,15}$/,
                     })}
@@ -272,29 +272,33 @@ const ProfilePage = ({ userId, myPage }: Props) => {
               >
                 Introduce
               </p>
-                {myPage ? (
-                  <form action="" onSubmit={registerIntro.handleSubmit(onSelfIntroSubmit)} className="relative">
-                    <textarea
-                      className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none"
-                      {...registerIntro.register("introduce", {
-                        // required: true,
-                        maxLength: 40,
-                      })}
-                      defaultValue={user.introduce}
-                    />
-                    <button type="submit">
-                      <CiEdit
-                        size={30}
-                        className=" absolute bottom-1 z-10 cursor-pointer
+              {myPage ? (
+                <form
+                  action=""
+                  onSubmit={registerIntro.handleSubmit(onSelfIntroSubmit)}
+                  className="relative"
+                >
+                  <textarea
+                    className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none"
+                    {...registerIntro.register('introduce', {
+                      // required: true,
+                      maxLength: 40,
+                    })}
+                    defaultValue={user.introduce}
+                  />
+                  <button type="submit">
+                    <CiEdit
+                      size={30}
+                      className=" absolute bottom-1 z-10 cursor-pointer
                         md:right-10
                         "
-                      />
-                    </button>
-                  </form>
-                ) : (
-                  user.introduce
-                )}
-              </div>
+                    />
+                  </button>
+                </form>
+              ) : (
+                user.introduce
+              )}
+            </div>
           </article>
           {/* 카운트카운트 */}
           <>{cntDiv(isMobile)}</>
@@ -308,26 +312,26 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           "
           >
             <div
-              className={`${menu === "topics" ? "bg-bamboo" : "bg-gray-300"}
+              className={`${menu === 'topics' ? 'bg-bamboo' : 'bg-gray-300'}
             article rounded-md w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center 
             `}
-              onClick={() => setMenu("topics")}
+              onClick={() => setMenu('topics')}
             >
               Topics
             </div>
             <div
-              className={`${menu === "follow" ? "bg-bamboo" : "bg-gray-300"}
+              className={`${menu === 'follow' ? 'bg-bamboo' : 'bg-gray-300'}
             article rounded-md w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center 
             `}
-              onClick={() => setMenu("follow")}
+              onClick={() => setMenu('follow')}
             >
               Bookmark
             </div>
             <div
-              className={`${menu === "following" ? "bg-bamboo" : "bg-gray-300"}
+              className={`${menu === 'following' ? 'bg-bamboo' : 'bg-gray-300'}
             article rounded-md w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center 
             `}
-              onClick={() => setMenu("following")}
+              onClick={() => setMenu('following')}
             >
               Follow
             </div>
@@ -338,14 +342,14 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             md:h-full md:pt-12
           "
           >
-            {menu === "topics" && (
+            {menu === 'topics' && (
               <article className="article h-full justify-center items-center bg-gray-300 rounded-md">
                 <div className="w-5/6 h-5/6 flex justify-center items-center border-3 bg-white rounded-md">
                   토픽 아이템
                 </div>
               </article>
             )}
-            {menu === "follow" && (
+            {menu === 'follow' && (
               <article
                 className="article h-full rounded-md border-4 border-bamboo bg-transparent
               md:border-l-0 md:px-6 md:py-6
@@ -354,7 +358,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                 즐겨찾기
               </article>
             )}
-            {menu === "following" && (
+            {menu === 'following' && (
               <article
                 className="article h-full rounded-md border-4 border-bamboo bg-transparent
               md:border-l-0 md:px-6 md:py-6

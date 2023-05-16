@@ -26,9 +26,6 @@ import { TopicRepository } from 'src/topics/dao/topics.repository';
       useClass: ValidationPipe,
     },
   ],
-  exports: [
-    ...userRepository,
-    UsersService
-  ],
+  exports: [...userRepository, UsersService],
 })
 export class UsersModule {}
