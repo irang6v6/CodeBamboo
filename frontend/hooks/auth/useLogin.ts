@@ -20,7 +20,7 @@ interface LoginResponse {
 const serveAuthCode = async (code:string|undefined, provider:string): Promise<LoginResponse> => {
   if (!code) throw new Error('Auth code is not defined');
 
-  const BASE_URL = 'https://k8a801.p.ssafy.io/api/';
+  const BASE_URL = 'https://k8a801.p.ssafy.io/api/auth/oauth/';
   const response = await axios.post(BASE_URL + provider, {code}, {
     headers: {
       'Content-Type': 'application/json',
