@@ -37,8 +37,8 @@ export class TopicsController {
     return this.topicsService.search(userInput);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Public()
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   getOne(@Param('id') id: number, @Req() req: Request) {
     console.log('userId', req.user);
