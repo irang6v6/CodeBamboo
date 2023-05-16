@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { codeState } from '@/recoil/topic';
 import { UnControlled as CodeItem } from 'react-codemirror2';
+import { isBrowser } from "browser-or-node";
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import { Rendering } from './Rendering';
 import { Article } from './Article';
 import useIsMobile from '@/hooks/useIsMobile';
+
+if (isBrowser) {
+  require("codemirror/mode/xml/xml");
+}
 
 export const Editor = () => {
   const [code, setCode] = useRecoilState(codeState);
@@ -14,17 +19,24 @@ export const Editor = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('HTML');
   const [initialCode, setInitialCode] = useState('');
 
-  useEffect(() => {
-    if (isMobile) return;
-    setSelectedLanguage(code[0]?.language);
-  }, [isMobile]);
+  const mode:any = {
+    'HTML': 'xml',
+    'CSS': 'css',
+    'JavaScript': 'javascript'
+  }
 
   useEffect(() => {
+    if (isMobile || !code || code.length === 0) return;
+    setSelectedLanguage(code[0]?.language);
+  }, [isMobile, code]);
+
+  useEffect(() => {
+    if (!code || code.length === 0) return;
     const selectedCode = code.find(
       (e) => e.language === selectedLanguage
     )?.content;
     setInitialCode(selectedCode || '');
-  }, [selectedLanguage]);
+  }, [selectedLanguage, code]);
 
   const handleChange = (editor: any, data: any, value: string) => {
     const selectedCodeIndex = code.findIndex(
@@ -40,7 +52,8 @@ export const Editor = () => {
 
   const Tabs = () => {
     const languageOrder = ['HTML', 'CSS', 'JavaScript'];
-    const tabs = code
+    const filteredCode = code || [];
+    const tabs = filteredCode
       .filter((e) => languageOrder.includes(e.language))
       .sort((a, b) => {
         return (
@@ -101,12 +114,11 @@ export const Editor = () => {
               value={initialCode}
               onChange={handleChange}
               options={{
-                mode: 'xml',
+                mode: mode[selectedLanguage],
                 theme: 'material',
                 lineNumbers: true,
                 scrollbarStyle: 'null',
                 lineWrapping: true,
-                // cursorScrollMargin: 5,
                 // imeMode: 'disabled',
                 // spellcheck: false,
                 // inputStyle: "contenteditable",

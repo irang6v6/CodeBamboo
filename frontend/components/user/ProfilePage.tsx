@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { userDefault, userState } from "@/recoil/user";
-import useIsMobile from "@/hooks/useIsMobile";
-import authApi from "@/hooks/api/axios.authorization.instance";
-import { useMutation, useQuery } from "react-query";
-import { useForm } from "react-hook-form";
-import { CiEdit } from "react-icons/ci";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { userDefault, userState } from '@/recoil/user';
+import useIsMobile from '@/hooks/useIsMobile';
+import authApi from '@/hooks/api/axios.authorization.instance';
+import { useMutation, useQuery } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { CiEdit } from 'react-icons/ci';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 interface Props {
   userId: string;
@@ -39,7 +39,7 @@ const cntDiv = (isMobile: boolean) => {
 
 const queryFn = async (userId: string) => {
   try {
-    const response = await authApi.get("user/" + userId);
+    const response = await authApi.get('user/' + userId);
     // setUser, res.data
     return response.data;
   } catch (error) {
@@ -65,11 +65,11 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     setFocus,
   } = useForm();
 
-  const registerIntro = useForm()
+  const registerIntro = useForm();
 
   // 유저 정보 API
   const [user, setUser] = useState(userDefault);
-  const getUser = useQuery(["users", userId], () => queryFn(userId), {
+  const getUser = useQuery(['users', userId], () => queryFn(userId), {
     // 원하는 시점에 쿼리를 호출할 수 있게 하는 옵션
     enabled: !!userId,
     onSuccess: (data) => {
@@ -87,17 +87,17 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   }, [getUser.data, getUser.isSuccess, reset]);
 
   const onNicknameSubmit = async () => {
-    if (user.nickname === watch("nickname")) {
-      setFocus("nickname");
+    if (user.nickname === watch('nickname')) {
+      setFocus('nickname');
     } else {
-      console.log(watch("nickname"));
-      if (window.confirm("닉네임 수정하시겠습니까?")) {
+      console.log(watch('nickname'));
+      if (window.confirm('닉네임 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch("user/" + userId, { nickname: watch("nickname") })
+            .patch('user/' + userId, { nickname: watch('nickname') })
             .then((res) => res.data);
-          setMyState({ ...myState, nickname: watch("nickname") });
-          alert("닉네임 저장 완료!");
+          setMyState({ ...myState, nickname: watch('nickname') });
+          alert('닉네임 저장 완료!');
         } catch (error) {
           console.error(error);
         }
@@ -105,21 +105,21 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     }
   };
 
-  const onSelfIntroSubmit = async() => {
-    const watch = registerIntro.watch("introduce")
-    console.log(user.introduce)
-    console.log(watch)
+  const onSelfIntroSubmit = async () => {
+    const watch = registerIntro.watch('introduce');
+    console.log(user.introduce);
+    console.log(watch);
     if (user.introduce === watch) {
-      registerIntro.setFocus("introduce");
+      registerIntro.setFocus('introduce');
     } else {
       console.log(watch);
-      if (window.confirm("자기소개 수정하시겠습니까?")) {
+      if (window.confirm('자기소개 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch("user/" + userId, { introduce: watch })
+            .patch('user/' + userId, { introduce: watch })
             .then((res) => res.data);
           setMyState({ ...myState, introduce: watch });
-          alert("자기소개 저장 완료!");
+          alert('자기소개 저장 완료!');
         } catch (error) {
           console.error(error);
         }
@@ -127,33 +127,33 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     }
   };
 
-  const [topics, setTopics] = useState();
-  const getTopics = useQuery(
-    ["user/topic", userId],
-    () => authApi.get("user/topic/" + userId).then((res) => res.data),
-    {
-      onSuccess: (data) => {
-        // console.log(data)
-        setTopics(data);
-      },
-    }
-  );
+  // const [topics, setTopics] = useState();
+  // const getTopics = useQuery(
+  //   ["user/topic", userId],
+  //   () => authApi.get("user/topic/" + userId).then((res) => res.data),
+  //   {
+  //     onSuccess: (data) => {
+  //       // console.log(data)
+  //       setTopics(data);
+  //     },
+  //   }
+  // );
 
-  const [leafs, setLeafs] = useState();
-  const getLeafs = useQuery(
-    ["user/leaf", userId],
-    () => authApi.get("user/leaf/" + userId),
-    {
-      onSuccess: (data) => {
-        // console.log(data)
-        // setLeafs(data);
-      },
-    }
-  );
+  // const [leafs, setLeafs] = useState();
+  // const getLeafs = useQuery(
+  //   ["user/leaf", userId],
+  //   () => authApi.get("user/leaf/" + userId),
+  //   {
+  //     onSuccess: (data) => {
+  //       // console.log(data)
+  //       setLeafs(data);
+  //     },
+  //   }
+  // );
 
   const getBookmarks = useQuery(
-    ["user/bookmar", userId],
-    () => authApi.get("user/bookmark"),
+    ['user/bookmar', userId],
+    () => authApi.get('user/bookmark'),
     {
       onSuccess: (data) => {
         // console.log(data);
@@ -163,8 +163,8 @@ const ProfilePage = ({ userId, myPage }: Props) => {
 
   // 해당 유저가 팔로우하고 있는 목록들
   const getFollowings = useQuery(
-    ["user/following", userId],
-    () => authApi.get("user/following/" + userId),
+    ['user/following', userId],
+    () => authApi.get('user/following/' + userId),
     {
       onSuccess: (data) => {
         // console.log(data);
@@ -241,7 +241,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                   {/* <label htmlFor="nickname">{user.nickname}</label> */}
                   <input
                     id="nickname"
-                    {...registerNickname("nickname", {
+                    {...registerNickname('nickname', {
                       required: true,
                       pattern: /^[\uAC00-\uD7AFa-zA-Z0-9_\-]{2,15}$/,
                     })}
@@ -337,7 +337,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             article w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem]
             `}
-              onClick={() => setMenu("topics")}
+              onClick={() => setMenu('topics')}
             >
               Topics
             </div>
@@ -346,7 +346,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem]
             `}
-              onClick={() => setMenu("follow")}
+              onClick={() => setMenu('follow')}
             >
               Bookmark
             </div>
@@ -355,7 +355,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem]
             `}
-              onClick={() => setMenu("following")}
+              onClick={() => setMenu('following')}
             >
               Following
             </div>

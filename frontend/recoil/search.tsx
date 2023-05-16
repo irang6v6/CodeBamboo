@@ -53,3 +53,25 @@ export const newTogleState = atom<newTogle>({
         togleValue: true,
     },
 });
+
+interface topicFound {
+    foundValue: boolean;
+}
+
+export const topicFoundState = atom<topicFound>({
+    key: 'topicFoundState', // 선언명과 같지 않아도 됨, 그래도 통일하면 좋을 듯
+    default: {
+        foundValue: true,
+    },
+});
+
+interface leafFound {
+    foundValue: boolean;
+}
+
+export const leafFoundState = atom<leafFound>({
+    key: 'leafFoundState', // 선언명과 같지 않아도 됨, 그래도 통일하면 좋을 듯
+    default: {
+        foundValue: true,
+    },
+});

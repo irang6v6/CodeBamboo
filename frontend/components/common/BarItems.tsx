@@ -39,10 +39,11 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
                 >
                     <img
                         src="/images/icons/more.png"
-                        className="md:mt-8 md:h-9"
+                        className="hidden 
+                                    md:block md:mt-8 md:h-9"
                     />
                     <div className="md:mt-8 md:h-9 md:text-xl md:tracking-wider">
-                        <span className="md:text-3xl md:font-semibold">C</span>
+                        <span className="md:text-2xl md:font-semibold">C</span>
                         reate
                     </div>
                 </Link>
@@ -52,10 +53,11 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
                 >
                     <img
                         src="/images/icons/search_icon.png"
-                        className="md:mt-8 md:h-9"
+                        className="hidden 
+                                    md:block md:mt-8 md:h-9"
                     />
                     <div className="md:mt-8 md:h-9 md:text-xl md:tracking-wider">
-                        <span className="md:text-3xl md:font-semibold">S</span>
+                        <span className="md:text-2xl md:font-semibold">S</span>
                         earch
                     </div>
                 </Link>
@@ -143,9 +145,9 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
     return (
         <>
             <div
-                className="z-10 flex flex-col
+                className="z-10 flex flex-col bg-inherit
                       absolute top-full right-0 h-80 w-1/2 
-                      md:static md:h-full md:w-auto md:justify-between"
+                      md:bg-transparent md:static md:h-full md:w-auto md:justify-between"
             >
                 {HoverBarItems}
             </div>
