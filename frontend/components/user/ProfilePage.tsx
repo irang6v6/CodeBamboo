@@ -70,7 +70,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     // 원하는 시점에 쿼리를 호출할 수 있게 하는 옵션
     enabled: !!userId,
     onSuccess: (data) => {
-      // console.log("user : ", data);
+      console.log("user : ", data);
       setUser(data);
     },
   });
@@ -179,7 +179,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       {!isMobile && (
         <header
           className="header mx-8 mt-8 h-1/3 justify-end bg-transparent ps-[5rem] w-11/12 pb-8
-          md:w-full md:self-center md:ms-0"
+          md:w-11/12 md:self-center"
         >
           <img
             src="/images/bg-bamboo.png"
@@ -227,7 +227,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                       required: true,
                       pattern: /^[\uAC00-\uD7AFa-zA-Z0-9_\-]{2,15}$/,
                     })}
-                    className="text-center h-6 min-w-[8rem] max-w-[50%] cursor-pointer  placeholder-black"
+                    className="text-center h-6 min-w-[8rem] max-w-[50%] cursor-pointer  placeholder-black hover:border-2 hover:border-black rounded-md"
                     defaultValue={user.nickname}
                     // onBlur={() => setValue('nickname', user.nickname)}
                   />
@@ -275,7 +275,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                 {myPage ? (
                   <form action="" onSubmit={registerIntro.handleSubmit(onSelfIntroSubmit)} className="relative">
                     <textarea
-                      className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none"
+                      className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none hover:border-2 hover:border-black rounded-md"
                       {...registerIntro.register("introduce", {
                         // required: true,
                         maxLength: 40,
