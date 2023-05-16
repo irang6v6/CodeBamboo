@@ -34,7 +34,7 @@ function SearchModal() {
         });
         router.push('/search');
     };
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             handleSubmit();
         }
