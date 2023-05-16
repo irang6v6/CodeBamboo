@@ -16,6 +16,7 @@ import {
   RiBookmarkLine,
   RiBookmarkFill,
 } from 'react-icons/ri';
+import useIsMobile from '@/hooks/useIsMobile';
 
 interface LeafItemProps {
   leaf: LeafObject;
@@ -43,6 +44,10 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
   const [selectedLeaf, setSelectedLeaf] = useRecoilState(selectedLeafState);
   const setCode = useSetRecoilState(codeState);
   const setArticle = useSetRecoilState(articleState);
+  const [isLiked, setIsLiked] = useState(leaf.isLiked);
+  const [isBookmarked, setIsBookmarked] = useState(leaf.isBookmarked);
+  const isMobile = useIsMobile();
+
   const selectLeaf = () => {
     setSelectedLeaf({
       user_id: leaf.user_id,
@@ -54,8 +59,6 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
       content: leaf.content,
     });
   };
-  const [isLiked, setIsLiked] = useState(leaf.isLiked);
-  const [isBookmarked, setIsBookmarked] = useState(leaf.isBookmarked);
 
   const mutateLike = useMutation(() => queryLikeFn(leaf.leaf_id), {
     onSuccess: () => {
@@ -75,16 +78,20 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
     },
   });
 
-  return (
-    <div
-      className={`shrink-0 h-auto m-2 rounded-md flex cursor-pointer shadow-sm 
-                ${selectedLeaf.leaf_id === leaf.leaf_id ? 'bg-bamboo' : ''}`}
-      onClick={selectLeaf}
-    >
-      {leaf.type === 1 && <HiCode className="text-[1.5rem]" />}
-      <span className="text-[0.5rem]">
-        {leaf.title.length < 15 ? leaf.title : leaf.title.slice(0, 15) + '...'}
+  const CodeIcon = () => {
+    return <>{leaf.type === 1 && <HiCode className="text-[1.5rem]" />}</>;
+  };
+
+  const LeafTitle = () => {
+    return (
+      <span className="text-[0.8rem]">
+        {leaf.title.length < (isMobile ? 11 : 21) ? leaf.title : leaf.title.slice(0, (isMobile ? 10 : 20)) + '...'}
       </span>
+    );
+  };
+
+  const LikeIcon = () => {
+    return (
       <div
         className="z-10"
         onClick={(e) => {
@@ -98,7 +105,11 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
           <RiThumbUpLine className="text-[1.5rem]" />
         )}
       </div>
-      <span className="text-[0.5rem]">{leaf.likeCnt}</span>
+    );
+  };
+
+  const BookmarkIcon = () => {
+    return (
       <div
         className="z-10"
         onClick={(e) => {
@@ -111,6 +122,21 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
         ) : (
           <RiBookmarkLine className="text-[1.5rem]" />
         )}
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className={`bg-slate-300 shrink-0 h-12 m-2 p-2 rounded-md flex items-center justify-between cursor-pointer drop-shadow-lg shadow-md 
+                ${selectedLeaf.leaf_id === leaf.leaf_id ? 'border-bamboo border-2 bg-slate-50' : ''}`}
+      onClick={selectLeaf}
+    >
+      <CodeIcon />
+      <LeafTitle />
+      <div className='flex flex-row gap-1'>
+        <LikeIcon />
+        <BookmarkIcon />
       </div>
     </div>
   );

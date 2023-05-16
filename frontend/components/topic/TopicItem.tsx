@@ -53,13 +53,13 @@ export const TopicItem = ({
         />
         <div className="pl-[5%] w-[65%] flex flex-col justify-between">
           <div
-            className="bg-white text-xl h-[50%] rounded-xl p-[2%] overflow-hidden pt-[7px]
+            className="bg-white text-xl h-[50%] rounded-xl p-[2%] px-[4%] overflow-hidden pt-[7px]
                         md:hover:text-green-300 md:hover:transition"
             title={`${rootLeaf.title}`}
           >
             <Link href={`/topics/${topic_id}`}>{rootLeaf.title}</Link>
           </div>
-          <div className="bg-white text-base h-auto rounded-lg p-[1%]">
+          <div className="bg-white text-base h-auto rounded-lg p-[1%] px-[3%]">
             <Link href={`/users/${rootLeaf.user_id}`}>{rootLeaf.nickname}</Link>
           </div>
         </div>

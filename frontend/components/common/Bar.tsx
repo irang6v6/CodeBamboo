@@ -48,7 +48,7 @@ export const Bar = () => {
           {isHovered && 
           <div className='flex flex-col font-bold tracking-wide ml-3'>
           {/* <p>Code</p> */}
-          <p><span className='md:text-3xl md:font-semibold'>H</span>ome</p>
+          <p><span className='md:text-2xl md:font-semibold'>H</span>ome</p>
           </div>
           }
         </div>

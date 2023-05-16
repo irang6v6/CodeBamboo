@@ -13,6 +13,7 @@ module.exports = {
       },
       fontFamily: {
         scp: ['Source Code Pro', 'monospace'],
+        toss: ['Toss Product Sans', 'sans']
       },
       colors: {
         bamboo: '#2A9464',

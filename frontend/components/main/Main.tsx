@@ -22,7 +22,7 @@ export default function Main() {
       {/* 스크롤바에 밀리지않게 더미 박스 매우 중요*/}
       {isClient && isMobile && <div className="w-full h-20"></div>}
       <p
-        className="m-5
+        className="font-scp m-5
                   text-3xl
                   md:mx-20 md:mt-7 md:text-5xl"
       >
@@ -30,7 +30,7 @@ export default function Main() {
       </p>
       <TopicList topicList={mainTopicList.popular} />
       <p
-        className="m-5
+        className="font-scp m-5
                   text-3xl
                   md:mx-20 md:mt-7 md:text-5xl"
       >
