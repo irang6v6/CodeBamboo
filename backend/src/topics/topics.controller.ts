@@ -43,7 +43,7 @@ export class TopicsController {
   getOne(@Param('id') id: number, @Req() req: Request) {
     console.log('userId', req.user);
 
-    const user_id = req.user? req.user['user_id'] : 0
+    const user_id = req.user ? req.user['user_id'] : 0;
 
     console.log('user_ID임다', user_id);
     return this.topicsService.getOne(id, user_id);
