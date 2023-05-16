@@ -6,7 +6,7 @@ export default function searchTogle() {
     const [topicTogle, setTopicTogle] = useRecoilState(topicTogleState);
     const [newTogle, setNewTogle] = useRecoilState(newTogleState);
     const topicTogleWrapperClasses = `
-        py-2 px-2 h-12 md:h-14 cursor-pointer w-30 
+        py-2 px-1 h-12 md:h-14 cursor-pointer w-30 
         `;
     const newTogleWrapperClasses = `
         py-2 h-12 md:h-14 cursor-pointer w-32 md:w-36

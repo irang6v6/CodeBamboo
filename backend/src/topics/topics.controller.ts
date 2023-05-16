@@ -16,6 +16,7 @@ import { SimpleTopicDto } from './dto/simple.topic.dto';
 import { User } from 'src/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
+import { Public } from 'src/auth/utils/public.decorator';
 
 @Controller('topic')
 export class TopicsController {
@@ -35,12 +36,16 @@ export class TopicsController {
   search(@Query('input') userInput: string) {
     return this.topicsService.search(userInput);
   }
+
   @UseGuards(JwtAuthGuard)
+  @Public()
   @Get(':id')
   getOne(@Param('id') id: number, @Req() req: Request) {
-    // console.log('userId', req.user);
-    const user_id = req.user['user_id'];
-    // console.log('user_ID임다', user_id);
+    console.log('userId', req.user);
+
+    const user_id = req.user ? req.user['user_id'] : 0;
+
+    console.log('user_ID임다', user_id);
     return this.topicsService.getOne(id, user_id);
   }
 

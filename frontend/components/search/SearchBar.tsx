@@ -14,9 +14,7 @@ type State = {
 
 function SearchBar() {
     const [inputValue, setInputValue] = useRecoilState(searchInputState);
-    const [searchInput, setSearchInput] = useState<String>(
-        inputValue.inputValue
-    );
+    const [searchInput, setSearchInput] = useState(inputValue.inputValue);
     const router = useRouter();
     const modalWrapperClasses = `
         search-modal-wrapper`;
@@ -28,7 +26,7 @@ function SearchBar() {
         setInputValue({ inputValue: searchInput });
         router.push('/search');
     };
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             handleSubmit();
         }
@@ -49,7 +47,7 @@ function SearchBar() {
                 className="bg-black ml-3 mr-4 focus:outline-none text-white text-3xl w-full h-full"
                 onChange={handleChange}
                 onKeyUp={handleKeyPress}
-                value={searchInput}
+                value={`${searchInput}`}
                 autoFocus
             ></input>
         </div>
