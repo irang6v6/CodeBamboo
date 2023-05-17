@@ -95,7 +95,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
         <img
           src={user.image}
           alt=""
-          className="h-12 w-12 rounded-lg shadow-sm object-cover"
+          className="h-12 w-12 rounded-lg shadow-sm object-cover bg-white"
         />
         <div className="md:ml-auto md:animate-fadein">
           {user.isLoggedIn ? (
@@ -111,8 +111,8 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
       </div>
       {user.isLoggedIn && (
         <button
-          className="login-button mt-auto mb-2 h-14 px-0 tracking-wider text-lg
-                        md:animate-fadein md:h-8 md:w-[75%] md:text-[10px] md:absolute md:bottom-5 md:right-3 
+          className="login-button mt-auto mb-2 h-14 px-0 tracking-[0.1rem] text-lg
+                        md:animate-fadein md:h-8 md:w-[50%] md:text-[10px] md:absolute md:bottom-5 md:right-3 
         "
           onClick={() => {
             if (window.confirm('로그아웃 하시겠습니까?'))
@@ -141,7 +141,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
         </Link>
       </div>
       <div
-        className="mb-8 cursor-pointer
+        className="mb-8 cursor-pointer bg-white rounded-lg
         md:relative md:bottom-10
       "
         onClick={!user.isLoggedIn ? handleModalToggle : serveUserpage}

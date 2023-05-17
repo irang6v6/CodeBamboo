@@ -106,7 +106,7 @@ export class UsersController {
   )
   @Patch()
   update(@Req() req: Request, @Body() userInput: any, @UploadedFile() profileImg) {
-    console.log('img : ', profileImg)
+    // console.log('img : ', profileImg)
     return this.usersService.update(req.user['user_id'], userInput, profileImg);
   }
 }

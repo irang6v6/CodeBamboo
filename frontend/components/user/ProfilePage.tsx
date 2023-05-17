@@ -9,6 +9,7 @@ import { useRecoilState } from 'recoil';
 import { UserTopicsList } from './UserTopicList';
 import { UserBookmarkList } from './UserBookmarkList';
 import { UserFollowList } from './UserFollowList';
+import AlertDialog from '../common/AlertDialog';
 
 interface Props {
   userId: string;
@@ -63,13 +64,13 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   const [isTextAreaFocused, setTextAreaFocus] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [myState, setMyState] = useRecoilState(userState);
+  const [showAlert, setShowAlert] = useState(false)
   const profileImgRef = useRef<HTMLInputElement>(null);
 
   // 프로필 이미지 업로드
   const handleFileUpload = async(event:any)=>{
     const file = event.target.files && event.target.files[0];
     if (file) {
-      // console.log(file)
       const formData = new FormData()
       formData.append('profileImg', file)
       try {
@@ -77,7 +78,8 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           .patch('user', formData)
           .then((res) => res.data.data.newProfileImg);
         setMyState({ ...myState, image: newProfileImg });
-        alert('프로밀 이미지 저장 완료!');
+        setShowAlert(true)
+        setTimeout(()=>setShowAlert(false), 1000)
       } catch (error) {
         console.error(error);
       }
@@ -135,38 +137,35 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       setFocus('nickname');
     } else {
       console.log(watch('nickname'));
-      if (window.confirm('닉네임 수정하시겠습니까?')) {
-        try {
-          await authApi
-            .patch('user/', { nickname: watch('nickname') })
-            .then((res) => res.data);
-          setMyState({ ...myState, nickname: watch('nickname') });
-          alert('닉네임 저장 완료!');
-        } catch (error) {
-          console.error(error);
-        }
+      try {
+        await authApi
+          .patch('user/', { nickname: watch('nickname') })
+          .then((res) => res.data);
+        setMyState({ ...myState, nickname: watch('nickname') });
+        setShowAlert(true)
+        setTimeout(()=>setShowAlert(false), 1000)
+      } catch (error) {
+        console.error(error);
       }
     }
   };
 
   const onSelfIntroSubmit = async () => {
     const watch = registerIntro.watch('introduce');
-    console.log(user.introduce);
-    console.log(watch);
+    // console.log(user.introduce);
+    // console.log(watch);
     if (user.introduce === watch) {
       registerIntro.setFocus('introduce');
     } else {
-      console.log(watch);
-      if (window.confirm('자기소개 수정하시겠습니까?')) {
-        try {
-          await authApi
-            .patch('user/', { introduce: watch })
-            .then((res) => res.data);
-          setMyState({ ...myState, introduce: watch });
-          alert('자기소개 저장 완료!');
-        } catch (error) {
-          console.error(error);
-        }
+      try {
+        await authApi
+          .patch('user/', { introduce: watch })
+          .then((res) => res.data);
+        setMyState({ ...myState, introduce: watch });
+        setShowAlert(true)
+        setTimeout(()=>setShowAlert(false), 1000)
+      } catch (error) {
+        console.error(error);
       }
     }
   };
@@ -268,13 +267,13 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           "
           >
             <img
-              src={user.image}
+              src={myPage? myState.image : user.image}
               alt=""
               className="min-w-[5rem] max-h-[5rem] max-w-[5rem] min-h-[5rem] absolute bottom-12 rounded-lg drop-shadow-lg bg-cover object-cover z-10 bg-white cursor-pointer transition duration-100 md:hover:scale-110
              md:w-[7rem] md:bottom-20 md:aspect-square md:max-w-[50%]
              md:max-h-[7rem]
             "
-             onClick={()=>profileImgRef?.current?.click()}
+             onClick={myPage ? () => profileImgRef?.current?.click() : undefined}
             />
             <input type='file' className='hidden' ref={profileImgRef} onChange={handleFileUpload}/>
             <div
@@ -348,7 +347,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                     className="scrollbar-hide w-[90%] mt-3 h-[9rem] border-gray-300 rounded-md cursor-pointer resize-none hover:border-2 hover:border-black"
                     {...registerIntro.register('introduce', {
                       // required: true,
-                      maxLength: 40,
+                      maxLength: 100,
                     })}
                     defaultValue={user.introduce}
                     onFocus={() => setTextAreaFocus(true)}
@@ -441,6 +440,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           </section>
         </div>
       </main>
+      {showAlert && <AlertDialog/>}
     </>
   );
 };
