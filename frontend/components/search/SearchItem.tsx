@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { TopicItemInF } from '../topic/TopicInterface';
 import Image from 'next/image';
-import HandImage from '@/public/images/hand.png';
+import HandImage from '@/public/images/hand-panda.png';
 import { useRouter } from 'next/router';
 import { TopicItemRendering } from '../topic/TopicItemRendering';
 
@@ -23,9 +23,9 @@ export const SearchItem = ({
                   h-[12%] w-[10%] top-[63%] right-[61%]
                   md:h-12 md:w-12 md:-top-4 md:-right-3"
         >
-            <div className="animate-ping absolute h-full w-full rounded-full bg-gray-200 opacity-75"></div>
+            <div className=" absolute h-full w-full rounded-full"></div>
             <Image
-                className="absolute h-full w-full"
+                className="animate-rotation absolute h-full w-full"
                 src={HandImage}
                 alt="hand"
             />

@@ -66,7 +66,7 @@ export const TopicList = ({ topicList }: Props) => {
                   h-[40vh] ${
                     isMobile ? 'overflow-y-visible overflow-x-scroll' : ''
                   }
-                  md:w-full md:h-[53vh] md:items-end md:overflow-hidden md:px-5`}
+                  md:w-full md:h-[54.5vh] md:items-end md:overflow-hidden md:px-5`}
     >
       {!isMobile && rightArrow}
       <div

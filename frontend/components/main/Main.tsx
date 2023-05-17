@@ -22,17 +22,17 @@ export default function Main() {
       {/* 스크롤바에 밀리지않게 더미 박스 매우 중요*/}
       {isClient && isMobile && <div className="w-full h-20"></div>}
       <div
-        className="m-5 mb-0 pl-5 pb-5 border-b-gray-600 border-b-4
+        className="m-5 mb-0 pl-5 pb-5 border-b-gray-600 border-b-2
                   text-3xl
-                  md:mx-20 md:mt-7 md:text-5xl"
+                  md:mx-20 md:mt-7 md:text-4xl"
       >
         Popular
       </div>
       <TopicList topicList={mainTopicList.popular} />
       <div
-        className="m-5 mb-0 pl-5 pb-5 border-b-gray-600 border-b-4
+        className="m-5 mb-0 pl-5 pb-5 border-b-gray-600 border-b-2
                   text-3xl
-                  md:mx-20 md:mt-7 md:text-5xl"
+                  md:mx-20 md:mt-14 md:text-4xl"
       >
         Trending
       </div>
