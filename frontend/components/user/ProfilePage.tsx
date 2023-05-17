@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { userDefault, userState } from '@/recoil/user';
 import useIsMobile from '@/hooks/useIsMobile';
 import authApi from '@/hooks/api/axios.authorization.instance';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { CiEdit } from 'react-icons/ci';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { UserTopicsList } from './UserTopicList';
 import { UserBookmarkList } from './UserBookmarkList';
-import { FollowList } from './FollowList';
+import { UserFollowList } from './UserFollowList';
 
 interface Props {
   userId: string;
@@ -346,7 +346,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                 menu === 'topics' ? 'border-bamboo' : 'border-none'
               } border-b-4 bg-transparent box-content
             article w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center h-[2rem] z-10 
-            md:h-[2.6rem]
+            md:h-[2.6rem] md:hover:cursor-pointer
             `}
               onClick={() => setMenu('topics')}
             >
@@ -357,7 +357,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                 menu === 'follow' ? 'border-bamboo' : 'border-none'
               } border-b-4 bg-transparent box-content
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
-            md:h-[2.6rem]
+            md:h-[2.6rem] md:hover:cursor-pointer
             `}
               onClick={() => setMenu('follow')}
             >
@@ -368,7 +368,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                 menu === 'following' ? 'border-bamboo' : 'border-none'
               } border-b-4 bg-transparent box-content
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
-            md:h-[2.6rem]
+            md:h-[2.6rem] md:hover:cursor-pointer
             `}
               onClick={() => setMenu('following')}
             >
@@ -393,7 +393,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             )}
             {menu === 'following' && (
               <article className="article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 pt-5 px-5 overflow-y-auto">
-                <FollowList followingUsers={followeingUsers} />
+                <UserFollowList followingUsers={followeingUsers} />
               </article>
             )}
           </section>

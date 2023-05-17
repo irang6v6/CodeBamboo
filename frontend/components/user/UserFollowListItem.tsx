@@ -4,10 +4,16 @@ import Link from 'next/link';
 interface Props {
   user_id: number;
   nickname: string;
+  followersCnt: number;
   image: string;
 }
 
-export const UserItem = ({ user_id, nickname, image }: Props) => {
+export const UserFollowListItem = ({
+  user_id,
+  nickname,
+  image,
+  followersCnt,
+}: Props) => {
   const userImageItem = (
     <div className="md:relative md:w-[4rem] h-[4rem]">
       <img
@@ -23,7 +29,7 @@ export const UserItem = ({ user_id, nickname, image }: Props) => {
   );
 
   const userFollowerItem = (
-    <div className="h-auto p-[1%] pb-[10%]">팔로워수 : 30</div>
+    <div className="h-auto p-[1%] pb-[10%]">팔로워수 : {followersCnt}</div>
   );
 
   return (
