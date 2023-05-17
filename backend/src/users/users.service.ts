@@ -52,25 +52,20 @@ export class UsersService {
   async getFollowUsers(userId: number) {
     const existedUser = await this.isExistedUser(userId);
     if (existedUser) {
-      const users = await this.userRepository.findOne({
+      const followings = await this.followRepository.find({
         where: {
-          user_id: userId,
-        },
-        relations: {
-          followings: true,
+          following: { user_id: userId },
         },
       });
-      return users.followings.map((obj) => {
-        const followedUser = {
-          user_id: obj.followed.user_id,
-          nickname: obj.followed.nickname,
-          image: obj.followed.image,
-          introduce: obj.followed.introduce,
-          email: obj.followed.email,
-          isDeleted: obj.followed.isDeleted,
-        };
-        return followedUser;
-      });
+      for (let i = 0; i < followings.length; i++) {
+        const followersCnt = await this.followRepository.count({
+          where: {
+            followed: { user_id: followings[i].followed.user_id },
+          },
+        });
+        followings[i].followed['followersCnt'] = followersCnt;
+      }
+      return followings.map((followingUser) => followingUser.followed);
     }
   }
 
