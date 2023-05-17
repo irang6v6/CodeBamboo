@@ -34,9 +34,14 @@ module.exports = {
             transform: 'translate(-50%, 30%)',
           },
         },
+        fadein: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
         scrollArrow: 'scrollArrow 1.2s linear alternate-reverse infinite',
+        fadein: 'fadein 0.8s ease-in-out',
       },
     },
   },

@@ -46,7 +46,9 @@ export const Bar = () => {
           alt="Logo Icon"
           />
           {isHovered && 
-          <div className='flex flex-col font-bold tracking-wide ml-3'>
+          <div
+            className='flex flex-col font-bold tracking-wide ml-3
+                      md:animate-fadein'>
           {/* <p>Code</p> */}
           <p><span className='md:text-2xl md:font-semibold'>H</span>ome</p>
           </div>

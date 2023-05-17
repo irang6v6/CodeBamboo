@@ -46,12 +46,13 @@ export const TopicDetail = ({}: Props) => {
       });
       setLeafs(data?.leafs);
     },
+    refetchOnWindowFocus: false,
   });
 
   if (getTopic.isLoading) {
     return (
-      <div className='flex flex-col w-full h-full justify-center items-center bg-[#69AF9A]'>
-        <div className='font-scp text-2xl'>LOADING...</div>
+      <div className="flex flex-col w-full h-full justify-center items-center bg-[#69AF9A]">
+        <div className="font-scp text-2xl">LOADING...</div>
         <Loading />
       </div>
     );
