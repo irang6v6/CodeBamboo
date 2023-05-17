@@ -44,7 +44,7 @@ export const TopicItem = ({
       </div>
       <div className="w-[90%] h-[25%] flex justify-evenly">
         <img
-          className="bg-white rounded-xl hover:shadow-lg hover:transition hover:cursor-pointer"
+          className="bg-white rounded-xl hover:shadow-lg hover:transition hover:cursor-pointer aspect-square md:w-[6rem]"
           src={`${rootLeaf.image}`}
           alt="user Image"
           onClick={() => {
