@@ -30,7 +30,7 @@ export const TopicItem = ({
 
   return (
     <div
-      className={`relative bg-gray-300 shadow-lg flex flex-col items-center justify-evenly rounded-xl shrink-0
+      className={`relative bg-gray-100 shadow-lg flex flex-col items-center justify-evenly rounded-xl shrink-0
                     w-[94vw] h-[40vh] mx-[3%]
                     md:w-[30%] md:h-80 md:m-[2%] md:hover:relative md:hover:scale-110 md:transition`}
     >

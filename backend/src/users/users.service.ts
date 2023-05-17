@@ -2,16 +2,12 @@ import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { Follow } from './entities/follow.entity';
 import { Repository, Like, Equal } from 'typeorm';
-import { UpdateUserDto } from './dto/update.user.dto';
 import { SimpleUserDto } from './dto/simple.user.dto';
-import { CreateFollowDto } from './dto/create.follow.dto';
-import { GetUserDto } from './dto/get.user.dto';
 import { MessageUserDto } from './dto/message.user.dto';
 import { Bookmark } from './entities/bookmark.entity';
 import { Leaf } from 'src/leafs/entities/leaf.entity';
 import { LikeEntity } from './entities/like.entity';
-import { transformUserTopics, searchBestLeafId } from './utils/utils';
-import { getUserTopicsDTO } from './dto/get.userTopics.dto';
+import { searchBestLeafId } from './utils/utils';
 import { Topic } from 'src/topics/entities/topic.entity';
 
 @Injectable()
@@ -41,37 +37,21 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  // [1] 유저 nickname으로 정보 조회
-  // myUserId가 전달인자로 포함되어야함
-  async searchUsersNickname(userInput: string): Promise<GetUserDto[]> {
-    const users = await this.userRepository.find({
+  // [1] 유저 nickname으로 정보 조회 ok
+  async searchUsersNickname(userInput: string) {
+    const searchUsers = await this.userRepository.find({
       where: { nickname: Like(`%${userInput}%`) },
     });
-    if (!users) {
-      throw new NotFoundException(`user nickname ${userInput} not found`);
-    }
-    return users.map((obj) => {
-      const getUserDto = {
-        user_id: obj.user_id,
-        nickname: obj.nickname,
-        image: obj.image,
-        introduce: obj.introduce,
-        email: obj.email,
-        isDeleted: obj.isDeleted,
-        // isFollowed: await this.isFollowerUser(myUserId, obj.user_id),
-      };
-      return getUserDto;
-    });
+    return searchUsers;
   }
 
-  // [2 - 1] 유저Id로 팔로우 목록 조회
-  // myUserId가 전달인자로 포함되어야함
-  async getFollowUsers(id: number): Promise<GetUserDto[]> {
-    const existedUser = await this.getUser(id);
+  // [2] 유저Id로 팔로우 목록 조회 ok
+  async getFollowUsers(userId: number) {
+    const existedUser = await this.isExistedUser(userId);
     if (existedUser) {
       const users = await this.userRepository.findOne({
         where: {
-          user_id: id,
+          user_id: userId,
         },
         relations: {
           followings: true,
@@ -85,79 +65,72 @@ export class UsersService {
           introduce: obj.followed.introduce,
           email: obj.followed.email,
           isDeleted: obj.followed.isDeleted,
-          // isFollowed: await this.isFollowerUser(myUserId, obj.followed.user_id),
         };
         return followedUser;
       });
     }
   }
 
-  // [2 - 2] 내가 팔로우한 사람인지 아닌지 판별
-  async isFollowUser(myUserId: number, targetUserId: number): Promise<boolean> {
-    const existedMyUserId = await this.getUser(myUserId);
-    if (existedMyUserId) {
-      const myFollowUsers = await this.getFollowUsers(targetUserId);
-      for (let i = 0; i < myFollowUsers.length; i++) {
-        if (myFollowUsers[i].user_id === targetUserId) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  // [3] 팔로우 생성
-  async followUser(createFollowDto: CreateFollowDto): Promise<MessageUserDto> {
-    const existedUserA = await this.getUser(createFollowDto.userId);
-    const existedUserB = await this.getUser(createFollowDto.followUserId);
+  // [3] 팔로우 생성 ok
+  async followUser(myUserId: number, userId: number): Promise<MessageUserDto> {
+    const existedUserA = await this.isExistedUser(myUserId);
+    const existedUserB = await this.isExistedUser(userId);
     if (existedUserA && existedUserB) {
-      const follow = await this.followRepository.findBy({
-        following: Equal(createFollowDto.userId),
-        followed: Equal(createFollowDto.followUserId),
+      const follow = await this.followRepository.findOneBy({
+        following: { user_id: myUserId },
+        followed: { user_id: userId },
       });
       const messageUserDto = new MessageUserDto();
-      if (follow.length <= 0) {
+      if (!follow) {
         // 없는 관계면 생성
         await this.followRepository.save({
-          following: existedUserA,
-          followed: existedUserB,
+          following: { user_id: myUserId },
+          followed: { user_id: userId },
         });
         messageUserDto.message = `${existedUserB.nickname}님을 팔로우했어요 !`;
         return messageUserDto;
       } else {
         // 이미 있는 관계면 삭제
-        await this.followRepository.delete(follow[0].follow_id);
+        await this.followRepository.delete(follow.follow_id);
         messageUserDto.message = `${existedUserB.nickname}님을 언팔로우했어요 !`;
         return messageUserDto;
       }
     }
+    return new MessageUserDto();
   }
 
-  // [4] 특정 유저가 작성한 모든 토픽 조회
-  async getUserTopics(userId: number): Promise<getUserTopicsDTO> {
-    const existedUser = await this.getUser(userId);
-    if (!existedUser) throw new NotFoundException('존재하지 않는 유저입니다.'); // 에러타입이랑 메세지 알맞게 바꿔주셈
+  // [3-2] 내가 팔로우한 사람인지 아닌지 판별
+  async isFollowUser(myUserId: number, userId: number): Promise<boolean> {
+    if (myUserId === userId) return null;
+    return !!(await this.followRepository.findOneBy({
+      following: { user_id: myUserId },
+      followed: { user_id: userId },
+    }));
+  }
 
-    const user = await this.userRepository.findOne({
+  // [4] 특정 유저가 작성한 모든 토픽 조회 ok
+  async getUserTopics(userId: number) {
+    await this.isExistedUser(userId);
+    const topics = await this.topicRepository.find({
       where: {
-        user_id: userId,
+        user: { user_id: userId },
       },
-      // 여기 업데이트 해서, 토픽의 리프, 리프의 코드 싹 가져옴
-      relations: ['topics', 'topics.leafs', 'topics.leafs.codes'],
+      relations: [
+        'bestLeaf',
+        'rootLeaf',
+        'bestLeaf.codes',
+        'rootLeaf.codes',
+        'bestLeaf.user',
+        'rootLeaf.user',
+      ],
+      loadEagerRelations: false,
     });
-
-    // DTO에 맞게 찜찜
-    const data = transformUserTopics(user.topics);
-    return {
-      message: '유저 토픽 조회 성공',
-      data,
-    };
+    return topics;
   }
 
-  // [5] 특정 유저가 작성한 모든 리프 조회
-  // myUserId가 전달인자로 추가되어야함
+  // [5] 특정 유저가 작성한 모든 리프 조회 ok
   async getUserLeafs(userId: number) {
-    const existedUser = await this.getUser(userId);
+    const existedUser = await this.isExistedUser(userId);
     if (existedUser) {
       const user = await this.userRepository.findOne({
         where: {
@@ -170,31 +143,23 @@ export class UsersService {
       const userLeafs = user.leafs.map((obj) => {
         return {
           ...obj,
-          user: {
-            user_id: obj.user.user_id,
-            nickname: obj.user.nickname,
-            image: obj.user.image,
-            isDeleted: obj.user.isDeleted,
-            // isFollowed: await this.isFollowerUser(myUserId, obj.user.user_id),
-          },
+          user: userId,
         };
       });
       for (let i = 0; i < userLeafs.length; i++) {
         const leaf = await this.leafRepository.findOne({
           where: { leaf_id: userLeafs[i].leaf_id },
           relations: { codes: true },
-          loadEagerRelations: false,
         });
-        console.log(leaf);
         userLeafs[i].codes = leaf.codes;
       }
       return userLeafs;
     }
   }
 
-  // [6] 특정 유저가 즐겨찾기한 리프 조회
+  // [6] 특정 유저가 즐겨찾기한 리프 조회 ok
   async getBookmarkLeafs(userId: number) {
-    const existedUser = await this.getUser(userId);
+    const existedUser = await this.isExistedUser(userId);
     if (existedUser) {
       const userBookmark = await this.userRepository.findOne({
         where: {
@@ -218,18 +183,17 @@ export class UsersService {
         const leaf = await this.leafRepository.findOne({
           where: { leaf_id: bookmarkList[i].leaf.leaf_id },
           relations: { codes: true },
-          loadEagerRelations: false,
+          loadEagerRelations: true,
         });
-        console.log(leaf);
         bookmarkList[i].leaf = leaf;
       }
       return bookmarkList;
     }
   }
 
-  // [7] 즐겨찾기 추가 및 제거
+  // [7] 즐겨찾기 추가 및 제거 ok
   async addBookmarkLeaf(userId: number, leafId: number) {
-    const existedUser = await this.getUser(userId);
+    const existedUser = await this.isExistedUser(userId);
     const existedLeaf = await this.leafRepository.findOne({
       where: { leaf_id: leafId },
     });
@@ -259,9 +223,9 @@ export class UsersService {
     }
   }
 
-  // [8] 리프 좋아요 추가 및 삭제
+  // [8] 리프 좋아요 추가 및 삭제 ok
   async addLikeLeaf(userId: number, leafId: number) {
-    const existedUser = await this.getUser(userId);
+    const existedUser = await this.isExistedUser(userId);
     const existedLeaf = await this.leafRepository.findOne({
       where: { leaf_id: leafId },
       relations: ['topic'],
@@ -315,40 +279,66 @@ export class UsersService {
     }
   }
 
-  // [9] 유저 id로 정보 조회
-  // myUserId가 전달인자로 추가되어야함
-  async getUser(id: number): Promise<GetUserDto> {
-    const user = await this.userRepository.findOne({ where: { user_id: id } });
-    if (!user) {
-      throw new NotFoundException(`user id ${id} not found`);
-    }
-    // [2-2]를 호출하여 내가 팔로우한 유저인지 아닌지 확인한 값을 추가
-    // user.isfollowed = await this.isFollowUser(myUserId, id)
-    return user;
+  // [9] 유저 id로 정보 조회 ok
+  async getUser(myUserId: number, userId: number) {
+    const user = await this.isExistedUser(userId);
+    // isFollow
+    const isFollow = myUserId
+      ? await this.isFollowUser(myUserId, userId)
+      : null;
+
+    // cnt
+    const followersCnt = await this.followRepository.count({
+      where: { followed: { user_id: userId } },
+    });
+    const topicsCnt = await this.topicRepository.count({
+      where: { user: { user_id: userId } },
+    });
+    const leafsCnt = await this.leafRepository.count({
+      where: { user: { user_id: userId } },
+    });
+    const bookmarksCnt = await this.bookmarkRepository.count({
+      where: { user: { user_id: userId } },
+    });
+    return {
+      ...user,
+      isFollow,
+      followersCnt,
+      topicsCnt,
+      leafsCnt,
+      bookmarksCnt,
+    };
   }
 
-  // [10] 유저 삭제
-  async deleteOne(id: number): Promise<void> {
-    const user = await this.getUser(id);
-    if (user) {
-      await this.userRepository.delete(id);
-    }
+  // [9-2] 유효한 유저 아이디인지 확인 ok
+  async isExistedUser(userId: number) {
+    const isExistedUser = await this.userRepository.findOneBy({
+      user_id: userId,
+    });
+    if (!isExistedUser)
+      throw new NotFoundException(`user id ${userId} not found`);
+    return isExistedUser;
   }
 
-  // [11] 유저 정보 수정
+  // [10] 유저 정보 수정 ok
   // 닉네임, 이미지경로, 자기소개만 수정 가능
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<void> {
-    const simpleUserDto = await this.getUser(id);
-    if (simpleUserDto) {
-      await this.userRepository.update(id, {
-        nickname: updateUserDto.nickname
-          ? updateUserDto.nickname
-          : simpleUserDto.nickname,
-        image: updateUserDto.image ? updateUserDto.image : simpleUserDto.image,
-        introduce: updateUserDto.introduce
-          ? updateUserDto.introduce
-          : simpleUserDto.introduce,
+  async update(userId: number, userInput: any) {
+    const user = await this.isExistedUser(userId);
+    if (user) {
+      await this.userRepository.update(userId, {
+        nickname: userInput.nickname ? userInput.nickname : user.nickname,
+        image: userInput.image ? userInput.image : user.image,
+        introduce: userInput.introduce ? userInput.introduce : user.introduce,
       });
+      return this.isExistedUser(userId);
     }
   }
+
+  // 유저 삭제
+  // async deleteOne(id: number): Promise<void> {
+  //   const user = await this.getUser(id);
+  //   if (user) {
+  //     await this.userRepository.delete(id);
+  //   }
+  // }
 }

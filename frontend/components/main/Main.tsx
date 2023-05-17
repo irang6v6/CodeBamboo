@@ -21,21 +21,21 @@ export default function Main() {
     <div className="relative w-full top-[700vh] h-[100vh] overflow-y-scroll z-30 scrollbar-hide">
       {/* 스크롤바에 밀리지않게 더미 박스 매우 중요*/}
       {isClient && isMobile && <div className="w-full h-20"></div>}
-      <p
-        className="font-scp m-5
+      <div
+        className="m-5 mb-0 pl-5 pb-5 border-b-gray-600 border-b-4
                   text-3xl
                   md:mx-20 md:mt-7 md:text-5xl"
       >
         Popular
-      </p>
+      </div>
       <TopicList topicList={mainTopicList.popular} />
-      <p
-        className="font-scp m-5
+      <div
+        className="m-5 mb-0 pl-5 pb-5 border-b-gray-600 border-b-4
                   text-3xl
                   md:mx-20 md:mt-7 md:text-5xl"
       >
         Trending
-      </p>
+      </div>
       <TopicList topicList={mainTopicList.trending} />
     </div>
   );

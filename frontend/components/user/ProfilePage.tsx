@@ -6,13 +6,16 @@ import { useMutation, useQuery } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { CiEdit } from 'react-icons/ci';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import { UserTopicsList } from './UserTopicList';
+import { UserBookmarkList } from './UserBookmarkList';
+import { FollowList } from './FollowList';
 
 interface Props {
   userId: string;
   myPage: boolean;
 }
 
-const cntDiv = (isMobile: boolean) => {
+const cntDiv = (isMobile: boolean, user: any) => {
   return (
     <>
       {isMobile ? (
@@ -20,16 +23,16 @@ const cntDiv = (isMobile: boolean) => {
       ) : (
         <div className="grid grid-cols-2 gap-2 mx-0 my-2 border-2 border-black-300 h-[25%] bg-transparent rounded">
           <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Follwers // cnt
+            Follwers // {user.followersCnt}
           </article>
           <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Topics // cnt
+            Topics // {user.topicsCnt}
           </article>
           <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Leafs // cnt
+            Leafs // {user.leafsCnt}
           </article>
           <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Bookmarks // cnt
+            Bookmarks // {user.bookmarksCnt}
           </article>
         </div>
       )}
@@ -49,10 +52,10 @@ const queryFn = async (userId: string) => {
 
 const ProfilePage = ({ userId, myPage }: Props) => {
   const isMobile = useIsMobile();
-  const [menu, setMenu] = useState("topics");
+  const [menu, setMenu] = useState('topics');
   const [isInputFocused, setInputFocus] = useState(false);
   const [isTextAreaFocused, setTextAreaFocus] = useState(false);
-  const [isFollowed, setIsFollowed] = useState(false)
+  const [isFollowed, setIsFollowed] = useState(false);
   const [myState, setMyState] = useRecoilState(userState);
 
   const {
@@ -73,7 +76,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     // 원하는 시점에 쿼리를 호출할 수 있게 하는 옵션
     enabled: !!userId,
     onSuccess: (data) => {
-      console.log("user : ", data);
+      console.log('user : ', data);
       setUser(data);
     },
   });
@@ -127,47 +130,42 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     }
   };
 
-  // const [topics, setTopics] = useState();
-  // const getTopics = useQuery(
-  //   ["user/topic", userId],
-  //   () => authApi.get("user/topic/" + userId).then((res) => res.data),
-  //   {
-  //     onSuccess: (data) => {
-  //       // console.log(data)
-  //       setTopics(data);
-  //     },
-  //   }
-  // );
+  const [topics, setTopics] = useState([]);
+  const getTopics = useQuery(
+    ['user/topic/', userId],
+    () => authApi.get('user/topic/' + userId).then((res) => res.data),
+    {
+      onSuccess: (data) => {
+        // console.log(data)
+        setTopics(data);
+      },
+    }
+  );
 
-  // const [leafs, setLeafs] = useState();
-  // const getLeafs = useQuery(
-  //   ["user/leaf", userId],
-  //   () => authApi.get("user/leaf/" + userId),
-  //   {
-  //     onSuccess: (data) => {
-  //       // console.log(data)
-  //       setLeafs(data);
-  //     },
-  //   }
-  // );
-
+  const [bookmarks, setBookmarks] = useState();
   const getBookmarks = useQuery(
-    ['user/bookmar', userId],
-    () => authApi.get('user/bookmark'),
+    ['user/bookmark', userId],
+    () =>
+      authApi
+        .get('user/bookmark', { params: { id: userId } })
+        .then((res) => res.data),
     {
       onSuccess: (data) => {
         // console.log(data);
+        setBookmarks(data);
       },
     }
   );
 
   // 해당 유저가 팔로우하고 있는 목록들
+  const [followeingUsers, setFolloingUsers] = useState();
   const getFollowings = useQuery(
     ['user/following', userId],
-    () => authApi.get('user/following/' + userId),
+    () => authApi.get('user/following/' + userId).then((res) => res.data),
     {
       onSuccess: (data) => {
         // console.log(data);
+        setFolloingUsers(data);
       },
     }
   );
@@ -203,21 +201,26 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           md:w-1/3 md:h-full md:px-12 md:me-8 md:rounded-xl
         "
         >
-          {!myPage && (
-            isFollowed?
-            <button className="pink-button absolute bg-bamboo text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7 px-2
+          {!myPage &&
+            (isFollowed ? (
+              <button
+                className="pink-button absolute bg-bamboo text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7 px-2
             md:tracking-wider md:h-8 md:right-[3%]
             "
-            onClick={()=>setIsFollowed(false)}
-            >Following</button>
-            :
-            <button className="pink-button absolute text-bamboo bg-white text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7
+                onClick={() => setIsFollowed(false)}
+              >
+                Following
+              </button>
+            ) : (
+              <button
+                className="pink-button absolute text-bamboo bg-white text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7
             md:tracking-wider md:h-8 md:right-[3%]
             "
-            onClick={()=>setIsFollowed(true)}
-            >Follow</button>
-          )
-          }
+                onClick={() => setIsFollowed(true)}
+              >
+                Follow
+              </button>
+            ))}
           {/* 프사 & 닉네임 & 이메일있는 아티클 */}
           <article
             className="article items-center relative h-24 bg-transparent
@@ -248,21 +251,21 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                     className="text-center h-6 min-w-[8rem] max-w-[50%] cursor-pointer  placeholder-black hover:border-2 hover:border-black rounded-md"
                     defaultValue={user.nickname}
                     onFocus={() => setInputFocus(true)}
-                    onBlur={()=>setTimeout(()=>setInputFocus(false), 300)}
+                    onBlur={() => setTimeout(() => setInputFocus(false), 300)}
                   />
-                  {isInputFocused &&
-                  <button type="submit">
-                    <CiEdit
-                      size={20}
-                      className="absolute right-4 z-10 cursor-pointer top-[0.2rem]"
+                  {isInputFocused && (
+                    <button type="submit">
+                      <CiEdit
+                        size={20}
+                        className="absolute right-4 z-10 cursor-pointer top-[0.2rem]"
                       />
-                  </button>
-                  }
+                    </button>
+                  )}
                   {nicknameErrors.nickname && (
                     <p className="absolute top-full left-0 text-center text-xs text-red-400 pointer-events-none z-10">
-                    유효하지 않은 닉네임입니다
+                      유효하지 않은 닉네임입니다
                     </p>
-                    )}
+                  )}
                 </form>
               ) : (
                 user.nickname
@@ -293,36 +296,42 @@ const ProfilePage = ({ userId, myPage }: Props) => {
               >
                 Introduce
               </p>
-                {myPage ? (
-                  <form action="" onSubmit={registerIntro.handleSubmit(onSelfIntroSubmit)} className="relative">
-                    <textarea
-                      className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none hover:border-2 hover:border-black rounded-md"
-                      {...registerIntro.register("introduce", {
-                        // required: true,
-                        maxLength: 40,
-                      })}
-                      defaultValue={user.introduce}
-                      onFocus={() => setTextAreaFocus(true)}
-                      onBlur={()=>setTimeout(()=>setTextAreaFocus(false), 300)}
-                    />
-                    {isTextAreaFocused &&
+              {myPage ? (
+                <form
+                  action=""
+                  onSubmit={registerIntro.handleSubmit(onSelfIntroSubmit)}
+                  className="relative"
+                >
+                  <textarea
+                    className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none hover:border-2 hover:border-black rounded-md"
+                    {...registerIntro.register('introduce', {
+                      // required: true,
+                      maxLength: 40,
+                    })}
+                    defaultValue={user.introduce}
+                    onFocus={() => setTextAreaFocus(true)}
+                    onBlur={() =>
+                      setTimeout(() => setTextAreaFocus(false), 300)
+                    }
+                  />
+                  {isTextAreaFocused && (
                     <button type="submit">
                       <CiEdit
                         size={30}
                         className=" absolute bottom-2 z-10 cursor-pointer
                         md:right-10
                         "
-                        />
+                      />
                     </button>
-                    }
-                  </form>
-                ) : (
-                  user.introduce
-                )}
-              </div>
+                  )}
+                </form>
+              ) : (
+                user.introduce
+              )}
+            </div>
           </article>
           {/* 카운트카운트 */}
-          <>{cntDiv(isMobile)}</>
+          <>{cntDiv(isMobile, user)}</>
         </section>
         {/* 데탑화면에서 하나로 묶기용 div */}
         <div className="md:w-2/3 md:h-full h-[auto] shadow-neutral-300 md:shadow-lg md:border-t-2 md:border-2 border-gray-200 rounded-xl">
@@ -333,7 +342,9 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           "
           >
             <div
-              className={`${menu === "topics" ? "border-bamboo" : "border-none"} border-b-4 bg-transparent box-content
+              className={`${
+                menu === 'topics' ? 'border-bamboo' : 'border-none'
+              } border-b-4 bg-transparent box-content
             article w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem]
             `}
@@ -342,7 +353,9 @@ const ProfilePage = ({ userId, myPage }: Props) => {
               Topics
             </div>
             <div
-              className={`${menu === "follow" ? "border-bamboo" : "border-none"} border-b-4 bg-transparent box-content
+              className={`${
+                menu === 'follow' ? 'border-bamboo' : 'border-none'
+              } border-b-4 bg-transparent box-content
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem]
             `}
@@ -351,7 +364,9 @@ const ProfilePage = ({ userId, myPage }: Props) => {
               Bookmark
             </div>
             <div
-              className={`${menu === "following" ? "border-bamboo" : "border-none"} border-b-4 bg-transparent box-content
+              className={`${
+                menu === 'following' ? 'border-bamboo' : 'border-none'
+              } border-b-4 bg-transparent box-content
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem]
             `}
@@ -366,52 +381,19 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             md:h-full md:pt-12
           "
           >
-            {menu === "topics" && (
+            {menu === 'topics' && (
               <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  토픽 아이템
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  토픽 아이템
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  토픽 아이템
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  토픽 아이템
-                </div>
+                <UserTopicsList topics={topics} />
               </article>
             )}
-            {menu === "follow" && (
+            {menu === 'follow' && (
               <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  즐겨찾기한 리프                 
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  즐겨찾기한 리프                 
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  즐겨찾기한 리프                 
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  즐겨찾기한 리프                 
-                </div>
+                <UserBookmarkList bookmarks={bookmarks} />
               </article>
             )}
-            {menu === "following" && (
-              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  내가 팔로우하는 유저들의 리프                 
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  내가 팔로우하는 유저들의 리프                 
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  내가 팔로우하는 유저들의 리프                 
-                </div>
-                <div className="w-auto h-[90%] flex justify-center items-center bg-white rounded-md">
-                  내가 팔로우하는 유저들의 리프                 
-                </div>
+            {menu === 'following' && (
+              <article className="article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 pt-5 px-5 overflow-y-auto">
+                <FollowList followingUsers={followeingUsers} />
               </article>
             )}
           </section>
