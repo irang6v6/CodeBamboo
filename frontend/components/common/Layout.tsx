@@ -16,7 +16,7 @@ export const Layout = ({ children }: Props) => {
     const response = await authApi.get('auth/keep-login-state');
     if (response.status !== 200) throw new Error('로그인 상태 유지 실패');
     const user = response.data.data;
-    console.log(user);
+    // console.log(user);
     setUser({
       ...user,
       isLoggedIn: true,

@@ -1,5 +1,5 @@
-import { User } from 'src/users/entities/user.entity';
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { User } from './entities/user.entity';
 import { Follow } from './entities/follow.entity';
 import { Repository, Like, Equal } from 'typeorm';
 import { SimpleUserDto } from './dto/simple.user.dto';
@@ -9,6 +9,7 @@ import { Leaf } from 'src/leafs/entities/leaf.entity';
 import { LikeEntity } from './entities/like.entity';
 import { searchBestLeafId } from './utils/utils';
 import { Topic } from 'src/topics/entities/topic.entity';
+import { CloudStorageService } from 'src/core/services/cloud-stroage-service';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +31,8 @@ export class UsersService {
 
     @Inject('TOPIC_REPOSITORY')
     private topicRepository: Repository<Topic>,
+
+    private cloudStorageService: CloudStorageService
   ) {}
 
   // [#] 테스트용 코드
@@ -317,23 +320,36 @@ export class UsersService {
 
   // [10] 유저 정보 수정 ok
   // 닉네임, 이미지경로, 자기소개만 수정 가능
-  async update(userId: number, userInput: any) {
-    const user = await this.isExistedUser(userId);
-    if (user) {
-      await this.userRepository.update(userId, {
-        nickname: userInput.nickname ? userInput.nickname : user.nickname,
-        image: userInput.image ? userInput.image : user.image,
-        introduce: userInput.introduce ? userInput.introduce : user.introduce,
-      });
-      return this.isExistedUser(userId);
+  async update(id: number, userInput: any , profileImg) {
+    const user = await this.isExistedUser(id);
+    if (!user) throw new InternalServerErrorException('존재하지 않는 유저입니다.')
+
+    if (profileImg) {
+      // 기존 파일 삭제
+      const fileName = user.image.split('/').pop(); // extract file name from URL
+      // console.log('원래 프로필 이미지 : ', fileName)
+      await this.cloudStorageService.removeFile(fileName);
+      // 유저가 업로드한 이미지 저장
+      const file = await this.cloudStorageService.uploadFile(user.nickname, profileImg, '');
+      userInput.image = file.publicUrl;
+      // console.log('새 프로필 이미지 : ', userInput.image)
+    }
+
+    await this.userRepository.update(id, {
+      nickname: userInput.nickname
+        ? userInput.nickname
+        : user.nickname,
+      image: userInput.image ? userInput.image : user.image,
+      introduce: userInput.introduce
+        ? userInput.introduce
+        : user.introduce,
+    });
+
+    return {
+      message:'회원정보 수정 성공',
+      data:{
+        newProfileImg:userInput.image
+      }
     }
   }
-
-  // 유저 삭제
-  // async deleteOne(id: number): Promise<void> {
-  //   const user = await this.getUser(id);
-  //   if (user) {
-  //     await this.userRepository.delete(id);
-  //   }
-  // }
 }

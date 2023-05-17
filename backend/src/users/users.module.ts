@@ -9,6 +9,7 @@ import { likeRepository } from './dao/likes.repository';
 import { LeafRepository } from 'src/leafs/dao/leafs.repository';
 import { APP_PIPE } from '@nestjs/core';
 import { TopicRepository } from 'src/topics/dao/topics.repository';
+import { CloudStorageService } from '../core/services/cloud-stroage-service'
 
 @Module({
   imports: [DatabaseModule],
@@ -25,6 +26,7 @@ import { TopicRepository } from 'src/topics/dao/topics.repository';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
+    CloudStorageService
   ],
   exports: [...userRepository, UsersService],
 })

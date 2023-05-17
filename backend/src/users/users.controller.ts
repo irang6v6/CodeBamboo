@@ -9,11 +9,15 @@ import {
   Post,
   UseGuards,
   Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SimpleUserDto } from './dto/simple.user.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
+import { memoryStorage } from 'multer';
 import { Public } from 'src/auth/utils/public.decorator';
 
 @Controller('user')
@@ -87,16 +91,22 @@ export class UsersController {
     return this.usersService.getUser(myUserId, id);
   }
 
-  // [10] 유저 정보 수정 ok
+  // [10] 유저 정보 수정
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor('profileImg', {
+      storage: memoryStorage(),
+      limits: { fileSize: 2097152 }, // 2MB --- 2*2^20
+      fileFilter: (req, file, callback) => {
+        return file.mimetype.match(/image\/(jpg|jpeg|png|gif)$/)
+          ? callback(null, true)
+          : callback(new BadRequestException('Only image files are allowed'), false);
+      }
+    })
+  )
   @Patch()
-  update(@Req() req: Request, @Body() userInput: any) {
-    return this.usersService.update(req.user['user_id'], userInput);
+  update(@Req() req: Request, @Body() userInput: any, @UploadedFile() profileImg) {
+    // console.log('img : ', profileImg)
+    return this.usersService.update(req.user['user_id'], userInput, profileImg);
   }
-
-  // 유저 삭제
-  // @Delete(':id')
-  // delete(@Param('id') id: number) {
-  //   return this.usersService.deleteOne(id);
-  // }
 }

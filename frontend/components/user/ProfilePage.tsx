@@ -19,20 +19,26 @@ const cntDiv = (isMobile: boolean, user: any) => {
   return (
     <>
       {isMobile ? (
-        <h1>아이콘</h1>
+        <>
+        {/* <h1>아이콘</h1> */}
+        </>
       ) : (
-        <div className="grid grid-cols-2 gap-2 mx-0 my-2 border-2 border-black-300 h-[25%] bg-transparent rounded">
-          <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Follwers // {user.followersCnt}
+        <div className="grid grid-cols-2 gap-2 mx-0 my-2 h-[30%] bg-transparent ">
+          <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
+            <span className='text-xl font-bold'>{user.followersCnt}</span>
+            <span className='text-gray-400'>Follwers</span> 
           </article>
-          <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Topics // {user.topicsCnt}
+          <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
+            <span className='text-xl font-bold'>{user.topicsCnt}</span>
+            <span className='text-gray-400'>Topics</span> 
           </article>
-          <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Leafs // {user.leafsCnt}
+          <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
+            <span className='text-xl font-bold'>{user.leafsCnt}</span>
+            <span className='text-gray-400'>Leafs</span> 
           </article>
-          <article className="article justify-center min-w-[10rem] items-start ps-2 bg-transparent">
-            Bookmarks // {user.bookmarksCnt}
+          <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
+            <span className='text-xl font-bold'>{user.bookmarksCnt}</span>
+            <span className='text-gray-400'>Bookmarks</span> 
           </article>
         </div>
       )}
@@ -57,17 +63,49 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   const [isTextAreaFocused, setTextAreaFocus] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [myState, setMyState] = useRecoilState(userState);
+  const profileImgRef = useRef<HTMLInputElement>(null);
 
+  // 프로필 이미지 업로드
+  const handleFileUpload = async(event:any)=>{
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+      // console.log(file)
+      const formData = new FormData()
+      formData.append('profileImg', file)
+      try {
+        const newProfileImg = await authApi
+          .patch('user', formData)
+          .then((res) => res.data.data.newProfileImg);
+        setMyState({ ...myState, image: newProfileImg });
+        alert('프로밀 이미지 저장 완료!');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  // 팔로우 등록, 해제
+  const followMutation = useMutation(()=>authApi.post('user/follow', {userId:user.user_id}), {
+    onSuccess:(data)=>{
+      console.log(data.data)
+    },
+    onMutate:()=>{
+      setIsFollowed(prev=>!prev)
+    }
+  })
+
+
+  // 닉네임 useForm 인스턴스 생성
   const {
     register: registerNickname,
     handleSubmit: handleNicknameSubmit,
     formState: { errors: nicknameErrors },
-    setValue,
     reset,
     watch,
     setFocus,
   } = useForm();
 
+  // 자기소개 useForm 인스턴스 생성
   const registerIntro = useForm();
 
   // 유저 정보 API
@@ -76,8 +114,11 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     // 원하는 시점에 쿼리를 호출할 수 있게 하는 옵션
     enabled: !!userId,
     onSuccess: (data) => {
-      console.log('user : ', data);
+      console.log('쿼리 클라이언트로부터 유저정보를 최신화합니다 : ', data);
       setUser(data);
+      if(!myPage) {
+        setIsFollowed(data.isFollow) // 팔로우 상태를 서버 스테이트와 동기화
+      }
     },
   });
 
@@ -97,7 +138,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       if (window.confirm('닉네임 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch('user/' + userId, { nickname: watch('nickname') })
+            .patch('user/', { nickname: watch('nickname') })
             .then((res) => res.data);
           setMyState({ ...myState, nickname: watch('nickname') });
           alert('닉네임 저장 완료!');
@@ -119,7 +160,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       if (window.confirm('자기소개 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch('user/' + userId, { introduce: watch })
+            .patch('user/', { introduce: watch })
             .then((res) => res.data);
           setMyState({ ...myState, introduce: watch });
           alert('자기소개 저장 완료!');
@@ -207,7 +248,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                 className="pink-button absolute bg-bamboo text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7 px-2
             md:tracking-wider md:h-8 md:right-[3%]
             "
-                onClick={() => setIsFollowed(false)}
+                onClick={() => followMutation.mutate()}
               >
                 Following
               </button>
@@ -216,7 +257,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                 className="pink-button absolute text-bamboo bg-white text-center border-solid border-2 border-bamboo top-10 right-0 max-w-[20%] z-10 h-7
             md:tracking-wider md:h-8 md:right-[3%]
             "
-                onClick={() => setIsFollowed(true)}
+                onClick={() => followMutation.mutate()}
               >
                 Follow
               </button>
@@ -229,11 +270,13 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             <img
               src={user.image}
               alt=""
-              className="min-w-[5rem] max-h-[5rem] max-w-[5rem] min-h-[5rem] absolute bottom-12 rounded-lg drop-shadow-lg bg-cover  object-cover z-10
+              className="min-w-[5rem] max-h-[5rem] max-w-[5rem] min-h-[5rem] absolute bottom-12 rounded-lg drop-shadow-lg bg-cover object-cover z-10 bg-white cursor-pointer transition duration-100 md:hover:scale-110
              md:w-[7rem] md:bottom-20 md:aspect-square md:max-w-[50%]
              md:max-h-[7rem]
             "
+             onClick={()=>profileImgRef?.current?.click()}
             />
+            <input type='file' className='hidden' ref={profileImgRef} onChange={handleFileUpload}/>
             <div
               className="absolute bottom-6 font-bold text-sm text-center 
                md:bottom-10 md:text-base
@@ -241,7 +284,6 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             >
               {myPage ? (
                 <form onSubmit={handleNicknameSubmit(onNicknameSubmit)}>
-                  {/* <label htmlFor="nickname">{user.nickname}</label> */}
                   <input
                     id="nickname"
                     {...registerNickname('nickname', {
@@ -303,7 +345,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                   className="relative"
                 >
                   <textarea
-                    className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded cursor-pointer resize-none hover:border-2 hover:border-black rounded-md"
+                    className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded-md cursor-pointer resize-none hover:border-2 hover:border-black"
                     {...registerIntro.register('introduce', {
                       // required: true,
                       maxLength: 40,
@@ -344,7 +386,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             <div
               className={`${
                 menu === 'topics' ? 'border-bamboo' : 'border-none'
-              } border-b-4 bg-transparent box-content
+              } border-b-4 bg-transparent box-content 
             article w-1/4 min-w-[6rem] max-w-[8rem] items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem] md:hover:cursor-pointer
             `}
@@ -355,24 +397,24 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             <div
               className={`${
                 menu === 'follow' ? 'border-bamboo' : 'border-none'
-              } border-b-4 bg-transparent box-content
+              } border-b-4 bg-transparent box-content 
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem] md:hover:cursor-pointer
             `}
               onClick={() => setMenu('follow')}
             >
-              Bookmark
+              Bookmarks
             </div>
             <div
               className={`${
                 menu === 'following' ? 'border-bamboo' : 'border-none'
-              } border-b-4 bg-transparent box-content
+              } border-b-4 bg-transparent box-content 
             article w-1/4 min-w-[6rem] max-w-[8rem]  items-center justify-center h-[2rem] z-10 
             md:h-[2.6rem] md:hover:cursor-pointer
             `}
               onClick={() => setMenu('following')}
             >
-              Following
+              Followings
             </div>
           </section>
           {/* 선택된 메뉴에 따라 내용 보여주는 섹션 */}
