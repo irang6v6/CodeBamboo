@@ -6,6 +6,7 @@ import {
   codeState,
   articleState,
   selectedLeafState,
+  LeafState,
 } from '@/recoil/topic';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import authApi from '@/hooks/api/axios.authorization.instance';
@@ -44,6 +45,7 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
   const [selectedLeaf, setSelectedLeaf] = useRecoilState(selectedLeafState);
   const setCode = useSetRecoilState(codeState);
   const setArticle = useSetRecoilState(articleState);
+  const setLeafs = useSetRecoilState(LeafState);
   const [isLiked, setIsLiked] = useState(leaf.isLiked);
   const [isBookmarked, setIsBookmarked] = useState(leaf.isBookmarked);
   const isMobile = useIsMobile();
@@ -61,20 +63,32 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
   };
 
   const mutateLike = useMutation(() => queryLikeFn(leaf.leaf_id), {
-    onSuccess: () => {
-      console.log('좋아요 성공');
+    onSuccess: (data) => {
+      console.log(data)
+      setLeafs((leafs)=>leafs.map((l) => {
+        if (l.leaf_id === leaf.leaf_id) {
+          return { ...l, isLiked:!l.isLiked };
+        }
+        return l
+      }))
     },
     onMutate: () => {
-      setIsLiked(!isLiked);
+      setIsLiked((prev)=>!prev);
     },
   });
 
   const mutateBookmark = useMutation(() => queryBookmarkFn(leaf.leaf_id), {
-    onSuccess: () => {
-      console.log('즐겨찾기 성공');
+    onSuccess: (data) => {
+      console.log(data)
+      setLeafs((leafs)=>leafs.map((l) => {
+        if (l.leaf_id === leaf.leaf_id) {
+          return { ...l, isBookmarked:!l.isBookmarked };
+        }
+        return l
+      }))
     },
     onMutate: () => {
-      setIsBookmarked(!isBookmarked);
+      setIsBookmarked((prev)=>!prev);
     },
   });
 

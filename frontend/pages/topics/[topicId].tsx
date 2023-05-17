@@ -8,6 +8,7 @@ import {
   LeafState,
   selectedLeafState,
 } from '@/recoil/topic';
+import Loading from '@/components/common/Loading';
 import Editor from '@/components/editor/Editor';
 import { Log } from '@/components/editor/Log';
 import authApi from '@/hooks/api/axios.authorization.instance';
@@ -48,11 +49,16 @@ export const TopicDetail = ({}: Props) => {
   });
 
   if (getTopic.isLoading) {
-    return <h1>로딩 중입니다..</h1>;
+    return (
+      <div className='flex flex-col w-full h-full justify-center items-center bg-[#69AF9A]'>
+        <div className='font-scp text-2xl'>LOADING...</div>
+        <Loading />
+      </div>
+    );
   }
 
   if (getTopic.isError) {
-    return;
+    return null;
   }
 
   return (

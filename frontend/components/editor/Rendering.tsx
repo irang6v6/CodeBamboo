@@ -40,7 +40,7 @@ export const Rendering = () => {
   }, [srcCode]);
 
   return (
-    <div className="h-full w-full border md:h-1/2">
+    <div className="h-1/2 w-full border">
       <iframe
         className="h-full w-full"
         srcDoc={src}

@@ -128,11 +128,7 @@ export const Article = ({}: Props) => {
   );
 
   return (
-    <div
-      className="flex p-4 bg-inherit
-                h-full
-                md:h-1/2"
-    >
+    <div className="flex p-4 bg-inherit h-1/2">
       <form className="flex flex-col w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="font-bold">
           Title :{' '}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { CodeInF } from './TopicInterface';
 import { useRouter } from 'next/router';
 
