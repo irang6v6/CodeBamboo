@@ -345,7 +345,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                   className="relative"
                 >
                   <textarea
-                    className="w-[90%] mt-3 h-[9rem] border-gray-300 rounded-md cursor-pointer resize-none hover:border-2 hover:border-black"
+                    className="scrollbar-hide w-[90%] mt-3 h-[9rem] border-gray-300 rounded-md cursor-pointer resize-none hover:border-2 hover:border-black"
                     {...registerIntro.register('introduce', {
                       // required: true,
                       maxLength: 40,
