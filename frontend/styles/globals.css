@@ -24,7 +24,7 @@
     }
 
     .search-modal-wrapper {
-        @apply rounded-xl fixed left-4 right-4 top-20 m-auto z-10  items-center;
+        @apply rounded-xl absolute md:fixed left-4 right-4 top-20 m-auto z-10  items-center;
     }
 
     .close-button {

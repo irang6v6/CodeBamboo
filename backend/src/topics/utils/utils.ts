@@ -27,7 +27,8 @@ export function makeLeaf(data) {
 }
 
 export function makeTopicLeafs(data, my_id: number) {
-  // console.log(data);
+  // console.log(my_id);
+  // console.log(data.likes);
   const likeCnt = { likeCnt: data.likes.length };
   const user_id = { user_id: data.user.user_id };
   const likeList = data.likes;

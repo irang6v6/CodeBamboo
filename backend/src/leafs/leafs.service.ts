@@ -17,38 +17,22 @@ export class LeafsService {
     private codeRepository: Repository<Code>,
   ) {}
 
-  // async getAll(): Promise<SimpleLeafDto[]> {
-  //   const leaf = await this.leafRepository.find({
-  //     relations: ['user', 'topic', 'code'],
-  //     loadRelationIds: { relations: ['user', 'topic'] },
-  //   });
-  //   return leaf;
-  // }
-
   async search(userInput: string) {
     //title로 조회. where문으로 검색할 수 있음. 괄호 주의
     const titleLeafs = await this.leafRepository.find({
-      where: {
-        title: Like(`%${userInput}%`),
-      },
+      where: [
+        {
+          title: Like(`%${userInput}%`),
+        },
+        { user: { nickname: Like(`%${userInput}%`) } },
+      ],
       relations: { user: true, likes: true, codes: true },
     });
-    const userLeafs = await this.leafRepository.find({
-      relations: {
-        user: true,
-        likes: true,
-        codes: true,
-      },
-      where: { user: { nickname: Like(`%${userInput}%`) } },
-    });
     //닉네임이나 타이틀로 검색 안되면 []로 들어와서 길이를 재서 유무 판별
-    if (userLeafs.length == 0 && titleLeafs.length == 0) {
+    if (titleLeafs.length == 0) {
       throw new NotFoundException(
         `'${userInput}'(이)라는 검색결과를 찾을 수 없습니다.`,
       );
-    } else if (userLeafs.length > 0) {
-      const user = userLeafs.map((data) => makeLeaf(data));
-      return user;
     } else if (titleLeafs.length > 0) {
       const title = titleLeafs.map((data) => makeLeaf(data));
       return title;

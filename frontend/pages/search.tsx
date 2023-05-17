@@ -10,16 +10,15 @@ import {
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { TopicItemInF } from '@/components/topic/TopicInterface';
 import { SearchItem } from '@/components/search/SearchItem';
-import { searchLeafFn, searchTopicFn } from '@/hooks/api/search.api';
+// import { SearchTopicFn } from '@/hooks/api/search.api';
 
 interface Props {}
 
 export const Search = ({}: Props) => {
     const [inputValue, setInputValue] = useRecoilState(searchInputState);
     const isMobile = useIsMobile();
-    const [isFound, setIsFound] = useState(true);
+    const [isTopicFound, setIsTopicFound] = useState(true);
     const [isLeafFound, setIsLeafFound] = useState(true);
     const isTopic = useRecoilValue(topicTogleState);
     const isNew = useRecoilValue(newTogleState);
@@ -36,24 +35,39 @@ export const Search = ({}: Props) => {
         (): ReactNode => <></>
     );
     const searchItemClass = `w-screen 
-    h-full bg-white ${
-        isMobile ? 'overflow-x-visible overflow-y-scroll scrollbar-hide' : ''
-    }
+    h-full bg-white 
     md:w-full md:h-full md:justify-center md:grid md:grid-cols-2 xl:grid xl:grid-cols-3 md:overflow-y-scroll scrollbar-hide`;
 
-    // const searchTopicFn = async (userInput: any) => {
-    //     if (!userInput) return;
-    //     try {
-    //         const response = await authApi.get(
-    //             `topic/search?input=${userInput}`
-    //         );
-    //         return response.data;
-    //     } catch (data: any) {
-    //         // console.log(error.response.data.message);
-    //         setErrorValue(data.response.data.message);
-    //         setIsFound(false);
-    //     }
-    // };
+    const notFoundClass = (data: boolean) => {
+        let isTopic = '토픽';
+        if (!data) {
+            isTopic = '리프';
+        }
+        return (
+            <div className="bg-white flex flex-col place-items-center justify-items-center h-full w-full">
+                <img
+                    src="/images/404Icon.png"
+                    className="md:mt-20 mt-10 md:mx-20  h-30 md:h-30"
+                ></img>
+                <div className="mt-3">
+                    {isTopic}에서는 {inputValue.inputValue}(을)를 찾을 수
+                    없습니다.
+                </div>
+            </div>
+        );
+    };
+
+    const searchTopicFn = async (userInput: any) => {
+        if (!userInput) return;
+        try {
+            const response = await authApi.get(
+                `topic/search?input=${userInput}`
+            );
+            return response.data;
+        } catch (data: any) {
+            setIsTopicFound(false);
+        }
+    };
     const getTopic = useQuery(
         ['topic', inputValue.inputValue],
         () => searchTopicFn(inputValue.inputValue),
@@ -61,23 +75,20 @@ export const Search = ({}: Props) => {
             onSuccess: (data) => {
                 if (data) {
                     setSearchTopicItems(
-                        data
-                            .reverse()
-                            .slice(0, 6)
-                            .map((obj: any, idx: number) => {
-                                return (
-                                    <SearchItem
-                                        topic_id={obj.topic_id}
-                                        needHelp={obj.needHelp}
-                                        creation_time={obj.creation_time}
-                                        rootLeaf={obj.rootLeaf}
-                                        bestLeaf={obj.bestLeaf}
-                                        key={idx}
-                                    />
-                                );
-                            })
+                        data.reverse().map((obj: any, idx: number) => {
+                            return (
+                                <SearchItem
+                                    topic_id={obj.topic_id}
+                                    needHelp={obj.needHelp}
+                                    creation_time={obj.creation_time}
+                                    rootLeaf={obj.rootLeaf}
+                                    bestLeaf={obj.bestLeaf}
+                                    key={idx}
+                                />
+                            );
+                        })
                     ),
-                        setIsFound(true);
+                        setIsTopicFound(true);
                     data.sort((prev: any, cur: any) => {
                         // age 기준 내림차순 정렬
                         if (prev.rootLeaf.likeCnt < cur.rootLeaf.likeCnt)
@@ -87,7 +98,7 @@ export const Search = ({}: Props) => {
                     });
                     // console.log(data);
                     setlikesTopicItems(
-                        data.slice(0, 6).map((obj: any, idx: number) => {
+                        data.map((obj: any, idx: number) => {
                             return (
                                 <SearchItem
                                     topic_id={obj.topic_id}
@@ -108,19 +119,18 @@ export const Search = ({}: Props) => {
         }
     );
 
-    // const searchLeafFn = async (userInput: any) => {
-    //     if (!userInput) return;
-    //     try {
-    //         const response = await authApi.get(
-    //             `leaf/search?input=${userInput}`
-    //         );
-    //         return response.data;
-    //     } catch (data: any) {
-    //         // console.log(data.response.data.message);
-    //         setLeafErrorValue(data.response.data.message);
-    //         setIsFound(false);
-    //     }
-    // };
+    const searchLeafFn = async (userInput: any) => {
+        if (!userInput) return;
+        try {
+            const response = await authApi.get(
+                `leaf/search?input=${userInput}`
+            );
+            return response.data;
+        } catch (data: any) {
+            // console.log(data.response.data.message);
+            setIsLeafFound(false);
+        }
+    };
     const getLeaf = useQuery(
         ['leaf', inputValue.inputValue],
         () => searchLeafFn(inputValue.inputValue),
@@ -150,7 +160,7 @@ export const Search = ({}: Props) => {
                     });
                     // console.log(data);
                     setlikesLeafItems(
-                        data.slice(0, 6).map((obj: any, idx: number) => {
+                        data.map((obj: any, idx: number) => {
                             return (
                                 <SearchItem
                                     topic_id={obj.topic_id}
@@ -172,7 +182,7 @@ export const Search = ({}: Props) => {
     );
 
     const TopicList = () => {
-        return isFound ? (
+        return isTopicFound ? (
             //토픽 찾았을 때
             isNew.togleValue ? (
                 <div className={searchItemClass}>{searchTopicItems}</div>
@@ -181,15 +191,7 @@ export const Search = ({}: Props) => {
             )
         ) : (
             //토픽 찾지 못했을 때
-            <div className="bg-white place-item-center h-full w-full ">
-                <img
-                    src="/images/404Icon.png"
-                    className="md:mt-20 md:mx-20 border border-black md:h-30"
-                ></img>
-                <div className="border border-black justify-center content-center">
-                    토픽에서는 {inputValue.inputValue}((을))를 찾을 수 없습니다.
-                </div>
-            </div>
+            notFoundClass(true)
         );
     };
     const LeafList = () => {
@@ -200,28 +202,19 @@ export const Search = ({}: Props) => {
                 <div className={searchItemClass}>{likesLeafItems}</div>
             )
         ) : (
-            <div className="bg-white place-item-center h-full w-full ">
-                <img
-                    src="/images/404Icon.png"
-                    className="md:mt-20 md:mx-20 border border-black md:h-30"
-                ></img>
-                <div className="border border-black justify-center content-center">
-                    리프에서는 {inputValue.inputValue} ((을))를 찾을 수
-                    없습니다.
-                </div>
-            </div>
+            notFoundClass(false)
         );
     };
 
     useEffect(() => {
         //api통신 여기에서
         // console.log('inputValue바뀜');
-    }, [inputValue, isFound, isLeafFound]);
+    }, [inputValue, isTopicFound, isLeafFound]);
     return (
         <div className="h-full w-full md:w-full bg-white">
             <header
                 className="header h-20 bg-white
-                              md:h-24 md:w-[96%] md:mx-[2%]"
+                            md:h-16 md:w-[96%] md:mx-[2%]"
             ></header>
             <main className="main md:w-[96%] md:mx-[2%] md:h-[90%] bg-white">
                 <SearchTogle />

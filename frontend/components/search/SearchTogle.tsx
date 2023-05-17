@@ -6,22 +6,22 @@ export default function searchTogle() {
     const [topicTogle, setTopicTogle] = useRecoilState(topicTogleState);
     const [newTogle, setNewTogle] = useRecoilState(newTogleState);
     const topicTogleWrapperClasses = `
-        py-2 px-1 h-12 md:h-14 cursor-pointer w-30 
+        py-2 px-1 h-12 md:h-12 cursor-pointer w-32 
         `;
     const newTogleWrapperClasses = `
-        py-2 h-12 md:h-14 cursor-pointer w-32 md:w-36
+        py-2 h-12 md:h-12 cursor-pointer w-32 md:w-36
         `;
     const isOnTogle = `
-        border-b-4 border-black
+        border-b-2 border-black
         `;
-
+    // space-x-24
     return (
         <section
-            className="section flex-row h-12 space-x-24 border-b-4 border-gray-400 bg-white
+            className="section flex-row h-12 w-full place-content-between  border-b-2 border-gray-100 bg-white
                   text-lg text-center
-                  md:w-full md:h-14 md:text-2xl"
+                  md:w-full md:h-12 md:text-lg"
         >
-            <article className="article w-30 flex flex-row ml-3 bg-white">
+            <article className="article w-24 flex flex-row ml-3 bg-white">
                 <div
                     className={`${topicTogleWrapperClasses} ${
                         topicTogle.togleValue ? isOnTogle : ''
@@ -43,7 +43,7 @@ export default function searchTogle() {
                     리프
                 </div>
             </article>
-            <article className="article w-40 flex flex-row pr-3 bg-white justify-end">
+            <article className="article w-40 flex flex-row md:pr-6 bg-white justify-end">
                 <div
                     className={`${newTogleWrapperClasses} ${
                         newTogle.togleValue ? isOnTogle : ''

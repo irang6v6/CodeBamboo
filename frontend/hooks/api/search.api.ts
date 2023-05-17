@@ -2,31 +2,33 @@ import { useSetRecoilState } from 'recoil';
 import authApi from './axios.authorization.instance';
 import { leafFoundState, topicFoundState } from '@/recoil/search';
 
-// const setTopicFound = useSetRecoilState(topicFoundState);
 // const setLeafFound = useSetRecoilState(leafFoundState);
 
-const searchTopicFn = async (userInput: any) => {
+const SearchTopicFn = async (userInput: any) => {
+    const setisTopicFound = useSetRecoilState(topicFoundState);
     if (!userInput) return;
     try {
         const response = await authApi.get(`topic/search?input=${userInput}`);
         return response.data;
     } catch (data: any) {
         // setIsFound(false);
-        // setTopicFound({ foundValue: false });
-        return data.response.data.message, false;
+        console.log('djfdkfjdfdjf');
+        setisTopicFound({ foundValue: false });
+        return false;
     }
 };
 
-const searchLeafFn = async (userInput: any) => {
+const SearchLeafFn = async (userInput: any) => {
+    const setLeafFound = useSetRecoilState(leafFoundState);
     if (!userInput) return;
     try {
         const response = await authApi.get(`leaf/search?input=${userInput}`);
         return response.data;
     } catch (data: any) {
-        console.log(data.response.data.message);
         // setIsFound(false);
-        return data.response.data.message, false;
+        setLeafFound({ foundValue: false });
+        return false;
     }
 };
 
-export { searchTopicFn, searchLeafFn };
+export { SearchTopicFn, SearchLeafFn };
