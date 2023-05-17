@@ -7,7 +7,7 @@ interface Props {
 export const UserTopicsList = ({ topics }: Props) => {
   return topics.map((topic: any, idx: number) => {
     return (
-      <div className="w-auto h-[90%]">
+      <div className="w-auto h-[90%]" key={idx}>
         <UserTopicListItem
           topic_id={topic.topic_id}
           needHelp={topic.needHelp}

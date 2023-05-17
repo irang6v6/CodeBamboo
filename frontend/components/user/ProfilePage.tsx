@@ -97,7 +97,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       if (window.confirm('닉네임 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch('user/' + userId, { nickname: watch('nickname') })
+            .patch('user', { nickname: watch('nickname') })
             .then((res) => res.data);
           setMyState({ ...myState, nickname: watch('nickname') });
           alert('닉네임 저장 완료!');
@@ -119,7 +119,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       if (window.confirm('자기소개 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch('user/' + userId, { introduce: watch })
+            .patch('user', { introduce: watch })
             .then((res) => res.data);
           setMyState({ ...myState, introduce: watch });
           alert('자기소개 저장 완료!');
@@ -388,7 +388,11 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             )}
             {menu === 'follow' && (
               <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
-                <UserBookmarkList bookmarks={bookmarks} />
+                <UserBookmarkList
+                  bookmarks={bookmarks}
+                  myPage={myPage}
+                  setBookmarks={setBookmarks}
+                />
               </article>
             )}
             {menu === 'following' && (

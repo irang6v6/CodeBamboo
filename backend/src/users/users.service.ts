@@ -156,37 +156,31 @@ export class UsersService {
   async getBookmarkLeafs(userId: number) {
     const existedUser = await this.isExistedUser(userId);
     if (existedUser) {
-      const userBookmark = await this.userRepository.findOne({
+      const bookmarks = await this.bookmarkRepository.find({
         where: {
-          user_id: userId,
+          user: { user_id: userId },
         },
-        relations: {
-          bookmarks: true,
-        },
+        relations: ['leaf', 'leaf.topic', 'leaf.codes'],
+        loadEagerRelations: false,
       });
-
-      const bookmarkList = userBookmark.bookmarks.map((obj) => {
-        return {
-          bookmark_id: obj.bookmark_id,
-          user_id: obj.user.user_id,
-          leaf: obj.leaf,
-          codes: obj.leaf.codes,
-        };
-      });
-
-      for (let i = 0; i < bookmarkList.length; i++) {
-        const leaf = await this.leafRepository.findOne({
-          where: { leaf_id: bookmarkList[i].leaf.leaf_id },
-          relations: { codes: true },
-          loadEagerRelations: true,
-        });
-        bookmarkList[i].leaf = leaf;
-      }
-      return bookmarkList;
+      return bookmarks;
     }
   }
 
-  // [7] 즐겨찾기 추가 및 제거 ok
+  // [7] 즐겨찾기한 리프의 메모 수정
+  async updateBookmarkMemo(
+    myUserId: number,
+    bookmarkId: number,
+    userInput: string,
+  ) {
+    const user = this.isExistedUser(myUserId);
+    if (user) {
+      await this.bookmarkRepository.update(bookmarkId, {
+        memo: userInput ? userInput : '',
+      });
+    }
+  }
+  // [8] 즐겨찾기 추가 및 제거 ok
   async addBookmarkLeaf(userId: number, leafId: number) {
     const existedUser = await this.isExistedUser(userId);
     const existedLeaf = await this.leafRepository.findOne({
@@ -206,6 +200,7 @@ export class UsersService {
         await this.bookmarkRepository.save({
           user: existedUser,
           leaf: existedLeaf,
+          memo: '',
         });
         messageUserDto.message = `${existedLeaf.leaf_id}번 리프 즐겨찾기 등록 성공`;
         return messageUserDto;
@@ -218,7 +213,7 @@ export class UsersService {
     }
   }
 
-  // [8] 리프 좋아요 추가 및 삭제 ok
+  // [9] 리프 좋아요 추가 및 삭제 ok
   async addLikeLeaf(userId: number, leafId: number) {
     const existedUser = await this.isExistedUser(userId);
     const existedLeaf = await this.leafRepository.findOne({
@@ -274,7 +269,7 @@ export class UsersService {
     }
   }
 
-  // [9] 유저 id로 정보 조회 ok
+  // [10] 유저 id로 정보 조회 ok
   async getUser(myUserId: number, userId: number) {
     const user = await this.isExistedUser(userId);
     // isFollow
@@ -305,7 +300,7 @@ export class UsersService {
     };
   }
 
-  // [9-2] 유효한 유저 아이디인지 확인 ok
+  // [10-2] 유효한 유저 아이디인지 확인 ok
   async isExistedUser(userId: number) {
     const isExistedUser = await this.userRepository.findOneBy({
       user_id: userId,
@@ -315,7 +310,7 @@ export class UsersService {
     return isExistedUser;
   }
 
-  // [10] 유저 정보 수정 ok
+  // [11] 유저 정보 수정 ok
   // 닉네임, 이미지경로, 자기소개만 수정 가능
   async update(userId: number, userInput: any) {
     const user = await this.isExistedUser(userId);
