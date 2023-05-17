@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { userDefault, userState } from '@/recoil/user';
 import useIsMobile from '@/hooks/useIsMobile';
 import authApi from '@/hooks/api/axios.authorization.instance';
@@ -19,26 +19,24 @@ const cntDiv = (isMobile: boolean, user: any) => {
   return (
     <>
       {isMobile ? (
-        <>
-        {/* <h1>아이콘</h1> */}
-        </>
+        <>{/* <h1>아이콘</h1> */}</>
       ) : (
         <div className="grid grid-cols-2 gap-2 mx-0 my-2 h-[30%] bg-transparent ">
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.followersCnt}</span>
-            <span className='text-gray-400'>Follwers</span> 
+            <span className="text-xl font-bold">{user.followersCnt}</span>
+            <span className="text-gray-400">Follwers</span>
           </article>
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.topicsCnt}</span>
-            <span className='text-gray-400'>Topics</span> 
+            <span className="text-xl font-bold">{user.topicsCnt}</span>
+            <span className="text-gray-400">Topics</span>
           </article>
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.leafsCnt}</span>
-            <span className='text-gray-400'>Leafs</span> 
+            <span className="text-xl font-bold">{user.leafsCnt}</span>
+            <span className="text-gray-400">Leafs</span>
           </article>
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.bookmarksCnt}</span>
-            <span className='text-gray-400'>Bookmarks</span> 
+            <span className="text-xl font-bold">{user.bookmarksCnt}</span>
+            <span className="text-gray-400">Bookmarks</span>
           </article>
         </div>
       )}
@@ -66,12 +64,12 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   const profileImgRef = useRef<HTMLInputElement>(null);
 
   // 프로필 이미지 업로드
-  const handleFileUpload = async(event:any)=>{
+  const handleFileUpload = async (event: any) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
       // console.log(file)
-      const formData = new FormData()
-      formData.append('profileImg', file)
+      const formData = new FormData();
+      formData.append('profileImg', file);
       try {
         const newProfileImg = await authApi
           .patch('user', formData)
@@ -82,18 +80,20 @@ const ProfilePage = ({ userId, myPage }: Props) => {
         console.error(error);
       }
     }
-  }
+  };
 
   // 팔로우 등록, 해제
-  const followMutation = useMutation(()=>authApi.post('user/follow', {userId:user.user_id}), {
-    onSuccess:(data)=>{
-      console.log(data.data)
-    },
-    onMutate:()=>{
-      setIsFollowed(prev=>!prev)
+  const followMutation = useMutation(
+    () => authApi.post('user/follow', { userId: user.user_id }),
+    {
+      onSuccess: (data) => {
+        console.log(data.data);
+      },
+      onMutate: () => {
+        setIsFollowed((prev) => !prev);
+      },
     }
-  })
-
+  );
 
   // 닉네임 useForm 인스턴스 생성
   const {
@@ -116,8 +116,8 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     onSuccess: (data) => {
       console.log('쿼리 클라이언트로부터 유저정보를 최신화합니다 : ', data);
       setUser(data);
-      if(!myPage) {
-        setIsFollowed(data.isFollow) // 팔로우 상태를 서버 스테이트와 동기화
+      if (!myPage) {
+        setIsFollowed(data.isFollow); // 팔로우 상태를 서버 스테이트와 동기화
       }
     },
   });
@@ -274,9 +274,14 @@ const ProfilePage = ({ userId, myPage }: Props) => {
              md:w-[7rem] md:bottom-20 md:aspect-square md:max-w-[50%]
              md:max-h-[7rem]
             "
-             onClick={()=>profileImgRef?.current?.click()}
+              onClick={() => profileImgRef?.current?.click()}
             />
-            <input type='file' className='hidden' ref={profileImgRef} onChange={handleFileUpload}/>
+            <input
+              type="file"
+              className="hidden"
+              ref={profileImgRef}
+              onChange={handleFileUpload}
+            />
             <div
               className="absolute bottom-6 font-bold text-sm text-center 
                md:bottom-10 md:text-base
@@ -430,7 +435,11 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             )}
             {menu === 'follow' && (
               <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
-                <UserBookmarkList bookmarks={bookmarks} />
+                <UserBookmarkList
+                  bookmarks={bookmarks}
+                  myPage={myPage}
+                  setBookmarks={setBookmarks}
+                />
               </article>
             )}
             {menu === 'following' && (
