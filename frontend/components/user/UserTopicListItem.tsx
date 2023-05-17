@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import HandImage from '@/public/images/hand.png';
+import HandImage from '@/public/images/hand-panda.png';
 import { useRouter } from 'next/router';
 import { TopicItemRendering } from '../topic/TopicItemRendering';
 
