@@ -1,4 +1,9 @@
-import { Injectable, Inject, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { Follow } from './entities/follow.entity';
 import { Repository, Like, Equal } from 'typeorm';
@@ -32,7 +37,7 @@ export class UsersService {
     @Inject('TOPIC_REPOSITORY')
     private topicRepository: Repository<Topic>,
 
-    private cloudStorageService: CloudStorageService
+    private cloudStorageService: CloudStorageService,
   ) {}
 
   // [#] 테스트용 코드
@@ -320,39 +325,41 @@ export class UsersService {
 
   // [10] 유저 정보 수정 ok
   // 닉네임, 이미지경로, 자기소개만 수정 가능
-  async update(id: number, userInput: any , profileImg) {
+  async update(id: number, userInput: any, profileImg) {
     const user = await this.isExistedUser(id);
-    if (!user) throw new InternalServerErrorException('존재하지 않는 유저입니다.')
+    if (!user)
+      throw new InternalServerErrorException('존재하지 않는 유저입니다.');
 
     if (profileImg) {
       // 기존 파일 삭제
       const fileName = user.image.split('/').pop(); // extract file name from URL
-      console.log('원래 프로필 이미지 : ', fileName)
+      console.log('원래 프로필 이미지 : ', fileName);
       try {
         await this.cloudStorageService.removeFile(fileName);
-      } finally {
-        // 유저가 업로드한 이미지 저장
-        const file = await this.cloudStorageService.uploadFile(user.nickname, profileImg, '');
-        userInput.image = file.publicUrl;
-        console.log('새 프로필 이미지 : ', userInput.image)
-      }
+      } catch (error) {}
+
+      // 유저가 업로드한 이미지 저장
+      const file = await this.cloudStorageService.uploadFile(
+        user.nickname,
+        profileImg,
+        '',
+      );
+      userInput.image = file.publicUrl;
+      console.log('새 프로필 이미지 : ', userInput.image);
     }
 
     await this.userRepository.update(id, {
-      nickname: userInput.nickname
-        ? userInput.nickname
-        : user.nickname,
+      nickname: userInput.nickname ? userInput.nickname : user.nickname,
       image: userInput.image ? userInput.image : user.image,
-      introduce: userInput.introduce
-        ? userInput.introduce
-        : user.introduce,
+      introduce: userInput.introduce ? userInput.introduce : user.introduce,
     });
 
     return {
-      message:'회원정보 수정 성공',
-      data:{
-        newProfileImg:userInput.image || '프로필 이미지를 수정하지 않았습니다.'
-      }
-    }
+      message: '회원정보 수정 성공',
+      data: {
+        newProfileImg:
+          userInput.image || '프로필 이미지를 수정하지 않았습니다.',
+      },
+    };
   }
 }

@@ -25,10 +25,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   // [#] 테스트용 코드
-  @Get()
-  getAll(): Promise<SimpleUserDto[]> {
-    return this.usersService.getAll();
-  }
+  // @Get()
+  // getAll(): Promise<SimpleUserDto[]> {
+  //   return this.usersService.getAll();
+  // }
 
   // [1] 유저 nickname으로 정보 조회 ok
   @Get('search')
