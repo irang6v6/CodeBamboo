@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { TopicItemInF } from './TopicInterface';
 import Image from 'next/image';
-import HandImage from '@/public/images/hand.png';
+import HandImage from '@/public/images/hand-panda.png';
 import { useRouter } from 'next/router';
 import { TopicItemRendering } from './TopicItemRendering';
 
@@ -23,8 +23,12 @@ export const TopicItem = ({
                   h-[12%] w-[10%] top-[63%] right-[61%]
                   md:h-12 md:w-12 md:-top-4 md:-right-3"
     >
-      <div className="animate-ping absolute h-full w-full rounded-full bg-gray-400 opacity-75"></div>
-      <Image className="absolute h-full w-full" src={HandImage} alt="hand" />
+      <div className=" absolute h-full w-full rounded-full"></div>
+      <Image
+        className=" animate-rotation absolute h-full w-full"
+        src={HandImage}
+        alt="hand"
+      />
     </div>
   );
 
@@ -54,7 +58,7 @@ export const TopicItem = ({
         <div className="pl-[5%] w-[65%] flex flex-col justify-between">
           <div
             className="bg-white text-xl h-[50%] rounded-xl p-[2%] px-[4%] overflow-hidden pt-[7px]
-                        md:hover:text-green-300 md:hover:transition"
+                        md:hover:text-bamboo md:hover:transition"
             title={`${rootLeaf.title}`}
           >
             <Link href={`/topics/${topic_id}`}>{rootLeaf.title}</Link>

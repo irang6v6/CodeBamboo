@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { loginModalState, userDefault, userState } from '@/recoil/user';
@@ -16,6 +16,8 @@ interface Props {
 export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
   const user = useRecoilValue(userState);
   const setIsOpen = useSetRecoilState(loginModalState);
+  const [isCreateHovered, setIsCreateHovered] = useState(false);
+  const [isSearchHovered, setIsSearchHovered] = useState(false);
   const router = useRouter();
 
   const logoutMutaion = useLogout();
@@ -37,29 +39,49 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
           href={'/topics'}
           className="text-xl h-fit flex items-center justify-center mt-11
                     md:mt-0 md:justify-between md:w-[7.5rem]"
+          onMouseEnter={() => setIsCreateHovered(true)}
+          onMouseLeave={() => setIsCreateHovered(false)}
         >
           <img
-            src="/images/icons/more.png"
+            src={
+              isCreateHovered
+                ? '/images/icons/more_green.png'
+                : '/images/icons/more.png'
+            }
             className="hidden 
                                     md:block md:mt-8 md:h-9"
           />
-          <div className="md:animate-fadein md:mt-8 md:h-9 md:text-xl md:tracking-wider">
+          <div
+            className={`${isCreateHovered ? 'md:text-bamboo' : ''}
+              md:animate-fadein md:mt-8 md:h-9 md:text-xl md:tracking-wider `}
+          >
             <span className="md:text-2xl md:font-semibold">C</span>
             reate
           </div>
         </Link>
+
         <Link
           href={'/search'}
           className="text-xl h-fit flex items-center justify-center mt-11
                     md:mt-0 md:justify-between md:w-[7.5rem] md:box-content md:border-none"
+          onMouseEnter={() => setIsSearchHovered(true)}
+          onMouseLeave={() => setIsSearchHovered(false)}
         >
           <img
-            src="/images/icons/search_icon.png"
+            src={
+              isSearchHovered
+                ? '/images/icons/search_icon_green.png'
+                : '/images/icons/search_icon.png'
+            }
             className="hidden 
                                     md:block md:mt-8 md:h-9"
           />
-          <div className="md:animate-fadein md:mt-8 md:h-9 md:text-xl md:tracking-wider">
-            <span className="md:text-2xl md:font-semibold">S</span>
+          <div
+            className={`${
+              isSearchHovered ? 'text-bamboo' : ''
+            } md:animate-fadein md:mt-8 md:h-9 md:text-xl md:tracking-wider`}
+          >
+            <span className="md:text-2xl md:font-semibold ">S</span>
             earch
           </div>
         </Link>
