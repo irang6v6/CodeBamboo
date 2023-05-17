@@ -176,18 +176,18 @@ export class UsersService {
   }
 
   // [7] 즐겨찾기한 리프의 메모 수정
-  async updateBookmarkMemo(
-    myUserId: number,
-    bookmarkId: number,
-    userInput: string,
-  ) {
-    const user = this.isExistedUser(myUserId);
-    if (user) {
-      await this.bookmarkRepository.update(bookmarkId, {
-        memo: userInput ? userInput : '',
-      });
-    }
-  }
+  // async updateBookmarkMemo(
+  //   myUserId: number,
+  //   bookmarkId: number,
+  //   userInput: string,
+  // ) {
+  //   const user = this.isExistedUser(myUserId);
+  //   if (user) {
+  //     await this.bookmarkRepository.update(bookmarkId, {
+  //       memo: userInput ? userInput : '',
+  //     });
+  //   }
+  // }
   // [8] 즐겨찾기 추가 및 제거 ok
   async addBookmarkLeaf(userId: number, leafId: number) {
     const existedUser = await this.isExistedUser(userId);

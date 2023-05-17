@@ -17,10 +17,7 @@ export class Bookmark {
 
   @CreateDateColumn()
   creation_time: Timestamp;
-
-  @Column({ nullable: true })
-  memo: string;
-
+  
   @ManyToOne(() => User, (user) => user.bookmarks, {
     onDelete: 'CASCADE',
     eager: true,
