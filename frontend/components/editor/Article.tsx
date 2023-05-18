@@ -2,11 +2,12 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { articleState, codeState, selectedLeafState } from '@/recoil/topic';
+import { LeafState, articleState, codeState, selectedLeafState } from '@/recoil/topic';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import authApi from '@/hooks/api/axios.authorization.instance';
 import { GrFlagFill } from 'react-icons/gr';
 import { loginModalState, userState } from '@/recoil/user';
+import { queryTopicDetailFn } from '@/pages/topics/[topicId]';
 
 interface Props {}
 
@@ -37,13 +38,23 @@ const queryLeafEditFn = async (leafId:number|null, body: any) => {
   }
 };
 
+const queryLeafDeleteFn = async (leafId:number|null) => {
+  try {
+    const response = await authApi.patch(`leaf/invalidLeaf/${leafId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const Article = ({}: Props) => {
   const router = useRouter();
   const topicId = router.query.topicId;
   const [article, setArticle] = useRecoilState(articleState);
   const user = useRecoilValue(userState);
   const code = useRecoilValue(codeState);
-  const selectedLeaf = useRecoilValue(selectedLeafState);
+  const setLeafs = useSetRecoilState(LeafState)
+  const [selectedLeaf, setSelectedLeaf] = useRecoilState(selectedLeafState);
   const setIsOpen = useSetRecoilState(loginModalState);
   const [localArticle, setLocalArticle] = useState(article);
   const [needHelp, setNeedHelp] = useState(false);
@@ -66,8 +77,17 @@ export const Article = ({}: Props) => {
   });
 
   const mutateLeaf = useMutation((body: any) => queryLeafFn(body), {
-    onSuccess: (topicId) => {
-      router.push(`/topics/${topicId}`);
+    onSuccess: async (data) => {
+      try {
+        const response = await queryTopicDetailFn(topicId);
+        setLeafs(response?.leafs);
+        setSelectedLeaf({
+          user_id: data?.user.user_id,
+          leaf_id: data?.leaf_id,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
@@ -77,12 +97,40 @@ export const Article = ({}: Props) => {
     },
   });
 
+  const mutateLeafDelete = useMutation(() => queryLeafDeleteFn(selectedLeaf.leaf_id), {
+    onSuccess: async (data) => {
+      try {
+        const response = await queryTopicDetailFn(topicId);
+        setLeafs(response?.leafs);
+        setSelectedLeaf({
+          user_id: data?.bestLeaf.user_id,
+          leaf_id: data?.bestLeaf.leaf_id,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  })
+
+  // const updateTopic = useQuery(['topic', topicId], () => queryTopicDetailFn(topicId), {
+  //   onSuccess: (data) => {
+  //     setLeafs(data?.leafs);
+  //   },
+  //   refetchOnWindowFocus: false,
+  // });
+
   const EditLeaf = () => {
     const body = {
       ...watch(),
       codes:code,
     }
     mutateLeafEdit.mutate(body)
+  }
+
+  const DeleteLeaf = () => {
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      mutateLeafDelete.mutate()
+    }
   }
 
   useEffect(() => {
@@ -166,6 +214,12 @@ export const Article = ({}: Props) => {
               {!needHelp ? `Help!` : <GrFlagFill />}
             </div>
           )}
+          { selectedLeaf.user_id === user.user_id &&
+            <div 
+              className="bamboo-button bg-rose-500 hover:bg-red-600"
+              onClick={()=>DeleteLeaf()}>
+              Delete
+            </div> }
           { selectedLeaf.user_id === user.user_id &&
             <div 
               className="bamboo-button"

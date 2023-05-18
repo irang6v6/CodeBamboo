@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { LeafState } from '@/recoil/topic';
 import { LeafItem } from './LeafItem';
+import { LogTree } from './LogTree';
 import { GrTree } from 'react-icons/gr';
 import useIsMobile from '@/hooks/useIsMobile';
 
@@ -10,6 +11,7 @@ export const Log = () => {
   const [isLogOpen, setIsLogOpen] = useState(false);
   const isMobile = useIsMobile();
   const [isTimeline, setIsTimeline] = useState(true);
+  const [isTreeOpen, setIsTreeOpen] = useState(false);
 
   useEffect(() => {
     if (leafs) {
@@ -28,11 +30,16 @@ export const Log = () => {
   const LeafItems = () => {
     return (
       <div
-        className="bg-slate-400 flex flex-col z-20 h-full overflow-y-auto
+        className="bg-slate-400 flex flex-col z-20 h-full overflow-y-auto scrollbar-hide
                   absolute left-0 w-3/5 
                   md:static md:w-full md:max-w-xs"
       >
-        <div className="flex flex-row self-end mr-3 mt-4 cursor-pointer gap-5">
+        <div className="flex flex-row mr-3 mt-4 cursor-pointer gap-5">
+          <span
+            className='mr-auto ml-3'
+            onClick={() => setIsTreeOpen(true)}>
+            로그 트리
+          </span>
           <span
             className={`border-b-4 ${
               isTimeline ? 'font-semibold border-lime-300' : 'border-none'
@@ -51,7 +58,7 @@ export const Log = () => {
           </span>
         </div>
         {leafs?.map((e) => (
-          <LeafItem key={e.leaf_id} leaf={e} />
+          <LeafItem key={e.leaf_id} leaf={e} isTreeOpen={false} />
         ))}
       </div>
     );
@@ -78,13 +85,19 @@ export const Log = () => {
             <GrTree className="text-[3rem] text-white" />
           </div>
         ) : (
-          <div>
-            <LeafItems />
-            {LogOpenBackground}
-          </div>
+          <>
+            {!isTreeOpen ? (
+              <>
+                <LeafItems />
+                {LogOpenBackground}
+              </>
+            ) : (
+              <LogTree setIsTreeOpen={setIsTreeOpen}/>
+            )}
+          </>
         )
       ) : (
-        <LeafItems />
+        <>{!isTreeOpen ? <LeafItems /> : <LogTree setIsTreeOpen={setIsTreeOpen} />}</>
       )}
     </>
   );

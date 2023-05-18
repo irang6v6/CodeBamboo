@@ -43,21 +43,22 @@ export const articleState = atom<ArticleObject>({
 });
 
 export interface LeafObject {
-  leaf_id: number;
-  nickname: string;
-  title: string;
-  content: string;
-  step: number;
-  ref_order: number;
-  parent_leaf_id: number;
-  exportCnt: number;
-  likeCnt: number;
-  type: number;
-  is_root: boolean;
   codes: CodeObject[];
-  user_id: number;
-  isLiked: boolean;
+  content: string;
+  exportCnt: number;
   isBookmarked: boolean;
+  isLiked: boolean;
+  is_deleted: boolean;
+  is_root: boolean;
+  leaf_id: number;
+  likeCnt: number;
+  nickname: string;
+  parent_leaf_id: number;
+  ref_order: number;
+  step: number;
+  title: string;
+  type: number;
+  user_id: number;
 }
 
 export const LeafState = atom<LeafObject[]>({
