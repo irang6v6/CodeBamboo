@@ -15,7 +15,7 @@ export const UserBookmarkListItem = ({ topic_id, leaf_id, codes }: Props) => {
   return (
     <div
       className={`relative bg-gray-100 shadow-lg flex flex-col items-center justify-between rounded-xl shrink-0 p-[5%]
-                    w-[94vw] h-[40vh] mx-[3%]
+                    h-[40vh] mx-[3%]
                     md:w-full md:h-full md:hover:relative md:hover:scale-110 md:transition`}
     >
       <div

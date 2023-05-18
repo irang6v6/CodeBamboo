@@ -423,12 +423,13 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           "
           >
             {menu === 'topics' && (
-              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
+              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 
+              grid grid-cols-1 md:grid-cols-2 gap-5 px-5 overflow-y-auto scrollbar-hide pt-5">
                 <UserTopicsList topics={topics} />
               </article>
             )}
             {menu === 'follow' && (
-              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 px-5 overflow-y-auto">
+              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-1 md:grid-cols-2 gap-5 md:px-5 overflow-y-auto scrollbar-hide pt-5">
                 <UserBookmarkList bookmarks={bookmarks} />
               </article>
             )}
