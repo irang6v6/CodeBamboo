@@ -8,6 +8,7 @@ import authApi from '@/hooks/api/axios.authorization.instance';
 import { GrFlagFill } from 'react-icons/gr';
 import { loginModalState, userState } from '@/recoil/user';
 import { queryTopicDetailFn } from '@/pages/topics/[topicId]';
+import Dialog from '../common/Dialog';
 
 interface Props {}
 
@@ -49,7 +50,7 @@ const queryLeafDeleteFn = async (leafId:number|null) => {
 
 export const Article = ({}: Props) => {
   const router = useRouter();
-  const topicId = router.query.topicId;
+  const topicId = router.query.topicId as string
   const [article, setArticle] = useRecoilState(articleState);
   const user = useRecoilValue(userState);
   const [code, setCode] = useRecoilState(codeState);
@@ -57,6 +58,9 @@ export const Article = ({}: Props) => {
   const [selectedLeaf, setSelectedLeaf] = useRecoilState(selectedLeafState);
   const setIsOpen = useSetRecoilState(loginModalState);
   const [needHelp, setNeedHelp] = useState(false);
+  const [gptLoading, setGptLoading] = useState(false)
+  const [gptFail, setGptFail] = useState(false)
+
   const {
     register,
     formState: { errors },
@@ -172,32 +176,48 @@ export const Article = ({}: Props) => {
     },
     [setArticle]
   );
-
+  
+  // gpt 호출
   const userPrompt = article.content
-  console.log(userPrompt)
-  const servePromptMutation = useMutation(()=>authApi.post('user/gpt/call', {userPrompt}), {
+  const prevCode = ''
+  const servePromptMutation = useMutation(()=>authApi.post('user/gpt/call', {userPrompt, prevCode:prevCode||null}), {
     onSuccess:(data)=>{
-      const rst = data.data.answer
-      const convertedData = JSON.parse(rst)
-      const gptCode = []
-
-      for (const key in convertedData) {
-        const value = convertedData[key]
-        const codeForm = {
-          code_id: null,
-          language: key,
-          content: value
+        const rst = data.data.answer
+        console.log('파싱 전 : ', rst)
+        const json = JSON.parse(rst)
+        console.log('파싱 후 : ', json)
+        
+        const gptCode = []
+  
+        for (const key in json) {
+          const value = json[key]
+          const codeForm = {
+            code_id: null,
+            language: key,
+            content: value
+          }
+          gptCode.push(codeForm)
         }
-        gptCode.push(codeForm)
-      }
-      setCode(gptCode)
+        console.log(gptCode)
+        setCode(gptCode)
+        console.log('code: ', code)
+        // setTimeout(()=>{setGptFail(true)},1500)
+        // setTimeout(()=>{setGptFail(false)},1500)
     },
   })
-  console.log(servePromptMutation)
   const handleServePrompt = ()=>{
     servePromptMutation.mutate()
     // e.preventDefault()
   }
+
+  useEffect(()=>{
+    if (servePromptMutation.isLoading) {
+      setGptLoading(true)
+    }
+    if (!servePromptMutation.isLoading) {
+      setTimeout(()=>setGptLoading(false), 1000) 
+    }
+  }, [servePromptMutation.isLoading])
 
   return (
     <div className="flex p-4 bg-inherit h-1/2">
@@ -266,6 +286,8 @@ export const Article = ({}: Props) => {
           </button>
         </div>
       </form>
+      {gptLoading && <Dialog fail={false} context='컴포넌트를 작성하는 중입니다...'/>}
+      {gptFail && <Dialog fail={true} context='조금 뒤에 다시 시도해주세요.'/>}
     </div>
   );
 };

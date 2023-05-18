@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Toss Product Sans';
+    font-family: 'Toss Product Sans', sans-serif;
 }
 
 .CodeMirror {

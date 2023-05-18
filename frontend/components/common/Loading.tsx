@@ -1,8 +1,6 @@
 import React from 'react';
 
-interface Props {}
-
-export const Loading = ({}: Props) => {
+export const Loading = () => {
 
   return (
     <img src="/images/loading.gif" alt="loading_panda" />

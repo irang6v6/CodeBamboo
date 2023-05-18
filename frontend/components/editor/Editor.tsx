@@ -55,6 +55,13 @@ export const Editor = () => {
     setCode(updatedCode);
   };
 
+  useEffect(()=>{
+    const selectedCode = code.find(
+      (e) => e.language === selectedLanguage
+    )?.content;
+    setInitialCode(selectedCode)
+  },[code])
+
   const Tabs = () => {
     const languageOrder = ['HTML', 'CSS', 'JavaScript'];
     const filteredCode = code || [];

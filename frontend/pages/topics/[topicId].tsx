@@ -13,7 +13,7 @@ import Editor from '@/components/editor/Editor';
 import { Log } from '@/components/editor/Log';
 import authApi from '@/hooks/api/axios.authorization.instance';
 
-export const queryTopicDetailFn = async (topicId: any) => {
+export const queryTopicDetailFn = async (topicId: string) => {
   if (!topicId) return null;
   try {
     const response = await authApi.get(`topic/${topicId}`);
@@ -24,11 +24,9 @@ export const queryTopicDetailFn = async (topicId: any) => {
   }
 };
 
-interface Props {}
-
-export const TopicDetail = ({}: Props) => {
+export const TopicDetail = () => {
   const router = useRouter();
-  const topicId = router.query.topicId;
+  const topicId = router.query.topicId as string;
   const setCode = useSetRecoilState(codeState);
   const setArticle = useSetRecoilState(articleState);
   const setSelectedLeaf = useSetRecoilState(selectedLeafState);
@@ -55,6 +53,7 @@ export const TopicDetail = ({}: Props) => {
       refetchOnWindowFocus: false,
     }
   );
+
   if (isLoading) {
     return (
       <div className="flex flex-col w-full h-full justify-center items-center bg-[#69AF9A]">

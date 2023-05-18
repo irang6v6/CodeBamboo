@@ -14,17 +14,17 @@ export const codeState = atom<CodeObject[]>({
     {
       code_id: null,
       language: 'HTML',
-      content: '',
+      content: null,
     },
     {
       code_id: null,
       language: 'CSS',
-      content: '',
+      content: null,
     },
     {
       code_id: null,
       language: 'JavaScript',
-      content: '',
+      content: null,
     },
   ],
 });
