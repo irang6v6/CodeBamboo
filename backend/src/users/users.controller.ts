@@ -67,15 +67,15 @@ export class UsersController {
   }
 
   // [7] 즐겨찾기한 리프의 메모 수정
-  // @UseGuards(JwtAuthGuard)
-  // @Patch('bookmark')
-  // updateBookmarkMemo(@Req() req: Request, @Body() reqBody: any) {
-  //   return this.usersService.updateBookmarkMemo(
-  //     req.user['user_id'],
-  //     reqBody.bookmarkId,
-  //     reqBody.userInput,
-  //   );
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Patch('bookmark')
+  updateBookmarkMemo(@Req() req: Request, @Body() reqBody: any) {
+    return this.usersService.updateBookmarkMemo(
+      req.user['user_id'],
+      reqBody.bookmarkId,
+      reqBody.userInput,
+    );
+  }
 
   // [8] 즐겨찾기 추가 및 제거 ok
   @UseGuards(JwtAuthGuard)

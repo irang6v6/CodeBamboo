@@ -15,6 +15,7 @@ import { LikeEntity } from './entities/like.entity';
 import { searchBestLeafId } from './utils/utils';
 import { Topic } from 'src/topics/entities/topic.entity';
 import { CloudStorageService } from 'src/core/services/cloud-stroage-service';
+import { ExceptionMessages } from '@google-cloud/storage/build/src/storage';
 
 @Injectable()
 export class UsersService {
@@ -176,18 +177,24 @@ export class UsersService {
   }
 
   // [7] 즐겨찾기한 리프의 메모 수정
-  // async updateBookmarkMemo(
-  //   myUserId: number,
-  //   bookmarkId: number,
-  //   userInput: string,
-  // ) {
-  //   const user = this.isExistedUser(myUserId);
-  //   if (user) {
-  //     await this.bookmarkRepository.update(bookmarkId, {
-  //       memo: userInput ? userInput : '',
-  //     });
-  //   }
-  // }
+  async updateBookmarkMemo(
+    myUserId: number,
+    bookmarkId: number,
+    userInput: string,
+  ) {
+    const user = await this.isExistedUser(myUserId);
+    const validBookmarkId = await this.bookmarkRepository.findOneBy({
+      bookmark_id: bookmarkId,
+    });
+    if (!validBookmarkId)
+      new NotFoundException(`not found bookmark id: ${bookmarkId}`);
+    if (user) {
+      await this.bookmarkRepository.update(bookmarkId, {
+        memo: userInput ? userInput : 'memo',
+      });
+    }
+  }
+
   // [8] 즐겨찾기 추가 및 제거 ok
   async addBookmarkLeaf(userId: number, leafId: number) {
     const existedUser = await this.isExistedUser(userId);
@@ -208,7 +215,7 @@ export class UsersService {
         await this.bookmarkRepository.save({
           user: existedUser,
           leaf: existedLeaf,
-          memo: '',
+          memo: 'memo',
         });
         messageUserDto.message = `${existedLeaf.leaf_id}번 리프 즐겨찾기 등록 성공`;
         return messageUserDto;

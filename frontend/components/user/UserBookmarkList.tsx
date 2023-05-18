@@ -8,9 +8,9 @@ interface Props {
 
 export const UserBookmarkList = ({
   bookmarks,
-}: // myPage,
-// setBookmarks,
-Props) => {
+  myPage,
+  setBookmarks,
+}: Props) => {
   return bookmarks.map((bookmark: any, idx: number) => {
     return (
       <div className="w-auto h-[90%]" key={idx}>
@@ -20,9 +20,9 @@ Props) => {
           creation_time={bookmark.leaf.creation_time}
           leaf_id={bookmark.leaf.leaf_id}
           codes={bookmark.leaf.codes}
-          // memo={bookmark.memo}
-          // myPage={myPage}
-          // setBookmarks={setBookmarks}
+          memo={bookmark.memo}
+          myPage={myPage}
+          setBookmarks={setBookmarks}
           key={idx}
         />
       </div>
