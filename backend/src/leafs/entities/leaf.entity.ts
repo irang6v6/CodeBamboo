@@ -47,6 +47,9 @@ export class Leaf {
   @Column({ default: 0 })
   parent_leaf_id: number;
 
+  @Column({ type: 'boolean', default: false })
+  is_deleted: boolean;
+
   @ManyToOne(() => User, (user) => user.leafs, {
     eager: true,
   })

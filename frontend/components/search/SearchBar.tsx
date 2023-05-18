@@ -49,6 +49,7 @@ function SearchBar() {
                 onChange={handleChange}
                 onKeyUp={handleKeyPress}
                 value={`${searchInput}`}
+                placeholder='title, nickname으로 검색 가능합니다.'
                 autoFocus
             ></input>
         </div>
