@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { CodeInF } from './TopicInterface';
 import { useRouter } from 'next/router';
 
@@ -9,7 +9,6 @@ interface Props {
 
 export const TopicItemRendering = ({ codes, topic_id }: Props) => {
   const router = useRouter();
-  const [src, setSrc] = useState('');
   const html = codes.find((e) => e.language === 'HTML')?.content;
   const css = codes.find((e) => e.language === 'CSS')?.content;
   const js = codes.find((e) => e.language === 'JavaScript')?.content;
@@ -36,19 +35,11 @@ export const TopicItemRendering = ({ codes, topic_id }: Props) => {
     </html>
   `;
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSrc(srcCode);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, [srcCode]);
-
   return (
-    <div className="h-full w-full scrollBar-hide">
+    <div className="h-full w-full scrollbar-hide">
       <iframe
         className="h-full w-full"
-        srcDoc={src}
+        srcDoc={srcCode}
         sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-scripts allow-top-navigation-by-user-activation allow-downloads allow-presentation"
         allow="accelerometer; camera; encrypted-media; display-capture; geolocation; gyroscope; microphone; midi; clipboard-read; clipboard-write"
         // allowTransparency={true} // TS 에러가 나거나 콘솔에 뜸

@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  Column,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Leaf } from 'src/leafs/entities/leaf.entity';
@@ -16,6 +17,9 @@ export class Bookmark {
 
   @CreateDateColumn()
   creation_time: Timestamp;
+
+  @Column({ nullable: true, default: 'memo' })
+  memo: string;
 
   @ManyToOne(() => User, (user) => user.bookmarks, {
     onDelete: 'CASCADE',

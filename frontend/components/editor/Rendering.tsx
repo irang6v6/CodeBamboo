@@ -5,9 +5,9 @@ import { codeState } from '@/recoil/topic';
 export const Rendering = () => {
   const code = useRecoilValue(codeState);
   const [src, setSrc] = useState('');
-  const html = code.find((e) => e.language === 'HTML')?.content;
-  const css = code.find((e) => e.language === 'CSS')?.content;
-  const js = code.find((e) => e.language === 'JavaScript')?.content;
+  const html = code?.find((e) => e.language === 'HTML')?.content;
+  const css = code?.find((e) => e.language === 'CSS')?.content;
+  const js = code?.find((e) => e.language === 'JavaScript')?.content;
 
   const srcCode = `
     <html>
@@ -18,7 +18,6 @@ export const Rendering = () => {
         height: 100%;
         margin: 0;
         padding: 0;
-        overflow: hidden; 
       }
       body{
         display: flex;
@@ -40,7 +39,7 @@ export const Rendering = () => {
   }, [srcCode]);
 
   return (
-    <div className="h-full w-full border md:h-1/2">
+    <div className="h-1/2 w-full border">
       <iframe
         className="h-full w-full"
         srcDoc={src}

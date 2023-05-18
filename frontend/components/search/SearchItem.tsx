@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { TopicItemInF } from '../topic/TopicInterface';
 import Image from 'next/image';
-import HandImage from '@/public/images/hand.png';
+import HandImage from '@/public/images/hand-panda.png';
 import { useRouter } from 'next/router';
 import { TopicItemRendering } from '../topic/TopicItemRendering';
 
@@ -23,9 +23,9 @@ export const SearchItem = ({
                   h-[12%] w-[10%] top-[63%] right-[61%]
                   md:h-12 md:w-12 md:-top-4 md:-right-3"
         >
-            <div className="animate-ping absolute h-full w-full rounded-full bg-gray-400 opacity-75"></div>
+            <div className=" absolute h-full w-full rounded-full"></div>
             <Image
-                className="absolute h-full w-full"
+                className="animate-rotation absolute h-full w-full"
                 src={HandImage}
                 alt="hand"
             />
@@ -34,13 +34,13 @@ export const SearchItem = ({
 
     return (
         <div
-            className={`relative bg-gray-300 shadow-lg flex flex-col items-center justify-evenly rounded-xl shrink-0
+            className={`relative bg-gray-100 shadow-lg flex flex-col items-center justify-evenly rounded-xl shrink-0
                     w-[94vw] h-[40vh] mx-[3%] my-4
                     md:w-[90%] md:h-80 md:mx-[4%] md:mt-[8%] md:hover:relative md:hover:scale-110 md:transition`}
         >
             {needHelp && needHelpPing}
             <div
-                className="relative bg-white w-[90%] h-[60%] rounded-xl p-[3%] overflow-hidden hover:cursor-pointer"
+                className="relative bg-white w-[90%] h-[60%] rounded-xl overflow-hidden hover:cursor-pointer"
                 onClick={() => router.push(`/topics/${topic_id}`)}
             >
                 <div className="absolute top-0 left-0 w-full h-full bg-transparent z-40"></div>
@@ -61,14 +61,14 @@ export const SearchItem = ({
                 <div className="pl-[5%] w-[65%] flex flex-col justify-between">
                     <div
                         className="bg-white text-xl h-[50%] rounded-xl p-[2%] overflow-hidden pt-[7px]
-                        md:hover:text-green-300 md:hover:transition"
+                        md:hover:text-bamboo md:hover:transition"
                         title={`${rootLeaf.title}`}
                     >
                         <Link href={`/topics/${topic_id}`}>
                             {rootLeaf.title}
                         </Link>
                     </div>
-                    <div className="bg-white text-base h-auto rounded-lg p-[1%]">
+                    <div className="bg-white text-base h-auto rounded-lg p-[1%] px-[3%]">
                         <Link href={`/users/${rootLeaf.user_id}`}>
                             {rootLeaf.nickname}
                         </Link>

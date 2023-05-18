@@ -96,7 +96,7 @@ export class AuthController {
     if (!refreshToken) throw new Error('로그인되지 않은 사용자입니다.')
     const decoded = this.jwtService.verify(refreshToken, {secret:process.env.SECRET})
     // console.log(decoded.user_id)
-    const user = await this.userService.getUser(decoded.user_id)
+    const user = await this.userService.isExistedUser(decoded.user_id)
     // console.log('user : ', user)
     return {
       message:"로그인 상태 유지. 유저정보를 다시 불러왔습니다.",

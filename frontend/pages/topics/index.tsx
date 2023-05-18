@@ -3,9 +3,7 @@ import { Editor } from '@/components/editor/Editor';
 import { useResetRecoilState } from 'recoil';
 import { LeafState, articleState, codeState, selectedLeafState } from '@/recoil/topic';
 
-interface Props {}
-
-export const Topics = ({}: Props) => {
+export const Topics = () => {
   const resetCode = useResetRecoilState(codeState);
   const resetArticle = useResetRecoilState(articleState);
   const resetSelectedLeaf = useResetRecoilState(selectedLeafState);

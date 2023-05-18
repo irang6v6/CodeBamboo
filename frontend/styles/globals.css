@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+@import url('https://static.toss.im/tps/main.css');
+@import url('https://static.toss.im/tps/others.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    font-family: 'Toss Product Sans', sans-serif;
+}
 
 .CodeMirror {
     height: 100% !important;
@@ -18,7 +24,7 @@
     }
 
     .search-modal-wrapper {
-        @apply rounded-xl fixed left-4 right-4 top-20 m-auto z-10  items-center;
+        @apply rounded-xl absolute md:fixed left-4 right-4 top-20 m-auto z-10  items-center;
     }
 
     .close-button {
@@ -74,6 +80,19 @@
 
     .overlay {
         @apply absolute w-full h-full flex flex-col justify-center items-center z-10;
+    }
+
+    @keyframes width {
+        0% {
+          width: 0;
+        }
+        100% {
+          width: 100%;
+        }
+    }
+    
+    .animate-width {
+    animation: width 1s infinite linear;
     }
 }
 
