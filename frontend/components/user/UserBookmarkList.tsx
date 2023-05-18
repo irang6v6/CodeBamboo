@@ -11,6 +11,13 @@ export const UserBookmarkList = ({
   myPage,
   setBookmarks,
 }: Props) => {
+  if (bookmarks.length === 0) {
+    return (
+      <div className='absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]'>
+        북마크한 리프가 없어요.
+      </div>
+    );
+  }
   return bookmarks.map((bookmark: any, idx: number) => {
     return (
       <div className="md:w-[45%] md:mr-[2%] h-full md:h-[95%]" key={idx}>

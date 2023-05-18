@@ -1,10 +1,17 @@
-import { UserFollowListItem } from './UserFollowListItem';
+import { UserFollowListItem } from "./UserFollowListItem";
 
 interface Props {
   followingUsers: any;
 }
 
 export const UserFollowList = ({ followingUsers }: Props) => {
+  if (followingUsers.length === 0) {
+    return (
+      <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        팔로우한 유저가 없어요.
+      </div>
+    );
+  }
   return followingUsers.map((user: any, idx: number) => {
     return (
       <div
