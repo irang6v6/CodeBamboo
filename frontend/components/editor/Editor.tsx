@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { codeState } from '@/recoil/topic';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { codeState, selectedLeafState } from '@/recoil/topic';
 import { UnControlled as CodeItem } from 'react-codemirror2';
 import { isBrowser } from 'browser-or-node';
 import 'codemirror/lib/codemirror.css';
@@ -8,6 +8,7 @@ import 'codemirror/theme/material.css';
 import { Rendering } from './Rendering';
 import { Article } from './Article';
 import useIsMobile from '@/hooks/useIsMobile';
+import useIsClient from '@/hooks/useIsClient';
 
 if (isBrowser) {
   require('codemirror/mode/xml/xml');
@@ -17,7 +18,9 @@ if (isBrowser) {
 
 export const Editor = () => {
   const [code, setCode] = useRecoilState(codeState);
+  const selectedLeaf = useRecoilValue(selectedLeafState)
   const isMobile = useIsMobile();
+  const isClient = useIsClient();
   const [selectedLanguage, setSelectedLanguage] = useState('HTML');
   const [initialCode, setInitialCode] = useState('');
 
@@ -33,12 +36,12 @@ export const Editor = () => {
   }, [isMobile]);
 
   useEffect(() => {
-    if (!code || code.length === 0) return;
+    if (!code) return;
     const selectedCode = code.find(
       (e) => e.language === selectedLanguage
     )?.content;
     setInitialCode(selectedCode || '');
-  }, [selectedLanguage, code]);
+  }, [selectedLanguage, selectedLeaf]);
 
   const handleChange = (editor: any, data: any, value: string) => {
     const selectedCodeIndex = code.findIndex(
@@ -109,25 +112,22 @@ export const Editor = () => {
         <Tabs />
         <div className="h-full overflow-y-hidden">
           {selectedLanguage !== 'Content' ? (
-            <CodeItem
-              className="h-full
-                          text-base
-                          md:text-lg"
-              value={initialCode}
-              onChange={handleChange}
-              options={{
-                mode: mode[selectedLanguage],
-                theme: 'material',
-                lineNumbers: true,
-                scrollbarStyle: 'null',
-                lineWrapping: true,
-                // imeMode: 'disabled',
-                // spellcheck: false,
-                // inputStyle: "contenteditable",
-                // lint: 'true',
-              }}
-              autoScroll={true}
-            />
+            <>
+              {isClient && <CodeItem
+                className="h-full
+                            text-base
+                            md:text-lg"
+                value={initialCode}
+                onChange={handleChange}
+                options={{
+                  mode: mode[selectedLanguage],
+                  theme: 'material',
+                  lineNumbers: true,
+                  scrollbarStyle: 'null',
+                  lineWrapping: true,
+                }}
+              />}
+            </>
           ) : (
             <div className="h-full">
               <Article />

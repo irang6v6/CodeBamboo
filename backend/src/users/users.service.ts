@@ -188,7 +188,6 @@ export class UsersService {
   //     });
   //   }
   // }
-
   // [8] 즐겨찾기 추가 및 제거 ok
   async addBookmarkLeaf(userId: number, leafId: number) {
     const existedUser = await this.isExistedUser(userId);
@@ -329,8 +328,11 @@ export class UsersService {
     if (profileImg) {
       // 기존 파일 삭제
       const fileName = user.image.split('/').pop(); // extract file name from URL
-      // console.log('원래 프로필 이미지 : ', fileName)
-      await this.cloudStorageService.removeFile(fileName);
+      console.log('원래 프로필 이미지 : ', fileName);
+      try {
+        await this.cloudStorageService.removeFile(fileName);
+      } catch (error) {}
+
       // 유저가 업로드한 이미지 저장
       const file = await this.cloudStorageService.uploadFile(
         user.nickname,
@@ -338,7 +340,7 @@ export class UsersService {
         '',
       );
       userInput.image = file.publicUrl;
-      // console.log('새 프로필 이미지 : ', userInput.image)
+      console.log('새 프로필 이미지 : ', userInput.image);
     }
 
     await this.userRepository.update(id, {
