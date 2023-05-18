@@ -427,22 +427,24 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           </section>
           {/* 선택된 메뉴에 따라 내용 보여주는 섹션 */}
           <section
-            className="section h-5/6 min-h-[15rem] justify-center bg-transparent
-            md:h-full md:pt-12
+            className="section h-[41vh] min-h-[15rem] bg-transparent
+            md:h-full md:pt-12 md:justify-center
           "
           >
             {menu === 'topics' && (
               <article
-                className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 
-              grid grid-cols-1 md:flex md:flex-row md:flex-wrap md:justify-start md:items-start gap-5 overflow-y-auto scrollbar-hide p-[3%]"
+                className="article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
+                            h-full overflow-y-scroll gap-y-[30%] p-[5%]
+                            md:h-full md:flex md:flex-row md:gap-5 md:flex-wrap md:justify-start md:items-start md:overflow-y-auto md:p-[3%] md:pr-[0%]"
               >
                 <UserTopicsList topics={topics} />
               </article>
             )}
             {menu === 'follow' && (
               <article
-                className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300
-              grid grid-cols-1 md:flex md:flex-row md:flex-wrap md:justify-start md:items-start gap-5 overflow-y-auto scrollbar-hide p-[3%]"
+                className="article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
+                          h-full overflow-y-scroll gap-y-[30%] p-[5%]
+                          md:h-full md:flex md:flex-row md:gap-5 md:flex-wrap md:justify-start md:items-start md:overflow-y-auto md:p-[3%] md:pr-[0%]"
               >
                 <UserBookmarkList
                   bookmarks={bookmarks}

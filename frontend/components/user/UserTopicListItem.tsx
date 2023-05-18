@@ -24,18 +24,20 @@ export const UserTopicListItem = ({
   const needHelpPing = (
     <div
       className="absolute z-50
-                  h-[12%] w-[10%] top-[63%] right-[61%]
+                  h-[14%] w-[14%] top-[0%] right-[-2%]
                   md:h-12 md:w-12 md:-top-4 md:-right-3"
     >
-      <div className="animate-ping absolute h-full w-full rounded-full bg-gray-400 opacity-75"></div>
-      <Image className="absolute h-full w-full" src={HandImage} alt="hand" />
+      <Image
+        className="animate-rotation absolute h-full w-full"
+        src={HandImage}
+        alt="hand"
+      />
     </div>
   );
 
   return (
     <div
-      className={`relative bg-gray-100 shadow-lg flex flex-col items-center justify-between rounded-xl shrink-0 p-[5%]
-                    h-[40vh]
+      className={`relative h-[125%] bg-gray-100 shadow-lg flex flex-col items-center justify-between rounded-xl p-[5%]
                     md:w-full md:h-full md:hover:relative md:hover:scale-110 md:transition`}
     >
       {needHelp && needHelpPing}
