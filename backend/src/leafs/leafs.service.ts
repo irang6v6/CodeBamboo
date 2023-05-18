@@ -135,7 +135,7 @@ export class LeafsService {
       const newCode = this.codeRepository.create(json);
       await this.codeRepository.save(newCode);
     }
-    return data.topic_id;
+    return createLeaf;
   }
 
   //   async deleteOne(id: number): Promise<void> {

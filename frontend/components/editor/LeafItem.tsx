@@ -16,6 +16,7 @@ import {
   RiBookmarkLine,
   RiBookmarkFill,
 } from 'react-icons/ri';
+import { BsArrowReturnRight } from 'react-icons/bs'
 import useIsMobile from '@/hooks/useIsMobile';
 
 interface LeafItemProps {
@@ -40,7 +41,16 @@ const queryBookmarkFn = async (leafId: number) => {
   }
 };
 
-export const LeafItem = ({ leaf }: LeafItemProps) => {
+interface LeafItemProps {
+  leaf: LeafObject;
+  isTreeOpen: boolean;
+}
+
+export const LeafItem = ({
+  leaf,
+  isTreeOpen,
+  children,
+}: React.PropsWithChildren<LeafItemProps>) => {
   const [selectedLeaf, setSelectedLeaf] = useRecoilState(selectedLeafState);
   const setCode = useSetRecoilState(codeState);
   const setArticle = useSetRecoilState(articleState);
@@ -63,41 +73,52 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
 
   const mutateLike = useMutation(() => queryLikeFn(leaf.leaf_id), {
     onSuccess: (data) => {
-      console.log(data)
+      console.log(data);
     },
     onMutate: () => {
-      setIsLiked((prev)=>!prev);
-      setLeafs((leafs)=>leafs.map((l) => {
-        if (l.leaf_id === leaf.leaf_id) {
-          return { ...l, isLiked:!l.isLiked, likeCnt:l.likeCnt+(!l.isLiked? 1 : -1) };
-        }
-        return l
-      }))
+      setIsLiked((prev) => !prev);
+      setLeafs((leafs) =>
+        leafs.map((l) => {
+          if (l.leaf_id === leaf.leaf_id) {
+            return {
+              ...l,
+              isLiked: !l.isLiked,
+              likeCnt: l.likeCnt + (!l.isLiked ? 1 : -1),
+            };
+          }
+          return l;
+        })
+      );
     },
   });
 
   const mutateBookmark = useMutation(() => queryBookmarkFn(leaf.leaf_id), {
     onSuccess: (data) => {
-      console.log(data)
-      setLeafs((leafs)=>leafs.map((l) => {
-        if (l.leaf_id === leaf.leaf_id) {
-          return { ...l, isBookmarked:!l.isBookmarked };
-        }
-        return l
-      }))
+      console.log(data);
+      setLeafs((leafs) =>
+        leafs.map((l) => {
+          if (l.leaf_id === leaf.leaf_id) {
+            return { ...l, isBookmarked: !l.isBookmarked };
+          }
+          return l;
+        })
+      );
     },
     onMutate: () => {
-      setIsBookmarked((prev)=>!prev);
+      setIsBookmarked((prev) => !prev);
     },
   });
 
   const CodeIcon = () => {
-    return <>{leaf.type === 1 && <HiCode className="text-[1.5rem]" />}</>;
+    const codeexist =
+      leaf.type === 1 &&
+      leaf.codes.some((code) => (code.content?.length ?? 0) > 0);
+    return <>{codeexist ? <HiCode className="text-[1.5rem]" /> : null}</>;
   };
 
   const LeafTitle = () => {
     return (
-      <span className="text-[0.8rem]">
+      <span className="mx-auto text-[0.8rem]">
         {leaf.title.length < (isMobile ? 11 : 21)
           ? leaf.title
           : leaf.title.slice(0, isMobile ? 10 : 20) + '...'}
@@ -143,21 +164,31 @@ export const LeafItem = ({ leaf }: LeafItemProps) => {
   };
 
   return (
-    <div
-      className={`bg-slate-300 shrink-0 h-12 m-2 p-2 rounded-md flex items-center justify-between cursor-pointer drop-shadow-lg shadow-md 
-                ${
-                  selectedLeaf.leaf_id === leaf.leaf_id
-                    ? 'border-bamboo border-2 bg-slate-50'
-                    : ''
-                }`}
-      onClick={selectLeaf}
-    >
-      <CodeIcon />
-      <LeafTitle />
-      <div className="flex flex-row gap-1">
-        <LikeIcon />
-        <BookmarkIcon />
+    <>
+      <div className="flex flex-row w-full px-2">
+        {!leaf.is_root && children && <BsArrowReturnRight className='mt-3 mr-2 shrink-0'/>}
+        <div
+          className={`bg-slate-300 shrink-0 h-12 p-2 my-2 rounded-md flex items-center cursor-pointer drop-shadow-lg shadow-md 
+                  ${
+                    selectedLeaf.leaf_id === leaf.leaf_id
+                      ? 'border-bamboo border-2 bg-slate-50'
+                      : ''
+                  }
+                  ${isTreeOpen ? 'w-[12rem]' : 'w-full'}
+                  `}
+          onClick={selectLeaf}
+        >
+          <CodeIcon />
+          <LeafTitle />
+          {!leaf.is_deleted && (
+            <div className="flex flex-row gap-1 ml-auto">
+              <LikeIcon />
+              <BookmarkIcon />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <div className="ml-10">{children}</div>
+    </>
   );
 };
