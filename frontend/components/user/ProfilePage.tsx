@@ -160,7 +160,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
       if (window.confirm('자기소개 수정하시겠습니까?')) {
         try {
           await authApi
-            .patch('user/', { introduce: watch })
+            .patch('user', { introduce: watch })
             .then((res) => res.data);
           setMyState({ ...myState, introduce: watch });
           alert('자기소개 저장 완료!');

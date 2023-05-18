@@ -11,60 +11,60 @@ interface Props {
   creation_time: Date;
   leaf_id: any;
   codes: any;
-  memo: string;
-  myPage: boolean;
-  setBookmarks: Function;
+  // memo: string;
+  // myPage: boolean;
+  // setBookmarks: Function;
   key: number;
 }
 
 export const UserBookmarkListItem = ({
-  myPage,
   bookmark_id,
   topic_id,
   leaf_id,
   codes,
-  setBookmarks,
-  memo,
-}: Props) => {
+}: // myPage,
+// setBookmarks,
+// memo,
+Props) => {
   const router = useRouter();
-  const [isInputFocused, setIsInputFocused] = useState(false);
+  // const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const {
-    register: registerMemo,
-    handleSubmit: handleMemoSubmit,
-    formState: { errors: memoErrors },
-    setValue,
-    reset,
-    watch,
-    setFocus,
-  } = useForm();
+  // const {
+  //   register: registerMemo,
+  //   handleSubmit: handleMemoSubmit,
+  //   formState: { errors: memoErrors },
+  //   setValue,
+  //   reset,
+  //   watch,
+  //   setFocus,
+  // } = useForm();
 
-  const onMemoSubmit = async () => {
-    if (memo === watch('memo')) {
-      setFocus('memo');
-    } else {
-      console.log(watch('memo'));
-      if (window.confirm('메모를 수정하시겠습니까?')) {
-        try {
-          await authApi
-            .patch('user/bookmark', { userInput: watch('memo') })
-            .then((res) => res.data);
-          setBookmarks((perv: any) => {
-            return perv.map((bookmark: any) => {
-              if (bookmark.bookmark_id === bookmark_id) {
-                return { ...bookmark, memo };
-              } else {
-                return bookmark;
-              }
-            });
-          });
-          alert('메모 수정 완료 !');
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-  };
+  // const onMemoSubmit = async () => {
+  //   if (memo === watch('memo')) {
+  //     setFocus('memo');
+  //   } else {
+  //     console.log(watch('memo'));
+  //     if (window.confirm('메모를 수정하시겠습니까?')) {
+  //       try {
+  //         await authApi
+  //           .patch('user/bookmark', { userInput: watch('memo') })
+  //           .then((res) => res.data);
+  //         setBookmarks((perv: any) => {
+  //           return perv.map((bookmark: any) => {
+  //             if (bookmark.bookmark_id === bookmark_id) {
+  //               return { ...bookmark, memo };
+  //             } else {
+  //               return bookmark;
+  //             }
+  //           });
+  //         });
+  //         alert('메모 수정 완료 !');
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     }
+  //   }
+  // };
 
   return (
     <div
@@ -79,7 +79,7 @@ export const UserBookmarkListItem = ({
         <div className="absolute top-0 left-0 w-full h-full bg-transparent z-40"></div>
         <TopicItemRendering codes={codes} topic_id={topic_id} />
       </div>
-      <div
+      {/* <div
         className="bg-white text-xl w-[90%] h-[12%] rounded-xl p-[2%] px-[4%] overflow-hidden
                         md:hover:text-green-300 md:hover:transition"
         title={memo}
@@ -112,7 +112,7 @@ export const UserBookmarkListItem = ({
             )}
           </form>
         }
-      </div>
+      </div> */}
     </div>
   );
 };
