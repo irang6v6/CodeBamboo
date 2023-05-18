@@ -300,6 +300,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                     defaultValue={user.nickname}
                     onFocus={() => setInputFocus(true)}
                     onBlur={() => setTimeout(() => setInputFocus(false), 300)}
+                    spellCheck="false"
                   />
                   {isInputFocused && (
                     <button type="submit">
@@ -361,6 +362,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                     onBlur={() =>
                       setTimeout(() => setTextAreaFocus(false), 300)
                     }
+                    spellCheck="false"
                   />
                   {isTextAreaFocused && (
                     <button type="submit">
@@ -425,20 +427,23 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           </section>
           {/* 선택된 메뉴에 따라 내용 보여주는 섹션 */}
           <section
-            className="section h-5/6 min-h-[15rem] bg- justify-center bg-transparent
+            className="section h-5/6 min-h-[15rem] justify-center bg-transparent
             md:h-full md:pt-12
           "
           >
             {menu === 'topics' && (
               <article
                 className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 
-              grid grid-cols-1 md:grid-cols-2 gap-5 px-5 overflow-y-auto scrollbar-hide pt-5"
+              grid grid-cols-1 md:flex md:flex-row md:flex-wrap md:justify-start md:items-start gap-5 overflow-y-auto scrollbar-hide p-[3%]"
               >
                 <UserTopicsList topics={topics} />
               </article>
             )}
             {menu === 'follow' && (
-              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-1 md:grid-cols-2 gap-5 md:px-5 overflow-y-auto scrollbar-hide pt-5">
+              <article
+                className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300
+              grid grid-cols-1 md:flex md:flex-row md:flex-wrap md:justify-start md:items-start gap-5 overflow-y-auto scrollbar-hide p-[3%]"
+              >
                 <UserBookmarkList
                   bookmarks={bookmarks}
                   myPage={myPage}
@@ -447,7 +452,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
               </article>
             )}
             {menu === 'following' && (
-              <article className="article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 pt-5 px-5 overflow-y-auto">
+              <article className="article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 p-5 overflow-y-auto scrollbar-hide">
                 <UserFollowList followingUsers={followeingUsers} />
               </article>
             )}

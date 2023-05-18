@@ -53,18 +53,18 @@ export const UserBookmarkListItem = ({
   return (
     <div
       className={`relative bg-gray-100 shadow-lg flex flex-col items-center justify-between rounded-xl shrink-0 p-[5%]
-                    h-[40vh] mx-[3%]
+                    h-[40vh]
                     md:w-full md:h-full md:hover:relative md:hover:scale-110 md:transition`}
     >
       <div
-        className="relative bg-white w-[90%] h-[84%] rounded-xl overflow-hidden hover:cursor-pointer"
+        className="relative bg-white w-[95%] h-[84%] rounded-xl overflow-hidden hover:cursor-pointer"
         onClick={() => router.push(`/topics/${topic_id}`)}
       >
         <div className="absolute top-0 left-0 w-full h-full bg-transparent z-40"></div>
         <TopicItemRendering codes={codes} topic_id={topic_id} />
       </div>
       <div
-        className="relative bg-white text-xl w-[90%] h-[12%] rounded-xl p-[2%] px-[4%] overflow-hidden
+        className="relative bg-white text-xl w-[95%] h-[12%] rounded-xl p-[2%] overflow-hidden
                   md:hover:transition"
         title={memo}
       >
@@ -75,17 +75,16 @@ export const UserBookmarkListItem = ({
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setTimeout(() => setIsInputFocused(false), 300)}
             onChange={(e) => setUserInput(e.target.value)}
+            spellCheck="false"
           />
         ) : (
-          <p className="text-center h-full w-full cursor-pointer  placeholder-black hover:border-2 hover:border-black rounded-md">
-            {memo}
-          </p>
+          <p className="text-center h-full w-full rounded-md">{memo}</p>
         )}
         {isInputFocused && (
           <button onClick={onMemoSubmit}>
             <CiEdit
-              size={20}
-              className="absolute right-5 z-10 cursor-pointer top-[50%] translate-y-[-50%]"
+              size={25}
+              className="absolute right-3 z-10 cursor-pointer top-[50%] translate-y-[-50%]"
             />
           </button>
         )}
