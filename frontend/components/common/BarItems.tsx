@@ -96,7 +96,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
           id="docs"
           className="h-fit flex items-center cursor-pointer
                     text-xl justify-center mt-11
-                  md:mt-0 md:w-full md:justify-around md:-left-1 md:h-fit md:relative"
+                  md:mt-0 md:w-full md:justify-evenly md:-left-3 md:h-fit md:relative"
           onClick={serveDocsPage}
         >
           <div className="md:shrink-0 md:w-fit md:h-fit md:flex">
@@ -107,8 +107,8 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
               isDocsHovered ? 'md:text-bamboo' : ''
             }md:animate-fadein md:mb-7 md:h-9 md:text-xl md:tracking-wider `}
           >
-            <span className="md:text-2xl md:font-semibold">D</span>
-            ocs
+            <span className="md:text-2xl md:font-semibold">I</span>
+            nfo
           </div>
         </div>
         <div

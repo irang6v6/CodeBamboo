@@ -36,7 +36,7 @@ export const TopicItemRendering = ({ codes, topic_id }: Props) => {
   `;
 
   return (
-    <div className="h-full w-full scrollBar-hide">
+    <div className="h-full w-full scrollbar-hide">
       <iframe
         className="h-full w-full"
         srcDoc={srcCode}
