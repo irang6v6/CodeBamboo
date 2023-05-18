@@ -26,12 +26,13 @@ export const Intro = () => {
   const ResponsiveIntro = (
     <>
       <div
-        className="bgImg-bamboo-bar-icon fixed z-20 p-0 m-0 flex items-center justify-center
+        className="fixed z-20 p-0 m-0 flex items-center justify-start
                     w-[60%] h-auto top-6 left-6
-                    md:w-1/5 md:top-10 md:left-10 md:justify-end"
+                    md:w-1/5 md:top-10 md:left-10"
       >
-        <div className=' text-white items-center text-[1.4rem] font-semibold 
-        md:font-bold md:text-[3rem]'
+        <img src='images/icons/bar_icon.png'/>
+        <div className=' text-white items-center text-[1.6rem] font-semibold 
+        md:font-bold md:text-[2.5rem]'
         >CodeBamboo</div>
       </div>
       <h1

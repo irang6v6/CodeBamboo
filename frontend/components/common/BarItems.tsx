@@ -179,7 +179,7 @@ export const BarItems = ({ isHovered, setIsMenuOpen }: Props) => {
           <img
             src={user.image}
             alt=""
-            className="h-12 w-12 rounded-lg shadow-sm object-cover"
+            className="h-12 w-12 rounded-lg shadow-sm object-cover bg-white"
           />
         </div>
       </div>
