@@ -58,7 +58,7 @@ export const Editor = () => {
   useEffect(()=>{
     const selectedCode = code.find(
       (e) => e.language === selectedLanguage
-    )?.content;
+    )?.content as string
     setInitialCode(selectedCode)
   },[code])
 

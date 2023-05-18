@@ -24,7 +24,7 @@ export default function Github() {
 
   return (
     <>
-    <h1>곧 인증작업이 시작됩니다...</h1>
+    <h1>깃허브 인증 처리 중입니다...</h1>
     </>
   );
 }

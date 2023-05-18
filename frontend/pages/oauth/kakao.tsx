@@ -15,7 +15,7 @@ export default function Kakao() {
   }, [code, loginMutation.mutate]);
   
   if (loginMutation.isLoading) {
-    return <div>카카오 인증 처리 중입니다...</div>;
+    return <div>곧 인증작업이 시작됩니다...</div>;
   }
 
   if (loginMutation.isError) {
@@ -24,7 +24,7 @@ export default function Kakao() {
 
   return (
     <>
-    <h1>곧 인증작업이 시작됩니다...</h1>
+    <h1>카카오 인증 처리 중입니다...</h1>
     </>
   );
 }

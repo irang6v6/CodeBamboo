@@ -15,7 +15,7 @@ export default function Naver() {
   }, [code, loginMutation.mutate]);
   
   if (loginMutation.isLoading) {
-    return <div>네이버 인증 처리 중입니다...</div>;
+    return <div>곧 인증작업이 시작됩니다...</div>;
   }
 
   if (loginMutation.isError) {
@@ -24,7 +24,7 @@ export default function Naver() {
 
   return (
     <>
-    <h1>곧 인증작업이 시작됩니다...</h1>
+    <h1>네이버 인증 처리 중입니다...</h1>
     </>
   );
 }
