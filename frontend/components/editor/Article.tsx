@@ -8,6 +8,7 @@ import authApi from '@/hooks/api/axios.authorization.instance';
 import { GrFlagFill } from 'react-icons/gr';
 import { loginModalState, userState } from '@/recoil/user';
 import { queryTopicDetailFn } from '@/pages/topics/[topicId]';
+import Dialog from '../common/Dialog';
 
 interface Props {}
 
@@ -57,6 +58,8 @@ export const Article = ({}: Props) => {
   const [selectedLeaf, setSelectedLeaf] = useRecoilState(selectedLeafState);
   const setIsOpen = useSetRecoilState(loginModalState);
   const [needHelp, setNeedHelp] = useState(false);
+  const [gptLoading, setGptLoading] = useState(false)
+
   const {
     register,
     formState: { errors },
@@ -174,7 +177,6 @@ export const Article = ({}: Props) => {
   );
 
   const userPrompt = article.content
-  console.log(userPrompt)
   const servePromptMutation = useMutation(()=>authApi.post('user/gpt/call', {userPrompt}), {
     onSuccess:(data)=>{
       const rst = data.data.answer
@@ -193,11 +195,19 @@ export const Article = ({}: Props) => {
       setCode(gptCode)
     },
   })
-  console.log(servePromptMutation)
   const handleServePrompt = ()=>{
     servePromptMutation.mutate()
     // e.preventDefault()
   }
+
+  useEffect(()=>{
+    if (servePromptMutation.isLoading) {
+      setGptLoading(true)
+    }
+    if (!servePromptMutation.isLoading) {
+      setTimeout(()=>setGptLoading(false), 1000) 
+    }
+  }, [servePromptMutation.isLoading])
 
   return (
     <div className="flex p-4 bg-inherit h-1/2">
@@ -266,6 +276,7 @@ export const Article = ({}: Props) => {
           </button>
         </div>
       </form>
+      {gptLoading && <Dialog fail={false} context='컴포넌트를 작성하는 중입니다...'/>}
     </div>
   );
 };
