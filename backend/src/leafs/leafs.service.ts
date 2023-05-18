@@ -170,9 +170,8 @@ export class LeafsService {
       let type = 0;
       if (leafDto.codes) {
         await this.codeRepository
-          .createQueryBuilder('users')
+          .createQueryBuilder('codes')
           .delete()
-          .from(Code)
           .where('leaf_id = :leaf_id', { leaf_id: id })
           .execute();
       }

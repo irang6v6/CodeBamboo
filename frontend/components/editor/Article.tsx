@@ -52,7 +52,7 @@ export const Article = ({}: Props) => {
   const topicId = router.query.topicId;
   const [article, setArticle] = useRecoilState(articleState);
   const user = useRecoilValue(userState);
-  const code = useRecoilValue(codeState);
+  const [code, setCode] = useRecoilState(codeState);
   const setLeafs = useSetRecoilState(LeafState)
   const [selectedLeaf, setSelectedLeaf] = useRecoilState(selectedLeafState);
   const setIsOpen = useSetRecoilState(loginModalState);
@@ -65,8 +65,8 @@ export const Article = ({}: Props) => {
     handleSubmit,
   } = useForm({
     defaultValues: {
-      title: `${article.title}`,
-      content: `${article.content}`,
+      title: article.title || '',
+      content: article.content || '',
     },
   });
 
@@ -92,8 +92,13 @@ export const Article = ({}: Props) => {
   });
 
   const mutateLeafEdit = useMutation((body: any) => queryLeafEditFn(selectedLeaf.leaf_id, body), {
-    onSuccess: (topicId) => {
-      router.push(`/topics/${topicId}`);
+    onSuccess: async (data) => {
+      try {
+        const response = await queryTopicDetailFn(topicId);
+        setLeafs(response?.leafs);
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
@@ -103,8 +108,13 @@ export const Article = ({}: Props) => {
         const response = await queryTopicDetailFn(topicId);
         setLeafs(response?.leafs);
         setSelectedLeaf({
-          user_id: data?.bestLeaf.user_id,
-          leaf_id: data?.bestLeaf.leaf_id,
+          user_id: response?.bestLeaf.user_id,
+          leaf_id: response?.bestLeaf.leaf_id,
+        });
+        setCode(response?.bestLeaf.codes);
+        setArticle({
+          title: response?.bestLeaf.title,
+          content: response?.bestLeaf.content,
         });
       } catch (error) {
         console.log(error);
@@ -112,12 +122,6 @@ export const Article = ({}: Props) => {
     },
   })
 
-  // const updateTopic = useQuery(['topic', topicId], () => queryTopicDetailFn(topicId), {
-  //   onSuccess: (data) => {
-  //     setLeafs(data?.leafs);
-  //   },
-  //   refetchOnWindowFocus: false,
-  // });
 
   const EditLeaf = () => {
     const body = {
@@ -190,7 +194,7 @@ export const Article = ({}: Props) => {
           {...register('title', { required: true, maxLength: 100 })}
           type="text"
           name="title"
-          value={localArticle.title}
+          value={localArticle.title || ''}
           onChange={handleInputChange}
           placeholder="제목"
         />

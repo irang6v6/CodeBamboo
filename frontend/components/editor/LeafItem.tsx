@@ -119,9 +119,9 @@ export const LeafItem = ({
   const LeafTitle = () => {
     return (
       <span className="mx-auto text-[0.8rem]">
-        {leaf.title.length < (isMobile ? 11 : 21)
+        {leaf.title.length < (isMobile ? 11 : isTreeOpen ? 16 : 21)
           ? leaf.title
-          : leaf.title.slice(0, isMobile ? 10 : 20) + '...'}
+          : leaf.title.slice(0, isMobile ? 10 : isTreeOpen ? 15 : 20) + '...'}
       </span>
     );
   };
@@ -166,7 +166,7 @@ export const LeafItem = ({
   return (
     <>
       <div className="flex flex-row w-full px-2">
-        {!leaf.is_root && children && <BsArrowReturnRight className='mt-3 mr-2 shrink-0'/>}
+        {!leaf.is_root && children && <BsArrowReturnRight className='mt-5 mr-2 shrink-0'/>}
         <div
           className={`bg-slate-300 shrink-0 h-12 p-2 my-2 rounded-md flex items-center cursor-pointer drop-shadow-lg shadow-md 
                   ${
@@ -174,7 +174,7 @@ export const LeafItem = ({
                       ? 'border-bamboo border-2 bg-slate-50'
                       : ''
                   }
-                  ${isTreeOpen ? 'w-[12rem]' : 'w-full'}
+                  ${isTreeOpen ? 'w-[17.5rem]' : 'w-full'}
                   `}
           onClick={selectLeaf}
         >
