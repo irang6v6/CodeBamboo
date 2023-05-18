@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+@import url('https://static.toss.im/tps/main.css');
+@import url('https://static.toss.im/tps/others.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: 'Toss Product Sans', sans-serif;
+}
+
+.CodeMirror {
+    height: 100% !important;
+}
+
+@layer components {
+    /* 모달 컴포넌트 클래스들 */
+    .modal-wrapper {
+        @apply flex flex-col border border-transparent shadow-md rounded-xl fixed inset-0 m-auto bg-white z-10 tracking-wider justify-center items-center;
+    }
+
+    .modal-wrapper-hidden {
+        @apply hidden;
+    }
+
+    .search-modal-wrapper {
+        @apply rounded-xl absolute md:fixed left-4 right-4 top-20 m-auto z-10  items-center;
+    }
+
+    .close-button {
+        @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+    }
+
+    .bgImg-bamboo {
+        background-image: url('/images/bg-bamboo.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    /* 시맨틱 컴포넌트를 위한 클래스들 */
+    .modal-inner-wrapper {
+        @apply flex flex-col items-center justify-center;
+    }
+
+    .line {
+        @apply w-4/6 border border-solid border-opacity-5 border-blue-500;
+    }
+
+    .pink-button {
+        @apply h-8 text-white text-xs font-semibold bg-pink-300 border-none rounded px-4 mx-2 cursor-pointer;
+    }
+
+    .login-button {
+        @apply h-8 text-white text-xs font-semibold bg-bamboo border-none rounded px-4 mx-2 cursor-pointer;
+    }
+
+    .bamboo-button {
+        @apply h-fit w-fit py-3 px-4 bg-bamboo text-white rounded-lg cursor-pointer shadow-sm hover:bg-green-700;
+    }
+
+    .header {
+        @apply flex flex-col bg-orange-300;
+    }
+
+    .main {
+        @apply bg-red-300 flex flex-col;
+    }
+
+    .article {
+        @apply flex flex-col bg-green-300;
+    }
+
+    .section {
+        @apply flex flex-col bg-blue-300;
+    }
+
+    .footer {
+        @apply flex justify-between items-center bg-lime-300;
+    }
+
+    .overlay {
+        @apply absolute w-full h-full flex flex-col justify-center items-center z-10;
+    }
+
+    @keyframes width {
+        0% {
+          width: 0;
+        }
+        100% {
+          width: 100%;
+        }
+    }
+    
+    .animate-width {
+    animation: width 1s infinite linear;
+    }
+}
+
+@screen md {
+    .modal-wrapper {
+        @apply w-3/4 h-5/6 max-w-screen-lg;
+    }
+
+    .modal-inner-wrapper {
+        @apply w-5/12;
+    }
+
+    .header {
+        @apply w-4/5;
+    }
+
+    .main {
+        @apply w-4/5 h-4/5;
+    }
+
+    .article {
+        @apply w-full;
+    }
+
+    .section {
+        @apply w-full;
+    }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.article-input {
+    @apply bg-gray-100 rounded-sm w-full mt-1 mb-3 p-2 cursor-text shadow-md;
+}
+
+.editor-tab {
+    @apply shrink-0 h-auto m-2 rounded-md flex items-center justify-center cursor-pointer shadow-sm;
+}
+
+.bgImg-position {
+    background-position: 50% 50%;
+    background-size: none;
+}
+
+.bgImg-bamboo-bar-icon {
+    background-image: url('/images/icons/bar_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.scroll-arrow {
+    background-image: url('/images/scroll-arrow.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
