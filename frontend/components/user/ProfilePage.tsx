@@ -436,7 +436,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           >
             {menu === 'topics' && (
               <article
-                className="article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
+                className="relative article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
                             h-full overflow-y-scroll gap-y-[30%] p-[5%]
                             md:h-full md:flex md:flex-row md:gap-5 md:flex-wrap md:justify-start md:items-start md:overflow-y-auto md:p-[3%] md:pr-[0%]"
               >
@@ -445,7 +445,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
             )}
             {menu === 'follow' && (
               <article
-                className="article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
+                className="relative article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
                           h-full overflow-y-scroll gap-y-[30%] p-[5%]
                           md:h-full md:flex md:flex-row md:gap-5 md:flex-wrap md:justify-start md:items-start md:overflow-y-auto md:p-[3%] md:pr-[0%]"
               >
@@ -457,7 +457,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
               </article>
             )}
             {menu === 'following' && (
-              <article className="article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 p-5 overflow-y-auto scrollbar-hide">
+              <article className="relative article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 p-5 overflow-y-auto scrollbar-hide">
                 <UserFollowList followingUsers={followeingUsers} />
               </article>
             )}

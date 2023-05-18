@@ -26,8 +26,8 @@ export const DocsSection = ({ title, contents }: Props) => {
     </div>
   );
 
-  const contentItems = contents.map((content) => {
-    return <div className="text-xl">{content}</div>;
+  const contentItems = contents.map((content, idx) => {
+    return <div className="text-xl" key={idx}>{content}</div>;
   });
 
   const sectionBody = (
