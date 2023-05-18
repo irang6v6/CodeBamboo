@@ -9,6 +9,7 @@ export function makeLeaf(data) {
   const codes = { codes: data.codes };
   const parentLeafId = { parentLeafId: data.parent_leaf_id };
   const exportCnt = { exportCnt: data.export };
+  const is_deleted = { is_deleted: data.is_deleted };
   const likeCnt = { likeCnt: data.likes.length };
   const user_id = { user_id: data.user.user_id };
   const creation_time = { creation_time: data.creation_time };
@@ -25,6 +26,7 @@ export function makeLeaf(data) {
     ...type,
     ...codes,
     ...exportCnt,
+    ...is_deleted,
     ...parentLeafId,
     ...likeCnt,
   };
