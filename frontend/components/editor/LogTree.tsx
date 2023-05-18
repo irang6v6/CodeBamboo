@@ -58,7 +58,7 @@ export const LogTree = ({setIsTreeOpen}: Props) => {
     md:w-[45%]"
     >
       <BiArrowFromRight
-        className='z-20 absolute top-3 right-3 w-16 h-16'
+        className='z-20 absolute top-3 right-3 w-16 h-16 cursor-pointer'
         onClick={()=>setIsTreeOpen(false)}/>
       {renderLogTree(LogTree)}
     </div>

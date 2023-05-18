@@ -10,6 +10,7 @@ import { LeafRepository } from 'src/leafs/dao/leafs.repository';
 import { APP_PIPE } from '@nestjs/core';
 import { TopicRepository } from 'src/topics/dao/topics.repository';
 import { CloudStorageService } from '../core/services/cloud-stroage-service'
+import { GptService } from 'src/core/services/gpt.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -26,7 +27,8 @@ import { CloudStorageService } from '../core/services/cloud-stroage-service'
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    CloudStorageService
+    CloudStorageService,
+    GptService
   ],
   exports: [...userRepository, UsersService],
 })
