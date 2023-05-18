@@ -35,7 +35,7 @@ export const UserTopicListItem = ({
   return (
     <div
       className={`relative bg-gray-100 shadow-lg flex flex-col items-center justify-between rounded-xl shrink-0 py-[5%]
-                    w-[94vw] h-[40vh] mx-[3%]
+                    h-[40vh] mx-[3%]
                     md:w-full md:h-full md:hover:relative md:hover:scale-110 md:transition`}
     >
       {needHelp && needHelpPing}
