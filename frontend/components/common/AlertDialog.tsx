@@ -1,8 +1,10 @@
 import React from 'react';
 
-interface Props {}
+interface Props {
+  context: string
+}
 
-export const AlertDialog = ({}: Props) => {
+export const AlertDialog = ({context}: Props) => {
 
   return (
       <div className='fixed top-[4rem] md:top-5 left-1/2 transform -translate-x-1/2 w-[50%] md:w-[12%] h-16 md:h-24 rounded-md bg-green-300 opacity-80 z-20 flex flex-col items-center justify-evenly min-w-max max-w-[50%] tracking-wider
@@ -13,7 +15,7 @@ export const AlertDialog = ({}: Props) => {
       font-bold 
       p-4
       '>
-        <p>저장이 완료되었습니다.</p>
+        <p>{context}</p>
         <div className="w-full h-1 bg-gray-200">
           <div className="h-full bg-green-500 transition-all duration-1000 ease-linear w-0 animate-width" />
         </div>

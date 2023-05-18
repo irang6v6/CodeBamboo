@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { userDefault, userState } from '@/recoil/user';
+import { dialogState, userDefault, userState } from '@/recoil/user';
 import useIsMobile from '@/hooks/useIsMobile';
 import authApi from '@/hooks/api/axios.authorization.instance';
 import { useMutation, useQuery } from 'react-query';
@@ -9,7 +9,7 @@ import { useRecoilState } from 'recoil';
 import { UserTopicsList } from './UserTopicList';
 import { UserBookmarkList } from './UserBookmarkList';
 import { UserFollowList } from './UserFollowList';
-import AlertDialog from '../common/AlertDialog';
+import Dialog from '../common/Dialog';
 
 interface Props {
   userId: string;
@@ -62,8 +62,14 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   const [isTextAreaFocused, setTextAreaFocus] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [myState, setMyState] = useRecoilState(userState);
-  const [showAlert, setShowAlert] = useState(false);
+  // const [showAlert, setShowAlert] = useState(false);
   const profileImgRef = useRef<HTMLInputElement>(null);
+  const [successAlert, setSuccessAlert ] = useRecoilState(dialogState)
+
+  const showSuccess = (sec:number)=>{
+    setSuccessAlert(true);
+    setTimeout(() => setSuccessAlert(false), sec);
+  }
 
   // 프로필 이미지 업로드
   const handleFileUpload = async (event: any) => {
@@ -76,8 +82,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           .patch('user', formData)
           .then((res) => res.data.data.newProfileImg);
         setMyState({ ...myState, image: newProfileImg });
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 1000);
+        showSuccess(1000)
       } catch (error) {
         console.error(error);
       }
@@ -142,8 +147,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           .patch('user/', { nickname: watch('nickname') })
           .then((res) => res.data);
         setMyState({ ...myState, nickname: watch('nickname') });
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 1000);
+        showSuccess(1000)
       } catch (error) {
         console.error(error);
       }
@@ -162,8 +166,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           .patch('user/', { introduce: watch })
           .then((res) => res.data);
         setMyState({ ...myState, introduce: watch });
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 1000);
+        showSuccess(1000)
       } catch (error) {
         console.error(error);
       }
@@ -461,7 +464,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           </section>
         </div>
       </main>
-      {showAlert && <AlertDialog />}
+      {successAlert && <Dialog fail={false} context={'저장 되었습니다.'}/>}
     </>
   );
 };

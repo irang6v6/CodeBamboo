@@ -92,7 +92,7 @@
     }
     
     .animate-width {
-    animation: width 1s linear;
+    animation: width 1s infinite linear;
     }
 }
 

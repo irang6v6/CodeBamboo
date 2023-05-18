@@ -18,10 +18,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { memoryStorage } from 'multer';
 import { Public } from 'src/auth/utils/public.decorator';
+import { GptService } from 'src/core/services/gpt.service';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private gptService: GptService
+    ) {}
 
   // [#] 테스트용 코드
   // @Get()
@@ -125,5 +129,11 @@ export class UsersController {
   ) {
     // console.log('img : ', profileImg)
     return this.usersService.update(req.user['user_id'], userInput, profileImg);
+  }
+
+  @Post('gpt/call')
+  async callGpt(@Body() body){
+    // console.log(body)
+    return await this.gptService.callGpt(body.userPrompt, body.prevCode)
   }
 }
