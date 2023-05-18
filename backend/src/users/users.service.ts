@@ -328,7 +328,7 @@ export class UsersService {
     if (profileImg) {
       // 기존 파일 삭제
       const fileName = user.image.split('/').pop(); // extract file name from URL
-      console.log('원래 프로필 이미지 : ', fileName);
+      // console.log('원래 프로필 이미지 : ', fileName);
       try {
         await this.cloudStorageService.removeFile(fileName);
       } catch (error) {}
@@ -340,7 +340,7 @@ export class UsersService {
         '',
       );
       userInput.image = file.publicUrl;
-      console.log('새 프로필 이미지 : ', userInput.image);
+      // console.log('새 프로필 이미지 : ', userInput.image);
     }
 
     await this.userRepository.update(id, {
