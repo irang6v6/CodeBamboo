@@ -25,11 +25,15 @@ export const UserFollowListItem = ({
   );
 
   const userNicknameItem = (
-    <div className="text-sm w-full md:text-xl md:h-1/2 rounded-lg md:p-[1%] text-center">{nickname}</div>
+    <div className="text-sm w-full md:text-xl md:h-1/2 rounded-lg text-center">
+      {nickname}
+    </div>
   );
 
   const userFollowerItem = (
-    <div className="text-sm md:text-base md:h-auto w-full md:p-[1%] md:pb-[10%] text-center md:text-start md:ps-2">팔로워수 : {followersCnt}</div>
+    <div className="text-sm md:text-base md:h-auto w-full text-center md:text-start">
+      팔로워수 : {followersCnt}
+    </div>
   );
 
   return (
@@ -39,7 +43,7 @@ export const UserFollowListItem = ({
                 md:hover:scale-105 md:transition md:flex-row"
     >
       {userImageItem}
-      <div className="h-1/2 w-full md:w-1/2 flex flex-col items-center justify-center md:justify-between">
+      <div className="h-2/3 w-full md:w-1/2 flex flex-col items-center justify-center md:justify-evenly">
         {userNicknameItem}
         {userFollowerItem}
       </div>

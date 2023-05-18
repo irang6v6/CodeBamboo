@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { userDefault, userState } from '@/recoil/user';
 import useIsMobile from '@/hooks/useIsMobile';
 import authApi from '@/hooks/api/axios.authorization.instance';
@@ -20,26 +20,24 @@ const cntDiv = (isMobile: boolean, user: any) => {
   return (
     <>
       {isMobile ? (
-        <>
-        {/* <h1>아이콘</h1> */}
-        </>
+        <>{/* <h1>아이콘</h1> */}</>
       ) : (
         <div className="grid grid-cols-2 gap-2 mx-0 my-2 h-[30%] bg-transparent ">
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.followersCnt}</span>
-            <span className='text-gray-400'>Follwers</span> 
+            <span className="text-xl font-bold">{user.followersCnt}</span>
+            <span className="text-gray-400">Follwers</span>
           </article>
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.topicsCnt}</span>
-            <span className='text-gray-400'>Topics</span> 
+            <span className="text-xl font-bold">{user.topicsCnt}</span>
+            <span className="text-gray-400">Topics</span>
           </article>
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.leafsCnt}</span>
-            <span className='text-gray-400'>Leafs</span> 
+            <span className="text-xl font-bold">{user.leafsCnt}</span>
+            <span className="text-gray-400">Leafs</span>
           </article>
           <article className="article justify-center min-w-[7rem] items-start ps-5 bg-transparent border-2 border-black-300 rounded-md shadow-sm">
-            <span className='text-xl font-bold'>{user.bookmarksCnt}</span>
-            <span className='text-gray-400'>Bookmarks</span> 
+            <span className="text-xl font-bold">{user.bookmarksCnt}</span>
+            <span className="text-gray-400">Bookmarks</span>
           </article>
         </div>
       )}
@@ -64,38 +62,40 @@ const ProfilePage = ({ userId, myPage }: Props) => {
   const [isTextAreaFocused, setTextAreaFocus] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [myState, setMyState] = useRecoilState(userState);
-  const [showAlert, setShowAlert] = useState(false)
+  const [showAlert, setShowAlert] = useState(false);
   const profileImgRef = useRef<HTMLInputElement>(null);
 
   // 프로필 이미지 업로드
-  const handleFileUpload = async(event:any)=>{
+  const handleFileUpload = async (event: any) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
-      const formData = new FormData()
-      formData.append('profileImg', file)
+      const formData = new FormData();
+      formData.append('profileImg', file);
       try {
         const newProfileImg = await authApi
           .patch('user', formData)
           .then((res) => res.data.data.newProfileImg);
         setMyState({ ...myState, image: newProfileImg });
-        setShowAlert(true)
-        setTimeout(()=>setShowAlert(false), 1000)
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 1000);
       } catch (error) {
         console.error(error);
       }
     }
-  }
+  };
 
   // 팔로우 등록, 해제
-  const followMutation = useMutation(()=>authApi.post('user/follow', {userId:user.user_id}), {
-    onSuccess:(data)=>{
-      console.log(data.data)
-    },
-    onMutate:()=>{
-      setIsFollowed(prev=>!prev)
+  const followMutation = useMutation(
+    () => authApi.post('user/follow', { userId: user.user_id }),
+    {
+      onSuccess: (data) => {
+        console.log(data.data);
+      },
+      onMutate: () => {
+        setIsFollowed((prev) => !prev);
+      },
     }
-  })
-
+  );
 
   // 닉네임 useForm 인스턴스 생성
   const {
@@ -118,8 +118,8 @@ const ProfilePage = ({ userId, myPage }: Props) => {
     onSuccess: (data) => {
       console.log('쿼리 클라이언트로부터 유저정보를 최신화합니다 : ', data);
       setUser(data);
-      if(!myPage) {
-        setIsFollowed(data.isFollow) // 팔로우 상태를 서버 스테이트와 동기화
+      if (!myPage) {
+        setIsFollowed(data.isFollow); // 팔로우 상태를 서버 스테이트와 동기화
       }
     },
   });
@@ -142,8 +142,8 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           .patch('user/', { nickname: watch('nickname') })
           .then((res) => res.data);
         setMyState({ ...myState, nickname: watch('nickname') });
-        setShowAlert(true)
-        setTimeout(()=>setShowAlert(false), 1000)
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 1000);
       } catch (error) {
         console.error(error);
       }
@@ -162,8 +162,8 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           .patch('user/', { introduce: watch })
           .then((res) => res.data);
         setMyState({ ...myState, introduce: watch });
-        setShowAlert(true)
-        setTimeout(()=>setShowAlert(false), 1000)
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 1000);
       } catch (error) {
         console.error(error);
       }
@@ -267,15 +267,22 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           "
           >
             <img
-              src={myPage? myState.image : user.image}
+              src={myPage ? myState.image : user.image}
               alt=""
               className="min-w-[5rem] max-h-[5rem] max-w-[5rem] min-h-[5rem] absolute bottom-12 rounded-lg drop-shadow-lg bg-cover object-cover z-10 bg-white cursor-pointer transition duration-100 md:hover:scale-110
              md:w-[7rem] md:bottom-20 md:aspect-square md:max-w-[50%]
              md:max-h-[7rem]
             "
-             onClick={myPage ? () => profileImgRef?.current?.click() : undefined}
+              onClick={
+                myPage ? () => profileImgRef?.current?.click() : undefined
+              }
             />
-            <input type='file' className='hidden' ref={profileImgRef} onChange={handleFileUpload}/>
+            <input
+              type="file"
+              className="hidden"
+              ref={profileImgRef}
+              onChange={handleFileUpload}
+            />
             <div
               className="absolute bottom-6 font-bold text-sm text-center 
                md:bottom-10 md:text-base
@@ -293,6 +300,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                     defaultValue={user.nickname}
                     onFocus={() => setInputFocus(true)}
                     onBlur={() => setTimeout(() => setInputFocus(false), 300)}
+                    spellCheck="false"
                   />
                   {isInputFocused && (
                     <button type="submit">
@@ -354,6 +362,7 @@ const ProfilePage = ({ userId, myPage }: Props) => {
                     onBlur={() =>
                       setTimeout(() => setTextAreaFocus(false), 300)
                     }
+                    spellCheck="false"
                   />
                   {isTextAreaFocused && (
                     <button type="submit">
@@ -418,30 +427,41 @@ const ProfilePage = ({ userId, myPage }: Props) => {
           </section>
           {/* 선택된 메뉴에 따라 내용 보여주는 섹션 */}
           <section
-            className="section h-5/6 min-h-[15rem] bg- justify-center bg-transparent
-            md:h-full md:pt-12
+            className="section h-[41vh] min-h-[15rem] bg-transparent
+            md:h-full md:pt-12 md:justify-center
           "
           >
             {menu === 'topics' && (
-              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 
-              grid grid-cols-1 md:grid-cols-2 gap-5 px-5 overflow-y-auto scrollbar-hide pt-5">
+              <article
+                className="article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
+                            h-full overflow-y-scroll gap-y-[30%] p-[5%]
+                            md:h-full md:flex md:flex-row md:gap-5 md:flex-wrap md:justify-start md:items-start md:overflow-y-auto md:p-[3%] md:pr-[0%]"
+              >
                 <UserTopicsList topics={topics} />
               </article>
             )}
             {menu === 'follow' && (
-              <article className="article h-full justify-center items-center bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-1 md:grid-cols-2 gap-5 md:px-5 overflow-y-auto scrollbar-hide pt-5">
-                <UserBookmarkList bookmarks={bookmarks} />
+              <article
+                className="article bg-gray-300 rounded border-t-4 border-t-lime-300 scrollbar-hide
+                          h-full overflow-y-scroll gap-y-[30%] p-[5%]
+                          md:h-full md:flex md:flex-row md:gap-5 md:flex-wrap md:justify-start md:items-start md:overflow-y-auto md:p-[3%] md:pr-[0%]"
+              >
+                <UserBookmarkList
+                  bookmarks={bookmarks}
+                  myPage={myPage}
+                  setBookmarks={setBookmarks}
+                />
               </article>
             )}
             {menu === 'following' && (
-              <article className="article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 pt-5 px-5 overflow-y-auto">
+              <article className="article h-full justify-center items-start bg-gray-300 rounded border-t-4 border-t-lime-300 grid grid-cols-2 gap-5 p-5 overflow-y-auto scrollbar-hide">
                 <UserFollowList followingUsers={followeingUsers} />
               </article>
             )}
           </section>
         </div>
       </main>
-      {showAlert && <AlertDialog/>}
+      {showAlert && <AlertDialog />}
     </>
   );
 };

@@ -12,7 +12,6 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { SimpleUserDto } from './dto/simple.user.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -67,7 +66,18 @@ export class UsersController {
     return this.usersService.getBookmarkLeafs(userId);
   }
 
-  // [7] 즐겨찾기 추가 및 제거 ok
+  // [7] 즐겨찾기한 리프의 메모 수정
+  @UseGuards(JwtAuthGuard)
+  @Patch('bookmark')
+  updateBookmarkMemo(@Req() req: Request, @Body() reqBody: any) {
+    return this.usersService.updateBookmarkMemo(
+      req.user['user_id'],
+      reqBody.bookmarkId,
+      reqBody.userInput,
+    );
+  }
+
+  // [8] 즐겨찾기 추가 및 제거 ok
   @UseGuards(JwtAuthGuard)
   @Post('bookmark/:id')
   addBookmarkLeaf(@Req() req: Request, @Param('id') leafId: number) {
@@ -75,14 +85,14 @@ export class UsersController {
     return this.usersService.addBookmarkLeaf(myUserId, leafId);
   }
 
-  // [8] 리프 좋아요 추가 및 삭제 ok
+  // [9] 리프 좋아요 추가 및 삭제 ok
   @UseGuards(JwtAuthGuard)
   @Post('like/:id')
   addLikeLeaf(@Param('id') leafId: number, @Req() req: Request) {
     return this.usersService.addLikeLeaf(req.user['user_id'], leafId);
   }
 
-  // [9] 유저 id로 정보 조회 ok
+  // [10] 유저 id로 정보 조회 ok
   @UseGuards(JwtAuthGuard)
   @Public()
   @Get(':id')
@@ -91,7 +101,7 @@ export class UsersController {
     return this.usersService.getUser(myUserId, id);
   }
 
-  // [10] 유저 정보 수정
+  // [11] 유저 정보 수정 ok
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('profileImg', {
@@ -100,12 +110,19 @@ export class UsersController {
       fileFilter: (req, file, callback) => {
         return file.mimetype.match(/image\/(jpg|jpeg|png|gif)$/)
           ? callback(null, true)
-          : callback(new BadRequestException('Only image files are allowed'), false);
-      }
-    })
+          : callback(
+              new BadRequestException('Only image files are allowed'),
+              false,
+            );
+      },
+    }),
   )
   @Patch()
-  update(@Req() req: Request, @Body() userInput: any, @UploadedFile() profileImg) {
+  update(
+    @Req() req: Request,
+    @Body() userInput: any,
+    @UploadedFile() profileImg,
+  ) {
     // console.log('img : ', profileImg)
     return this.usersService.update(req.user['user_id'], userInput, profileImg);
   }
