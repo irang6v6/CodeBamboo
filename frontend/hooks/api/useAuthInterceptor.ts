@@ -10,7 +10,7 @@ const useAuthInterceptor = () => {
 
   const handleLogout = useCallback(async () => {
     try {
-      const newAccessToken = await axios.get('https://k8a801.p.ssafy.io/api/auth/access', { withCredentials: true }).then(res => res.data.data.access_token);
+      const newAccessToken = await axios.get('http://localhost:8000/auth/access', { withCredentials: true }).then(res => res.data.data.access_token);
       localStorage.setItem('access_token', newAccessToken);
       return newAccessToken;
     } catch (error) {

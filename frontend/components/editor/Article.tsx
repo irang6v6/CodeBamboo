@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { LeafState, articleState, codeState, selectedLeafState } from '@/recoil/topic';
+import { LeafState, articleState, codeState, gptTrigger, selectedLeafState } from '@/recoil/topic';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import authApi from '@/hooks/api/axios.authorization.instance';
 import { GrFlagFill } from 'react-icons/gr';
@@ -60,6 +60,7 @@ export const Article = ({}: Props) => {
   const [needHelp, setNeedHelp] = useState(false);
   const [gptLoading, setGptLoading] = useState(false)
   const [gptFail, setGptFail] = useState(false)
+  const setGptTrigger = useSetRecoilState(gptTrigger)
 
   const {
     register,
@@ -200,14 +201,17 @@ export const Article = ({}: Props) => {
         }
         console.log(gptCode)
         setCode(gptCode)
-        console.log('code: ', code)
-        // setTimeout(()=>{setGptFail(true)},1500)
-        // setTimeout(()=>{setGptFail(false)},1500)
+        setGptTrigger(prev=>!prev)
+        // console.log('code: ', code)
     },
+    onError:()=>{
+        setGptFail(true)
+        setTimeout(()=>{setGptFail(false)},3000)
+    }
   })
+  
   const handleServePrompt = ()=>{
     servePromptMutation.mutate()
-    // e.preventDefault()
   }
 
   useEffect(()=>{

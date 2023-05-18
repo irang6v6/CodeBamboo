@@ -86,3 +86,8 @@ export const mainTopicListState = atom<mainTopicListInF>({
     trending: [],
   },
 });
+
+export const gptTrigger = atom({
+  key: 'getTrigger',
+  default:false
+})
