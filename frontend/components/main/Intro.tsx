@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useIsMobile from '@/hooks/useIsMobile';
 import useIsClient from '@/hooks/useIsClient';
+import { scrollTo700vh } from '@/pages';
 
 export const Intro = () => {
   const isMobile = useIsMobile();
@@ -25,10 +26,14 @@ export const Intro = () => {
   const ResponsiveIntro = (
     <>
       <div
-        className="bgImg-bamboo-bar-icon fixed z-20 p-0 m-0 
-                    w-[60%] h-[10%] top-6 left-6
-                    md:w-1/5 md:h-1/5 md:top-10 md:left-10"
-      ></div>
+        className="bgImg-bamboo-bar-icon fixed z-20 p-0 m-0 flex items-center justify-center
+                    w-[60%] h-auto top-6 left-6
+                    md:w-1/5 md:top-10 md:left-10 md:justify-end"
+      >
+        <div className=' text-white items-center text-[1.4rem] font-semibold 
+        md:font-bold md:text-[3rem]'
+        >CodeBamboo</div>
+      </div>
       <h1
         className="text-white font-bold fixed z-20
                   text-2xl left-8 top-[30%]
@@ -40,9 +45,9 @@ export const Intro = () => {
           }%)`,
         }}
       >
-        주제를 생성하고,
+        손쉽게 주제를 생성하고,
         {isClient && isMobile ? <br /> : ' '}
-        당신의 문제를
+        당신의 컴포넌트를
       </h1>
       <h1
         className="text-white font-bold fixed z-20
@@ -88,9 +93,10 @@ export const Intro = () => {
       {ResponsiveIntro}
       <div
         className="scroll-arrow fixed left-1/2 bottom-6 animate-scrollArrow z-10
-                  w-10 h-10
+                  w-10 h-10 transfrom hover:scale-110 cursor-pointer
                   md:w-20 md:h-20"
         style={{ transform: `translateX(-50%)` }}
+        onClick={()=>scrollTo700vh()}
       ></div>
     </div>
   );

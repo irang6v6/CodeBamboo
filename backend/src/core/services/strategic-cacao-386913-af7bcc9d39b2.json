@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "strategic-cacao-386913",
+  "private_key_id": "af7bcc9d39b28c209854b883c59bdedd3a313247",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDSzSEfK3D4Zo+Y\nEphBJPFZxEp/PB87JKYDGXmhzGMYSlTbvs/edolE2tzgJi6/ZeObgxoSsoEPjoAM\nKWHnpaGlXhjPVzTUMuTpTh6bnXRiSONQ2RJOXSEBOK4dmlpbtN0lhD/Pbv9E4xA4\nUiLLnlBHgTNTA456kQp7Hy5O30953HOJuvya2+V9ibxq23VQeVVafD5uZqzAhIT0\nfNWE2JFMFsTUh15M9t5BQaMHuBsRxkTHxKvBvMfft5VpZFXBHOA3Q56HseBdGSjs\nGyi5NKSbKFIoNkJiM9WDUm+dJ3x6E3Rscfmv0EiuNfxOfj8Q751bnuSfebqwFqp0\n+8yrA7r/AgMBAAECggEADZATJHoOcuNhmitmgZjkSmrdtcf8sZ9CN/E73GDvgBDJ\n2uv9wqNy+4VVY4dklJeN1TCfM232upu0ucbKPM9xHtgQb2HkZtuLbOAqcGEceHWW\nFcD4DScV+4nvcfCMOPN739d3DFw1rybCbjOiqq7AULylIuv+QjAlmEkn5coD+nDk\nHey3nNaKrCFgaAjO7weANyLr45dusAEC9RXho+Kivb1YdIIU+EggUPomvG9VKTe/\n9J79iHFFoRrif368v75PpjV+8oXB8kfmytxIaKtbd5cyu0fPUjSa+OZPQg0PfqEk\n/VwgR41MUaJltVu00vsBSoLjrOiBzKfujhMpmBckKQKBgQDxtCa3DIW6WO3uOT3E\nrOZLBsSjhcVXEpAN4DYT0SdGUPDZ5ZeUMFeRDX+/OupwptiI2LLSQEVEa4rAtqZs\n24KeGAJznXUcjBpv0oPBzgvKrCyv+OH5ABifhLeKBbIjfkbdd/oUUqW1ySX8MPS7\nuXVlAWO2MbfHIE8ZEB4OsKJ9PQKBgQDfRQ6o3CX+GialfdVdf0ENM9jWaYPruNQe\ns0elxrcYa9ZWEC/GkYMbWds8icKzhw5Ztw9KVOpwEEvXstlWQmRMKzTCuzo5EvM4\nO+0AmMZeEjqGMRG1lX9sl8oocDsgr4FtMMwdJErR5/5yJe09h3/KB+sgc/BwPi+t\nTAoxCXoU6wKBgDJIai12m3NzALyoh+McnSRKminysGU25WUdmeJxhpwoRpLuIqSf\nkfgJOORNm2woKa/+dOUsnbxoKwuAdAr9d6TwFcJ7pVt1AiL1RpfRB774JqvNOSWW\nEYlOEOjT2oVrxc5ZIVuM/hBdcluOy7sqD/QdX+MNYNA6NnpeUgJ4WLV5AoGAeCEx\n+A0rrALqFFUWPk4/9BiXbRYs0uIJz9Lqk/nNfihXlMr0ycR1ZHv+iB4fUnUydXcX\nlQkHcvBxvkcOxWjHimwc4UHX2+mkT/d+V7nb0bXBI363Zppfi1BIh2WLitSjsNp2\nmJ90WmiW8VgSw+5qBYwpKLb5AYuUH4wwV54fv60CgYEA2+BenZ/s8kcWzawSswB4\nD7F+J9b7fPL0BSF3F209vcUcxSjoe/g3VKhk6RwD7CE+H4Mmg+j5K9Ke6YM5FbfW\nLq13v6PQJRFUky9/5GpXnbIRsg8+6GnAqW8lFh1u+vXgdJOs/6kAZiCKsKJ4wnz0\nQrAfmmDNf40ajIDeFLa3qSs=\n-----END PRIVATE KEY-----\n",
+  "client_email": "codebamboo@strategic-cacao-386913.iam.gserviceaccount.com",
+  "client_id": "116399499059389212662",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/codebamboo%40strategic-cacao-386913.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -105,31 +105,27 @@ export class TopicsService {
         rootLeaf: { codes: true, user: true, likes: true },
         bestLeaf: { codes: true, user: true, likes: true },
       },
-      where: {
-        rootLeaf: { title: Like(`%${userInput}%`) },
-      },
+      where: [
+        { rootLeaf: { title: Like(`%${userInput}%`) } },
+        { user: { nickname: Like(`%${userInput}%`) } },
+      ],
     });
-    const userTopics = await this.topicRepository.find({
-      relations: {
-        user: true,
-        rootLeaf: { codes: true, user: true, likes: true },
-        bestLeaf: { codes: true, user: true, likes: true },
-      },
-      where: { user: { nickname: Like(`%${userInput}%`) } },
-    });
-    // console.log(userTopics);
+
     //닉네임이나 타이틀로 검색 안되면 []로 들어와서 길이를 재서 유무 판별
-    if (userTopics.length == 0 && titleTopics.length == 0) {
+    let topics = [];
+    if (titleTopics.length == 0) {
       throw new NotFoundException(
         `'${userInput}'(이)라는 검색결과를 찾을 수 없습니다.`,
       );
-    } else if (userTopics.length > 0) {
-      const topics = userTopics.map((data) => searchTopic(data));
-      return topics;
     } else if (titleTopics.length > 0) {
-      const topics = titleTopics.map((data) => searchTopic(data));
-      return topics;
+      topics = [...titleTopics.map((data) => searchTopic(data))];
     }
+    // console.log(topics);
+    // const topicsLength = topics?.length;
+    // const topicLastPage: number = Math.floor(0 / 6) + 1;
+    // console.log(topicLastPage);
+    // console.log(topicsLength);
+    return topics;
   }
 
   //getOne에서는 모든 리프를 makeTopicLeafs

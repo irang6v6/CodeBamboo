@@ -2,17 +2,16 @@ import {
   Query,
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
   Post,
   UseGuards,
   Req,
+  Response,
+  Header,
 } from '@nestjs/common';
 import { LeafsService } from './leafs.service';
-import { CreateLeafDto } from './dto/create.leaf.dto';
-import { SimpleLeafDto } from './dto/simple.leaf.dto';
 import { UpdateLeafDto } from './dto/update.leaf.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
@@ -42,10 +41,11 @@ export class LeafsController {
     const user_id = req.user['user_id'];
     return this.leafsService.create(createLeaf, user_id);
   }
-  // @Post()
-  // create(@Body() createLeafDto: CreateLeafDto) {
-  //   this.leafsService.create(createLeafDto);
-  // }
+
+  @Get('download/:id')
+  download(@Response({ passthrough: true }) res, @Param('id') id: number) {
+    return this.leafsService.download(res, 1);
+  }
 
   //   @Delete(':id')
   //   delete(@Param('id') id: number) {
@@ -55,5 +55,10 @@ export class LeafsController {
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateLeafDto: UpdateLeafDto) {
     this.leafsService.update(id, updateLeafDto);
+  }
+
+  @Patch('invalidLeaf/:id')
+  invalidLeaf(@Param('id') id: number) {
+    return this.leafsService.invalidLeaf(id);
   }
 }

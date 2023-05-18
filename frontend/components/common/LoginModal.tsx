@@ -111,13 +111,13 @@ function Modal() {
               className="article h-36 justify-between items-center border-none
           md:w-full bg-transparent
           ">
-            <a href={OAUTH_NAVER} onClick={()=>localStorage.setItem('prevPath', router.pathname)}>
+            <a href={OAUTH_NAVER} onClick={()=>localStorage.setItem('prevPath', router.asPath)}>
               <img src="/images/naver_login.png" alt="" className='rounded'/>
             </a>
-            <a href={OAUTH_KAKAO} onClick={()=>localStorage.setItem('prevPath', router.pathname)}>
+            <a href={OAUTH_KAKAO} onClick={()=>localStorage.setItem('prevPath', router.asPath)}>
               <img src="/images/kakao_login.png" alt="" className='rounded'/>
             </a>
-            <a href={OAUTH_GITHUB} onClick={()=>localStorage.setItem('prevPath', router.pathname)}>
+            <a href={OAUTH_GITHUB} onClick={()=>localStorage.setItem('prevPath', router.asPath)}>
               <img src="/images/github_login.png" alt="" className='rounded'/>
             </a>
           </article>

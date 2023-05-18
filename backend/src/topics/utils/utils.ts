@@ -9,6 +9,7 @@ export function makeLeaf(data) {
   const codes = { codes: data.codes };
   const parentLeafId = { parentLeafId: data.parent_leaf_id };
   const exportCnt = { exportCnt: data.export };
+  const is_deleted = { is_deleted: data.is_deleted };
   const likeCnt = { likeCnt: data.likes.length };
   // console.log(isLiked);
   const response = {
@@ -21,13 +22,15 @@ export function makeLeaf(data) {
     ...codes,
     ...exportCnt,
     ...parentLeafId,
+    ...is_deleted,
     ...likeCnt,
   };
   return response;
 }
 
 export function makeTopicLeafs(data, my_id: number) {
-  // console.log(data);
+  // console.log(my_id);
+  // console.log(data.likes);
   const likeCnt = { likeCnt: data.likes.length };
   const user_id = { user_id: data.user.user_id };
   const likeList = data.likes;

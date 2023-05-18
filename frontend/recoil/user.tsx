@@ -31,3 +31,8 @@ export const loginModalState = atom<boolean>({
   default: false,
 });
 
+export const dialogState = atom<boolean>({
+  key: "dialogState", // 선언명과 같지 않아도 됨, 그래도 통일하면 좋을 듯
+  default: false,
+});
+

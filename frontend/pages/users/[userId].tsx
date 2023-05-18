@@ -13,7 +13,7 @@ export const UserDetail = ({ } : Props) => {
   // next router에서는 query변수가 string || string[]이기 때문에,
   // 명시적으로 string이라고 지정을 해줘야지. ts가 오류를 출력하지 않는다.
   let stringUserId = Array.isArray(userId) ? userId[0] : userId;
-  console.log(userId)
+  // console.log(userId)
   if(stringUserId && +stringUserId !== me.user_id) {
     return <ProfilePage userId={stringUserId} myPage={false}/>
   } 

@@ -1,12 +1,19 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  StreamableFile,
+} from '@nestjs/common';
 import { Leaf } from './entities/leaf.entity';
 import { Repository, Like } from 'typeorm';
-import { CreateLeafDto } from './dto/create.leaf.dto';
-import { SimpleLeafDto } from './dto/simple.leaf.dto';
 import { Code } from './entities/code.entity';
 import { CreateCodeDto } from './dto/create.code.dto';
 import { makeLeaf } from './utils/utils';
 import { UpdateLeafDto } from './dto/update.leaf.dto';
+import { Response } from 'express';
+// import { createReadStream } from 'fs';
+import path, { join } from 'path';
+import { createReadStream } from 'fs';
 
 @Injectable()
 export class LeafsService {
@@ -17,38 +24,22 @@ export class LeafsService {
     private codeRepository: Repository<Code>,
   ) {}
 
-  // async getAll(): Promise<SimpleLeafDto[]> {
-  //   const leaf = await this.leafRepository.find({
-  //     relations: ['user', 'topic', 'code'],
-  //     loadRelationIds: { relations: ['user', 'topic'] },
-  //   });
-  //   return leaf;
-  // }
-
   async search(userInput: string) {
     //title로 조회. where문으로 검색할 수 있음. 괄호 주의
     const titleLeafs = await this.leafRepository.find({
-      where: {
-        title: Like(`%${userInput}%`),
-      },
+      where: [
+        {
+          title: Like(`%${userInput}%`),
+        },
+        { user: { nickname: Like(`%${userInput}%`) } },
+      ],
       relations: { user: true, likes: true, codes: true },
     });
-    const userLeafs = await this.leafRepository.find({
-      relations: {
-        user: true,
-        likes: true,
-        codes: true,
-      },
-      where: { user: { nickname: Like(`%${userInput}%`) } },
-    });
     //닉네임이나 타이틀로 검색 안되면 []로 들어와서 길이를 재서 유무 판별
-    if (userLeafs.length == 0 && titleLeafs.length == 0) {
+    if (titleLeafs.length == 0) {
       throw new NotFoundException(
         `'${userInput}'(이)라는 검색결과를 찾을 수 없습니다.`,
       );
-    } else if (userLeafs.length > 0) {
-      const user = userLeafs.map((data) => makeLeaf(data));
-      return user;
     } else if (titleLeafs.length > 0) {
       const title = titleLeafs.map((data) => makeLeaf(data));
       return title;
@@ -144,7 +135,7 @@ export class LeafsService {
       const newCode = this.codeRepository.create(json);
       await this.codeRepository.save(newCode);
     }
-    return data.topic_id;
+    return createLeaf;
   }
 
   //   async deleteOne(id: number): Promise<void> {
@@ -153,6 +144,22 @@ export class LeafsService {
   //       await this.userRepository.delete(id);
   //     }
   //   }
+
+  async download(res: Response, id: number) {
+    const getCodes = await this.leafRepository.findOne({
+      where: { leaf_id: id },
+    });
+    // const fileName = encodeURIComponent('한글파일.txt');
+    // const file = createReadStream(join(process.cwd()));
+    // console.log(file);
+    // res.set({
+    //   'Content-Disposition': `attachment; filename=${fileName}`,
+    // });
+    // const newFile = new StreamableFile(file);
+    // return getCodes;
+    // const file = createReadStream(join(process.cwd(), 'package.json'));
+    // return file.pipe(res);
+  }
 
   async update(id: number, updateLeafDto: UpdateLeafDto): Promise<void> {
     const leafDto = await this.getOne(id);
@@ -163,9 +170,8 @@ export class LeafsService {
       let type = 0;
       if (leafDto.codes) {
         await this.codeRepository
-          .createQueryBuilder('users')
+          .createQueryBuilder('codes')
           .delete()
-          .from(Code)
           .where('leaf_id = :leaf_id', { leaf_id: id })
           .execute();
       }
@@ -200,5 +206,64 @@ export class LeafsService {
         .where('leaf_id = :id', { id })
         .execute();
     }
+  }
+
+  async invalidLeaf(id: number) {
+    const leaf = await this.leafRepository.findOne({
+      relations: { user: true, likes: true, codes: true, topic: true },
+      where: { leaf_id: id },
+    });
+    // console.log(leaf);
+    if (!leaf) {
+      throw new NotFoundException(`leaf id ${id} not found`);
+    }
+    // console.log(leafDto);
+    if (!leaf.is_root && !leaf.is_deleted) {
+      if (leaf.codes) {
+        await this.codeRepository
+          .createQueryBuilder('users')
+          .delete()
+          .from(Code)
+          .where('leaf_id = :leaf_id', { leaf_id: id })
+          .execute();
+      }
+      const element = {
+        language: 'HTML',
+        content: '<div>삭제된 리프입니다.</div>',
+      };
+      const leaf_id = { leaf: { leaf_id: id } };
+      const json = { ...element, ...leaf_id };
+      // console.log(json);
+      const newCode = this.codeRepository.create(json);
+      await this.codeRepository.save(newCode);
+
+      const updateLeaf = await this.leafRepository
+        .createQueryBuilder()
+        .update(Leaf)
+        .set({
+          title: '삭제된 리프입니다.',
+          content: '삭제된 리프입니다.',
+          type: 0,
+          is_deleted: true,
+        })
+        .where('leaf_id = :id', { id })
+        .execute();
+    } else {
+      return '해당 leaf는 삭제 될 수 없습니다.';
+    }
+    return 'leaf가 삭제되었습니다.';
+
+    // const updateLeaf = await this.leafRepository
+    //   .createQueryBuilder()
+    //   .update(Leaf)
+    //   .set({
+    //     title: '삭제된 게시글',
+    //     content: 'this content have been deleted',
+    //     type: 0,
+    //     codes:{},
+    //   })
+    //   .where('leaf_id = :id', { id })
+    //   .execute();
+    // }
   }
 }
