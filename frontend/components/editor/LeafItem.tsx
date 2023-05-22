@@ -63,6 +63,7 @@ export const LeafItem = ({
     setSelectedLeaf({
       user_id: leaf.user_id,
       leaf_id: leaf.leaf_id,
+      nickname: leaf.nickname
     });
     setCode(leaf.codes);
     setArticle({

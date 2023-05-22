@@ -69,6 +69,7 @@ export const LeafState = atom<LeafObject[]>({
 export interface selectedObject {
   leaf_id: number | null;
   user_id: number | null;
+  nickname: string | null;
 }
 
 export const selectedLeafState = atom<selectedObject>({
@@ -76,6 +77,7 @@ export const selectedLeafState = atom<selectedObject>({
   default: {
     user_id: null,
     leaf_id: null,
+    nickname: null
   },
 });
 
