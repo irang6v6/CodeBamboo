@@ -46,6 +46,7 @@ export const TopicDetail = () => {
         setSelectedLeaf({
           user_id: data?.bestLeaf.user_id,
           leaf_id: data?.bestLeaf.leaf_id,
+          nickname: data?.bestLeaf.nickname
         });
         setLeafs(data?.leafs);
         setIsLoading(false);

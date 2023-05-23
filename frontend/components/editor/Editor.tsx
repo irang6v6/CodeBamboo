@@ -2,19 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { codeState, gptTrigger, selectedLeafState } from '@/recoil/topic';
 import { UnControlled as CodeItem } from 'react-codemirror2';
-import { isBrowser } from 'browser-or-node';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
 import { Rendering } from './Rendering';
 import { Article } from './Article';
 import useIsMobile from '@/hooks/useIsMobile';
 import useIsClient from '@/hooks/useIsClient';
-
-if (isBrowser) {
-  require('codemirror/mode/xml/xml');
-  require('codemirror/mode/css/css');
-  require('codemirror/mode/javascript/javascript');
-}
 
 export const Editor = () => {
   const [code, setCode] = useRecoilState(codeState);
@@ -26,7 +17,7 @@ export const Editor = () => {
   const codeUpdateTrigger = useRecoilValue(gptTrigger) 
 
   const mode: any = {
-    HTML: 'xml',
+    HTML: 'htmlmixed',
     CSS: 'css',
     JavaScript: 'javascript',
   };
